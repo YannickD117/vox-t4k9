@@ -4,184 +4,215 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0B0E11">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FFF8F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17141D" media="(prefers-color-scheme: dark)">
 <title>Stimmtrainer</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
 <style>
-/* ============ Dark-first "Tonstudio"-Design ============ */
+/* ============ Stimmtrainer — warm, flach, ruhig (Light-first) ============ */
 :root{
-  --bg:#0B0E11; --surface:#14191F; --surface2:#1C242C; --elev:#222B34;
-  --ink:#EFF3F6; --ink2:#A5B2BD; --muted:#6F7E8A;
-  --accent:#F4A83C; --on-accent:#171004; --accent-deep:#FFC46A; --accent-soft:#2B2211;
-  --glow:rgba(244,168,60,.17);
-  --good:#43D9A0; --warn:#F4A83C; --bad:#F27B72;
-  --chart:#F4A83C; --ref:#5F6D79; --line:#242E38;
-  --shadow:0 10px 28px rgba(0,0,0,.35);
-  --radius:20px;
-  --font-body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
-  --font-display:"Bricolage Grotesque",-apple-system,"Segoe UI",sans-serif;
-  color-scheme:dark;
+  color-scheme:light;
+  --bg:#FFF8F0; --surface:#FFFFFF; --surface2:#F6EDE4; --stage:#FFF1E6;
+  --track:#ECDFD2;
+  --ink:#2D2836; --ink2:#5E5769; --muted:#6B6477;
+  --primary:#E8731D; --on-primary:#2A1604; --primary-deep:#D6550C; --primary-text:#8A3D0C;
+  --peach:#FFE4D0; --on-peach:#8A3D0C;
+  --mint:#D8F1E3; --on-mint:#175C43;
+  --sky:#DBEBFA; --on-sky:#1E4E78;
+  --lavender:#E9E2FA; --on-lavender:#4D3A8C;
+  --figure:#D9744A;
+  --line:#EFE5DA; --line-strong:#DCCDBC;
+  --grid:rgba(45,40,54,.14);
+  --ring-track:rgba(45,40,54,.22);
+  --good:#176E4B; --warn:#A85400; --bad:#B5352B;
+  --chart:#D6550C; --ref:#6F6780;
+  --glow:rgba(232,115,29,.28);
+  --radius:24px; --radius-sm:16px;
+  --shadow:0 10px 30px rgba(94,60,24,.08);
+  --shadow-btn:0 8px 20px rgba(232,115,29,.26);
+  --edge:inset 0 0 0 1px rgba(0,0,0,.06);
+  --tabbar:rgba(255,255,255,.86);
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
-@media (prefers-color-scheme: light){
+@media (prefers-color-scheme: dark){
   :root{
-    --bg:#F4F2ED; --surface:#FFFFFF; --surface2:#ECE8E0; --elev:#FFFFFF;
-    --ink:#191C1F; --ink2:#525B63; --muted:#7A838C;
-    --accent:#E38B18; --on-accent:#201503; --accent-deep:#8F5B06; --accent-soft:#F6E7CB;
-    --glow:rgba(224,137,26,.15);
-    --good:#0F8A5F; --warn:#B36A00; --bad:#C2453B;
-    --chart:#D9820A; --ref:#9AA3AB; --line:#E3DFD6;
-    --shadow:0 8px 22px rgba(70,55,25,.10);
-    color-scheme:light;
+    color-scheme:dark;
+    --bg:#17141D; --surface:#24202D; --surface2:#2F2A3A; --stage:#2C2536;
+    --track:#3B3448;
+    --ink:#F5F1FA; --ink2:#C3BCCD; --muted:#A49DB2;
+    --primary:#FF9B4F; --on-primary:#2A1604; --primary-deep:#FF9B4F; --primary-text:#FFB27A;
+    --peach:#4A2C1A; --on-peach:#FFD3B3;
+    --mint:#1B3B2E; --on-mint:#A6E5C5;
+    --sky:#1C3145; --on-sky:#A8D3F5;
+    --lavender:#2F2747; --on-lavender:#D0C4F4;
+    --figure:#F2A67E;
+    --line:#352E42; --line-strong:#4A4060;
+    --grid:rgba(255,255,255,.14);
+    --ring-track:rgba(255,255,255,.22);
+    --good:#5AD69F; --warn:#FFB55A; --bad:#FF8C82;
+    --chart:#FF9B4F; --ref:#9A92AB;
+    --glow:rgba(255,155,79,.22);
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --shadow-btn:0 8px 20px rgba(255,155,79,.22);
+    --edge:inset 0 0 0 1px rgba(255,255,255,.06);
+    --tabbar:rgba(36,32,45,.86);
   }
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0; background:var(--bg); color:var(--ink);
-  font-family:var(--font-body); font-size:15px; line-height:1.5;
+  font-family:var(--font); font-size:15.5px; line-height:1.55; font-weight:400;
   padding-top:env(safe-area-inset-top,0px);
-  -webkit-text-size-adjust:100%;
+  -webkit-text-size-adjust:100%; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-.app{max-width:540px; margin:0 auto; padding:0 18px calc(92px + env(safe-area-inset-bottom,0px));}
-header.top{display:flex; align-items:center; justify-content:space-between; padding:16px 2px 12px;}
+.app{max-width:540px; margin:0 auto; padding:0 max(18px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));}
+header.top{display:flex; align-items:center; justify-content:space-between; padding:18px 2px 10px;}
 .brand{display:flex; align-items:center; gap:10px;}
-.brand h1{font-family:var(--font-display); font-weight:700; font-size:21px; margin:0; letter-spacing:.2px;}
+.brand h1{font-weight:800; font-size:22px; margin:0; letter-spacing:0;}
 .eq{display:flex; align-items:flex-end; gap:2.5px; height:20px;}
-.eq i{width:3.5px; border-radius:2px; background:var(--accent); display:block; animation:eq 1.1s ease-in-out infinite;}
+.eq i{width:4px; border-radius:2px; background:var(--primary-deep); display:block; animation:eq 1.1s ease-in-out infinite;}
 .eq i:nth-child(1){height:8px; animation-delay:0s}
 .eq i:nth-child(2){height:16px; animation-delay:.15s}
 .eq i:nth-child(3){height:11px; animation-delay:.3s}
 .eq i:nth-child(4){height:18px; animation-delay:.45s}
 .eq i:nth-child(5){height:7px; animation-delay:.6s}
 @keyframes eq{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1)}}
-.phase-chip{font-size:12px; font-weight:700; color:var(--accent-deep); background:var(--accent-soft); border-radius:999px; padding:5px 11px;}
-h2{font-family:var(--font-display); font-weight:700; font-size:19px; margin:24px 0 10px; text-wrap:balance;}
+.phase-chip{font-size:12.5px; font-weight:700; color:var(--on-peach); background:var(--peach); border-radius:999px; padding:6px 12px; white-space:nowrap;}
+h2{font-weight:700; font-size:22px; letter-spacing:0; margin:28px 0 10px; text-wrap:balance;}
 p{margin:6px 0}
-.small{font-size:13px; color:var(--ink2);}
-.tiny{font-size:12px; color:var(--muted);}
-.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:15px 17px; margin:10px 0;}
-.card.flat{background:transparent;}
+strong{font-weight:700}
+.small{font-size:13.5px; font-weight:400; color:var(--ink2);}
+.tiny{font-size:12.5px; font-weight:400; color:var(--muted);}
+.card{background:var(--surface); border:none; border-radius:var(--radius); padding:16px 18px; margin:10px 0; box-shadow:var(--shadow);}
+.card.flat{background:var(--surface2); box-shadow:none;}
+.card.mint{background:var(--mint); color:var(--on-mint); box-shadow:none;}
+.card.sky{background:var(--sky); color:var(--on-sky); box-shadow:none;}
 .row{display:flex; gap:10px; align-items:center;}
 .row.wrap{flex-wrap:wrap}
 .spread{justify-content:space-between}
 .stack{display:flex; flex-direction:column; gap:10px;}
-button{font-family:var(--font-body); font-size:15px; border:none; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:transform .12s ease;}
+button{font-family:var(--font); font-size:15.5px; border:none; cursor:pointer; color:inherit; -webkit-tap-highlight-color:transparent; transition:transform .12s ease, background-color .15s ease, box-shadow .15s ease;}
 button:active{transform:scale(.97)}
-.btn{background:var(--accent); color:var(--on-accent); font-weight:700; border-radius:999px; padding:15px 20px; width:100%; box-shadow:0 8px 22px var(--glow);}
-.btn.secondary{background:var(--surface2); color:var(--ink); border:1px solid var(--line); box-shadow:none; font-weight:600;}
-.btn.ghost{background:transparent; color:var(--ink2); border:1px solid var(--line); font-weight:500; box-shadow:none;}
-.btn.small{width:auto; padding:9px 15px; font-size:13px;}
-.btn.danger{background:transparent; color:var(--bad); border:1px solid var(--bad); box-shadow:none;}
-.btn:disabled{opacity:.45; cursor:default;}
+label.btn{cursor:pointer; -webkit-tap-highlight-color:transparent; font-size:15.5px; line-height:1.2;}
+.btn{background:var(--primary); color:var(--on-primary); font-weight:700; border-radius:999px; padding:16px 22px; width:100%; min-height:52px; box-shadow:var(--shadow-btn), var(--edge); line-height:1.2;}
+.btn.secondary{background:var(--peach); color:var(--on-peach); box-shadow:none; font-weight:700;}
+.btn.ghost{background:transparent; color:var(--ink); border:1.5px solid var(--line-strong); font-weight:600; box-shadow:none;}
+.btn.danger{background:transparent; color:var(--bad); border:1.5px solid var(--bad); box-shadow:none; font-weight:600;}
+.btn.small{width:auto; padding:10px 18px; min-height:44px; font-size:13.5px;}
+.btn:disabled{background:var(--track); color:var(--muted); border-color:transparent; box-shadow:none; cursor:default; transform:none;}
 /* ---- Hero ---- */
-.hero{position:relative; overflow:hidden; background:linear-gradient(165deg,var(--surface) 0%,var(--surface2) 100%);
-  border:1px solid var(--line); border-radius:26px; padding:20px 18px 18px; margin:4px 0 12px; text-align:center;}
-.hero .glow{position:absolute; left:50%; top:-30%; width:120%; height:80%; transform:translateX(-50%);
-  background:radial-gradient(closest-side, var(--glow), transparent 72%); pointer-events:none;}
-.greet{font-family:var(--font-display); font-weight:700; font-size:24px; position:relative;}
-.hero-sub{font-size:13px; color:var(--ink2); margin-top:3px; position:relative;}
-.ringwrap{position:relative; width:176px; height:176px; margin:16px auto 6px;}
+.hero{position:relative; overflow:hidden; background:var(--peach); color:var(--ink); border-radius:28px; padding:24px 18px 20px; margin:6px 0 14px; text-align:center; isolation:isolate;}
+.hero::before{content:""; position:absolute; right:-52px; top:-58px; width:170px; height:170px; border-radius:50%; background:var(--mint); z-index:-1; pointer-events:none;}
+.greet{font-weight:800; font-size:27px; letter-spacing:0; position:relative;}
+.hero-sub{font-size:13.5px; color:var(--ink2); margin-top:3px; position:relative;}
+.ringwrap{position:relative; width:176px; height:176px; margin:18px auto 8px;}
 .ringwrap svg{width:176px; height:176px; display:block;}
-.ring-track{stroke:var(--line); stroke-width:10; fill:none;}
-.ring-prog{stroke:var(--accent); stroke-width:10; fill:none; stroke-linecap:round;
-  transform:rotate(-90deg); transform-origin:88px 88px; transition:stroke-dashoffset .6s ease;}
-.playbtn{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width:92px; height:92px; border-radius:50%; background:var(--accent); color:var(--on-accent);
-  display:flex; align-items:center; justify-content:center; box-shadow:0 12px 32px var(--glow);}
+.ring-track{stroke:var(--ring-track); stroke-width:11; fill:none;}
+.ring-prog{stroke:var(--primary-deep); stroke-width:11; fill:none; stroke-linecap:round; transform:rotate(-90deg); transform-origin:88px 88px; transition:stroke-dashoffset .6s ease;}
+.playbtn{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:96px; height:96px; border-radius:50%; background:var(--primary); color:var(--on-primary); display:flex; align-items:center; justify-content:center; box-shadow:0 12px 30px var(--glow), var(--edge);}
 .playbtn:active{transform:translate(-50%,-50%) scale(.95)}
-.playbtn svg{width:34px; height:34px; fill:var(--on-accent); margin-left:5px;}
-.ring-lbl{font-size:12.5px; color:var(--muted); position:relative;}
-.hero-stats{display:flex; justify-content:center; gap:22px; margin-top:14px; position:relative; flex-wrap:wrap;}
-.delta{font-size:12px; font-weight:700;}
+.playbtn svg{width:36px; height:36px; fill:var(--on-primary); margin-left:5px;}
+.ring-lbl{font-size:13px; font-weight:600; color:var(--ink2); position:relative;}
+.hero-stats{display:flex; justify-content:center; gap:24px; margin-top:16px; position:relative; flex-wrap:wrap;}
+.delta{font-size:12.5px; font-weight:700;}
 .delta.up{color:var(--good)} .delta.down{color:var(--bad)} .delta.flat{color:var(--muted)}
 /* ---- Listen & Pills ---- */
 .ex-item{display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line);}
 .ex-item:last-child{border-bottom:none}
-.ex-item .num{width:27px; height:27px; border-radius:50%; background:var(--surface2); color:var(--ink2); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.ex-item .num{width:30px; height:30px; border-radius:50%; background:var(--mint); color:var(--on-mint); font-size:12.5px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
 .ex-item .t{flex:1; min-width:0;}
-.ex-item .t .n{font-weight:600;}
-.ex-item .t .d{font-size:12px; color:var(--muted);}
-.pill{font-size:11px; font-weight:700; padding:4px 9px; border-radius:999px; background:var(--surface2); color:var(--ink2); white-space:nowrap;}
-.pill.acc{background:var(--accent-soft); color:var(--accent-deep);}
+.ex-item .t .n{font-weight:700;}
+.ex-item .t .d{font-size:12.5px; color:var(--muted);}
+.pill{font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:999px; background:var(--surface2); color:var(--ink2); white-space:nowrap;}
+.pill.acc{background:var(--peach); color:var(--on-peach);}
 /* ---- Tabbar ---- */
-nav.tabs{
-  position:fixed; bottom:0; left:0; right:0; z-index:40;
-  background:var(--surface);
-  background:color-mix(in srgb, var(--surface) 80%, transparent);
-  -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
-  border-top:1px solid var(--line);
-  padding:7px 10px calc(7px + env(safe-area-inset-bottom,0px));
-}
+nav.tabs{position:fixed; bottom:0; left:0; right:0; z-index:40; background:var(--tabbar); -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px); border-top:1px solid var(--line); padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));}
 nav.tabs .inner{max-width:540px; margin:0 auto; display:flex; gap:4px;}
-nav.tabs button{flex:1; background:none; color:var(--muted); font-size:10.5px; font-weight:600; padding:7px 2px 6px; display:flex; flex-direction:column; align-items:center; gap:3px; border-radius:14px;}
-nav.tabs button svg{width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;}
-nav.tabs button.active{color:var(--accent-deep); background:var(--accent-soft);}
+nav.tabs button{flex:1; background:none; color:var(--muted); font-size:11px; font-weight:700; padding:8px 2px 7px; min-height:48px; display:flex; flex-direction:column; align-items:center; gap:3px; border-radius:999px;}
+nav.tabs button svg{width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+nav.tabs button.active{color:var(--on-peach); background:var(--peach);}
 .screen{display:none}
 .screen.active{display:block; animation:screenIn .28s cubic-bezier(.2,.7,.3,1);}
 @keyframes screenIn{from{opacity:0; transform:translateY(8px)}}
 /* ---- Overlays ---- */
-.overlay{position:fixed; inset:0; z-index:60; background:var(--bg); display:none; overflow-y:auto; padding:env(safe-area-inset-top,0px) 0 calc(20px + env(safe-area-inset-bottom,0px));}
+.overlay{position:fixed; inset:0; z-index:60; background:var(--bg); display:none; overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:env(safe-area-inset-top,0px) 0 calc(20px + env(safe-area-inset-bottom,0px));}
 .overlay.active{display:block; animation:screenIn .25s ease;}
-.overlay .inner{max-width:540px; margin:0 auto; padding:0 18px 30px;}
+.overlay .inner{max-width:540px; margin:0 auto; padding:0 max(18px,env(safe-area-inset-right,0px)) 30px max(18px,env(safe-area-inset-left,0px));}
 .overlay header{display:flex; align-items:center; gap:10px; padding:14px 0 8px;}
-.overlay header .x{background:var(--surface2); border:1px solid var(--line); color:var(--ink2); width:38px; height:38px; border-radius:50%; font-size:16px; flex-shrink:0;}
-.overlay header .ttl{flex:1; font-weight:700; font-size:15px;}
-.overlay header .step{font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums;}
-.pdots{display:flex; gap:5px; margin:2px 0 10px;}
-.pdots i{height:4px; flex:1; border-radius:2px; background:var(--surface2); display:block;}
-.pdots i.on{background:var(--accent);}
-.ex-title{font-family:var(--font-display); font-weight:700; font-size:25px; margin:6px 0 2px; text-wrap:balance;}
-.ex-meta{font-size:12px; color:var(--muted); margin-bottom:10px;}
-.instr{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px;}
+.overlay header .x{background:var(--surface); color:var(--ink); width:44px; height:44px; border-radius:50%; flex-shrink:0; box-shadow:var(--shadow), var(--edge); display:flex; align-items:center; justify-content:center;}
+.overlay header .x svg{width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:2.5; stroke-linecap:round;}
+.overlay header .ttl{flex:1; font-weight:700; font-size:15.5px;}
+.overlay header .step{font-size:12.5px; font-weight:600; color:var(--muted); font-variant-numeric:tabular-nums;}
+.pdots{display:flex; gap:5px; margin:2px 0 12px;}
+.pdots i{height:5px; flex:1; border-radius:3px; background:var(--track); display:block;}
+.pdots i.on{background:var(--primary-deep);}
+.ex-title{font-weight:800; font-size:27px; letter-spacing:0; line-height:1.15; margin:8px 0 3px; text-wrap:balance;}
+.ex-meta{font-size:12.5px; font-weight:600; color:var(--muted); margin-bottom:10px;}
+.instr{background:var(--surface); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow);}
 .instr ol{margin:4px 0 4px 18px; padding:0;}
-.instr li{margin:7px 0;}
-.instr .why{font-size:12.5px; color:var(--ink2); border-top:1px solid var(--line); margin-top:10px; padding-top:9px;}
-.feedback{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:13px; margin:12px 0; text-align:center;}
-.feedback canvas{width:100%; height:150px; display:block; border-radius:12px; background:var(--surface2);}
-.bigval{font-family:var(--font-display); font-size:46px; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:-1px; line-height:1.1;}
-.bigval .unit{font-size:16px; color:var(--muted); font-weight:500; font-family:var(--font-body);}
-.levelbar{height:14px; border-radius:7px; background:var(--surface2); overflow:hidden; margin:10px 0 2px; position:relative;}
-.levelbar .fill{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-deep)); border-radius:7px; transition:width .06s linear;}
-.levelbar .zone{position:absolute; top:0; bottom:0; border-left:2px dashed var(--ref); border-right:2px dashed var(--ref); opacity:.7;}
+.instr li{margin:8px 0;}
+.instr .why{font-size:13px; background:var(--lavender); color:var(--on-lavender); border-radius:var(--radius-sm); margin-top:12px; padding:10px 12px;}
+.sent{background:var(--sky); color:var(--on-sky); border-radius:var(--radius); padding:14px 18px; margin:12px 0 0;}
+.sent div{font-size:17px; font-weight:700; padding:6px 0; line-height:1.35;}
+/* ---- Feedback ---- */
+.feedback{background:var(--surface); border-radius:var(--radius); padding:14px; margin:12px 0; text-align:center; box-shadow:var(--shadow);}
+.feedback canvas{width:100%; height:160px; display:block; border-radius:var(--radius-sm); background:var(--stage);}
+.bigval{font-size:50px; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.5px; line-height:1.1;}
+.bigval .unit{font-size:16px; color:var(--muted); font-weight:600; letter-spacing:0;}
+.levelbar{height:14px; border-radius:7px; background:var(--track); overflow:hidden; margin:10px 0 2px; position:relative;}
+.levelbar .fill{height:100%; width:0%; background:var(--primary-deep); border-radius:7px; transition:width .06s linear; position:relative; z-index:1;}
+.levelbar .zone{position:absolute; top:0; bottom:0; background:var(--sky); border-left:2px solid var(--ref); border-right:2px solid var(--ref); opacity:1; z-index:0;}
 .controls{display:flex; gap:10px; margin-top:14px;}
-.controls .btn{flex:1}
+.controls .btn{flex:1; min-width:0; padding-left:12px; padding-right:12px;}
 .slider-row{display:flex; align-items:center; gap:10px; margin:8px 0;}
-.slider-row input[type=range]{flex:1; accent-color:var(--accent);}
+.slider-row input[type=range]{flex:1; height:32px; margin:0; accent-color:var(--primary-deep);}
+input[type=range]{height:32px; accent-color:var(--primary-deep);}
+/* ---- Charts ---- */
 .chartbox{margin:6px 0 2px;}
-.chartbox svg{width:100%; height:auto; display:block;}
-.chart-cap{font-size:12px; color:var(--muted); min-height:16px; font-variant-numeric:tabular-nums;}
+.chartbox svg{width:100%; height:auto; display:block; overflow:visible;}
+.chartbox svg text{font-family:var(--font); font-weight:600;}
+.chart-cap{font-size:12.5px; font-weight:600; color:var(--muted); min-height:16px; font-variant-numeric:tabular-nums;}
+/* ---- Tabellen ---- */
 table.data{width:100%; border-collapse:collapse; font-size:13.5px;}
-table.data th{text-align:left; font-weight:700; color:var(--ink2); padding:6px 6px 6px 0; border-bottom:1px solid var(--line); font-size:12px;}
-table.data td{padding:8px 6px 8px 0; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums;}
+table.data th{text-align:left; font-weight:700; color:var(--ink2); padding:6px 8px 6px 0; border-bottom:1px solid var(--line-strong); font-size:12px; white-space:nowrap;}
+table.data td{padding:8px 8px 8px 0; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; vertical-align:top;}
 table.data tr:last-child td{border-bottom:none}
+/* ---- VHI ---- */
 .vhi-item{padding:12px 0; border-bottom:1px solid var(--line);}
 .vhi-item:last-child{border:none}
 .vhi-item .q{margin-bottom:8px; font-size:14px;}
 .vhi-opts{display:flex; gap:6px;}
-.vhi-opts button{flex:1; padding:9px 0; border-radius:10px; background:var(--surface2); color:var(--ink2); font-size:12px; font-weight:700; border:1.5px solid transparent;}
-.vhi-opts button.sel{background:var(--accent-soft); color:var(--accent-deep); border-color:var(--accent);}
-.notice{border-left:3px solid var(--warn); background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--warn); border-radius:0 var(--radius) var(--radius) 0; padding:11px 14px; font-size:13px; color:var(--ink2); margin:10px 0;}
-.notice.acc{border-left-color:var(--accent);}
-input[type=date],select{font-family:var(--font-body); font-size:14px; padding:9px 11px; border:1px solid var(--line); border-radius:11px; background:var(--surface2); color:var(--ink);}
-.dots{display:flex; gap:5px; margin-top:8px;}
-.dots .d{width:14px; height:14px; border-radius:5px; background:var(--surface2); border:1px solid var(--line);}
-.dots .d.on{background:var(--accent); border-color:var(--accent);}
-.passage{background:var(--surface2); border-radius:12px; padding:12px 14px; font-size:15.5px; line-height:1.65; max-height:240px; overflow-y:auto;}
-.effort-lbls{display:flex; justify-content:space-between; font-size:11px; color:var(--muted);}
-a{color:var(--accent-deep);}
+.vhi-opts button{flex:1; min-height:44px; padding:10px 0; border-radius:999px; background:var(--surface); color:var(--ink2); font-size:13.5px; font-weight:700; border:1.5px solid var(--line-strong);}
+.vhi-opts button.sel{background:var(--peach); color:var(--on-peach); border-color:var(--primary-deep);}
+/* ---- Hinweise, Eingaben ---- */
+.notice{background:var(--surface); border:none; border-left:4px solid var(--warn); border-radius:var(--radius-sm); padding:12px 14px; font-size:13.5px; color:var(--ink2); margin:10px 0; box-shadow:var(--shadow);}
+.notice.acc{background:var(--peach); color:var(--on-peach); border-left-color:var(--primary-deep); box-shadow:none;}
+.notice.neutral{border-left-color:var(--line-strong);}
+input[type=date],select{font-family:var(--font); font-size:14px; font-weight:600; min-height:44px; padding:10px 12px; border:1.5px solid var(--line-strong); border-radius:12px; background:var(--surface); color:var(--ink); max-width:100%;}
+.dots{display:flex; gap:5px; margin-top:8px; flex-wrap:wrap;}
+.dots .d{width:16px; height:16px; border-radius:5px; background:var(--track); border:none;}
+.dots .d.on{background:var(--primary-deep);}
+.passage{background:var(--surface2); border-radius:var(--radius-sm); padding:12px 14px; font-size:15.5px; line-height:1.65; max-height:240px; overflow-y:auto; overscroll-behavior:contain;}
+.effort-lbls{display:flex; justify-content:space-between; font-size:11.5px; font-weight:600; color:var(--muted);}
+a{color:var(--primary-text); font-weight:600;}
 .mic-err{color:var(--bad); font-size:13px;}
+.mic-inline-err:not(:empty){color:var(--bad); margin-top:6px;}
 /* ---- Übungs-Demos ---- */
-.demo{background:var(--surface2); border:1px solid var(--line); border-radius:14px; padding:8px 0 2px; margin:10px 0 0;}
-.demo svg{width:100%; max-width:300px; height:auto; display:block; margin:0 auto;}
-.demo .cap{text-align:center; font-size:11.5px; color:var(--muted); padding:2px 12px 9px;}
-.demo .st{stroke:var(--ink2); stroke-width:3; fill:none; stroke-linecap:round; stroke-linejoin:round;}
-.demo .stf{fill:var(--ink2); stroke:none;}
-.demo .ac{stroke:var(--accent); stroke-width:3; fill:none; stroke-linecap:round; stroke-linejoin:round;}
-.demo .acf{fill:var(--accent); stroke:none;}
-.demo .ref{stroke:var(--ref); stroke-width:2; stroke-dasharray:4 5; fill:none;}
-.demo .lbl{font:600 13px var(--font-body); fill:var(--ink2);}
-.demo .lblA{font:700 15px var(--font-body); fill:var(--accent-deep);}
+.demo{background:var(--stage); border-radius:20px; padding:12px 0 4px; margin:10px 0 0; overflow:hidden;}
+.demo svg{width:100%; max-width:340px; height:auto; display:block; margin:0 auto;}
+.demo .cap{text-align:center; font-size:13px; font-weight:600; color:var(--ink2); padding:6px 14px 10px;}
+/* global, nicht unter .demo: Stile müssen auch die <use>-Klone der Symbole erreichen */
+.st{stroke:var(--ink); stroke-width:3.5; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+.stf{fill:var(--figure); stroke:none;}
+.bgf{fill:var(--stage); stroke:none;}
+.ac{stroke:var(--primary-deep); stroke-width:3.8; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+.acf{fill:var(--primary-deep); stroke:none;}
+.ref{stroke:var(--ref); stroke-width:2.6; stroke-dasharray:5 5; fill:none;}
+.demo .lbl{font:600 14px var(--font); fill:var(--ink2);}
+.demo .lblA{font:800 17px var(--font); fill:var(--primary-text);}
 @keyframes d-tilt{0%,20%,100%{transform:rotate(0)}35%,45%{transform:rotate(-16deg)}70%,80%{transform:rotate(16deg)}}
 @keyframes d-orbit{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes d-float{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-44px);opacity:0}}
@@ -199,6 +230,7 @@ a{color:var(--accent-deep);}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="k-profile" viewBox="0 0 120 150"><path class="stf" d="M52 8C74 8 91 22 91 40C91 44 89 47 90 49C97 52 105 55 105 59C105 62 100 64 95 65C95 67 98 69 97 71C96 72.5 94 73 94 73.5C95 75 98 77 96 80C94 83 91 84 92 86C94 87 95 89 93 91C90 95 78 101 68 102C68 108 68 113 68 118C84 121 106 127 118 139C119 142 120 146 120 150L0 150C0 146 1 142 2 139C12 127 32 121 44 118C44 112 44 106 44 100C28 96 12 80 12 56C12 28 30 8 52 8Z"/><path class="bgf" d="M71 44C74 40 82 39.5 87 43.5C82 47.5 74 48 71 44Z"/><circle class="stf" cx="82" cy="44" r="2.2"/><path class="bgf" d="M36 55C36 50 39 46 42 46C45 46 48 50 48 55C48 60 45 64 42 64C39 64 36 60 36 55Z"/><path class="stf" d="M40 56C40 53 41.5 51 43 51C44.5 51 46 53 46 56C46 59 44.5 61 43 61C41.5 61 40 59 40 56Z"/><path class="bgf" d="M85 73.5C88 72 92 72 94.5 73.5C92 75 88 75 85 73.5Z"/></symbol><symbol id="k-profile-o" viewBox="0 0 120 150"><path class="stf" d="M52 8C74 8 91 22 91 40C91 44 89 47 90 49C97 52 105 55 105 59C105 62 100 64 95 65C96 67 99.5 68 99.5 71C99.5 73 99 74 99 75.5C99 77 99.5 78 99.5 80C99.5 83 96 85 94 86C95 87.5 95 90 93 92C90 96 78 102 68 103C68 108 68 113 68 118C84 121 106 127 118 139C119 142 120 146 120 150L0 150C0 146 1 142 2 139C12 127 32 121 44 118C44 112 44 106 44 100C28 96 12 80 12 56C12 28 30 8 52 8Z"/><path class="bgf" d="M71 44C74 40 82 39.5 87 43.5C82 47.5 74 48 71 44Z"/><circle class="stf" cx="82" cy="44" r="2.2"/><path class="bgf" d="M36 55C36 50 39 46 42 46C45 46 48 50 48 55C48 60 45 64 42 64C39 64 36 60 36 55Z"/><path class="stf" d="M40 56C40 53 41.5 51 43 51C44.5 51 46 53 46 56C46 59 44.5 61 43 61C41.5 61 40 59 40 56Z"/><path class="bgf" d="M91.5 75.5C91.5 72.5 93.5 70.5 96 70.5C98.5 70.5 100.5 72.5 100.5 75.5C100.5 78.5 98.5 80.5 96 80.5C93.5 80.5 91.5 78.5 91.5 75.5Z"/></symbol><symbol id="k-profile-wide" viewBox="0 0 120 150"><path class="stf" d="M52 8C74 8 91 22 91 40C91 44 89 47 90 49C97 52 105 55 105 59C105 62 100 64 95 65C95 67 98 68 97 70C96 71 95 72 95 73C95 79 96 86 96 91C95 94 93 97 91 99C88 104 78 111 68 112C68 114 68 116 68 118C84 121 106 127 118 139C119 142 120 146 120 150L0 150C0 146 1 142 2 139C12 127 32 121 44 118C44 112 44 106 44 100C28 96 12 80 12 56C12 28 30 8 52 8Z"/><path class="bgf" d="M71 44C74 40 82 39.5 87 43.5C82 47.5 74 48 71 44Z"/><circle class="stf" cx="82" cy="44" r="2.2"/><path class="bgf" d="M36 55C36 50 39 46 42 46C45 46 48 50 48 55C48 60 45 64 42 64C39 64 36 60 36 55Z"/><path class="stf" d="M40 56C40 53 41.5 51 43 51C44.5 51 46 53 46 56C46 59 44.5 61 43 61C41.5 61 40 59 40 56Z"/><path class="bgf" d="M84 80C86 72 92 70 99 70.5C100 76 100 84 99 92C92 92 86 88 84 80Z"/></symbol><symbol id="k-front" viewBox="0 0 140 160"><path class="stf" d="M70 8C92 8 106 26 106 52C106 72 98 90 84 100C78 105 62 105 56 100C42 90 34 72 34 52C34 26 48 8 70 8ZM58 96L82 96C82 105 82 114 82 122C100 124 124 130 138 144C139 148 140 154 140 160L0 160C0 154 1 148 2 144C16 130 40 124 58 122C58 114 58 105 58 96Z"/><path class="stf" d="M29 56C29 52 31 49 33.5 49C36 49 38 52 38 56C38 60 36 63 33.5 63C31 63 29 60 29 56ZM102 56C102 52 104 49 106.5 49C109 49 111 52 111 56C111 60 109 63 106.5 63C104 63 102 60 102 56Z"/><path class="bgf" d="M47 46C50 41 60 41 63 46C60 51 50 51 47 46ZM77 46C80 41 90 41 93 46C90 51 80 51 77 46Z"/><circle class="stf" cx="55" cy="46" r="2.5"/><circle class="stf" cx="85" cy="46" r="2.5"/><path class="bgf" d="M69 50C69 55 68.5 60 67 63C66 64.5 64 65 63 64.5C64.5 67 69 67.5 71.5 65.5C72.2 60 71 55 71 50Z"/><path class="bgf" d="M57 77C62 75.5 78 75.5 83 77C78 79.2 62 79.2 57 77Z"/></symbol><symbol id="k-hand" viewBox="0 0 80 110"><path class="stf" d="M18 110C16 106 15 102 14 98C13 86 13 74 14 62C14 53 14 44 14 36C14 30 23 30 23 36C23 44 23 52 23 60L25 60C25 47 25 33 25 20C25 14 34 14 34 20C34 32 34 44 34 56L36 56C36 42 36 28 36 14C36 8 45 8 45 14C45 28 45 43 45 57L47 57C47 45 47 34 47 22C47 16 56 16 56 22C56 35 56 47 56 60C56 64 58 68 60 70C64 62 67 56 70 50C73 44 81 47 79 54C75 63 71 75 67 88C65 94 64 102 62 110Z"/></symbol><symbol id="k-glass" viewBox="0 0 80 110"><path class="acf" d="M19.4 69C20.3 78.7 21.1 88.3 22 98C22.5 100.5 24 102 27 102L53 102C56 102 57.5 100.5 58 98C58.9 88.3 59.7 78.7 60.6 69Z"/><path class="ac" d="M19.4 69C33 69 47 69 60.6 69"/><path class="st" d="M14 8C16.7 38 19.3 68 22 98C22.5 100.5 24 102 27 102L53 102C56 102 57.5 100.5 58 98C60.7 68 63.3 38 66 8Z"/></symbol><symbol id="k-straw" viewBox="0 0 120 120"><g transform="rotate(-47.7 60 60)"><path class="acf" d="M38 55L46 55L46 65L38 65ZM56 55L64 55L64 65L56 65ZM74 55L82 55L82 65L74 65Z"/><path class="st" d="M2 55L118 55L118 65L2 65Z"/></g></symbol><symbol id="k-headphones" viewBox="0 0 140 160"><path class="ac" d="M27 58C22 -18 118 -18 113 58"/><path class="acf" d="M20 46C20 44.5 21.5 43 23 43L31 43C32.5 43 34 44.5 34 46C34 54 34 62 34 70C34 71.5 32.5 73 31 73L23 73C21.5 73 20 71.5 20 70C20 62 20 54 20 46ZM106 46C106 44.5 107.5 43 109 43L117 43C118.5 43 120 44.5 120 46C120 54 120 62 120 70C120 71.5 118.5 73 117 73L109 73C107.5 73 106 71.5 106 70C106 62 106 54 106 46Z"/></symbol></defs></svg>
 <div class="app">
   <header class="top">
     <div class="brand"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><h1>Stimmtrainer</h1></div>
@@ -216,31 +248,31 @@ a{color:var(--accent-deep);}
           <circle class="ring-track" cx="88" cy="88" r="72"/>
           <circle class="ring-prog" id="ringProg" cx="88" cy="88" r="72" stroke-dasharray="452.4" stroke-dashoffset="452.4"/>
         </svg>
-        <button class="playbtn" onclick="startSession()" aria-label="Training starten"><svg viewBox="0 0 24 24"><path d="M6 3.8v16.4c0 .8.9 1.3 1.6.9l13-8.2c.6-.4.6-1.4 0-1.8l-13-8.2C6.9 2.5 6 3 6 3.8z"/></svg></button>
+        <button class="playbtn" onclick="startSession()" aria-label="Einheit starten"><svg viewBox="0 0 24 24"><path d="M6 3.8v16.4c0 .8.9 1.3 1.6.9l13-8.2c.6-.4.6-1.4 0-1.8l-13-8.2C6.9 2.5 6 3 6 3.8z"/></svg></button>
       </div>
       <div class="ring-lbl" id="ringLbl"></div>
       <div class="hero-stats" id="heroStats"></div>
     </div>
-    <button class="btn secondary" onclick="startQuickCheck()">Tages-Check (~2 Min.)</button>
+    <button class="btn secondary" onclick="startQuickCheck()">Tages-Check</button>
     <div id="homeBaselineHint"></div>
-    <h2>Diese Woche</h2>
+    <h2>Deine Routine</h2>
     <div class="card">
-      <div class="row spread"><span class="small">Trainingstage (letzte 14)</span><span class="small" id="streakTxt"></span></div>
+      <div class="row spread"><span class="small">Letzte 14 Tage</span><span class="small" id="streakTxt"></span></div>
       <div class="dots" id="weekDots"></div>
     </div>
     <div class="card" id="homeTrend"></div>
     <div id="backupHint"></div>
-    <div class="notice" style="border-left-color:var(--line)">
-      <strong>Kein Medizinprodukt.</strong> Diese App unterstützt den Stimmtherapie-Plan aus der Klinik-Untersuchung 11/2024 (muskuläre Spannungsdysphonie, Kehlkopf strukturell gesund). Sie ersetzt keine Therapie und keine ärztliche Kontrolle. Übungen sollen sich leicht anfühlen — alles, was wehtut, sofort stoppen.
+    <div class="notice neutral">
+      <strong>Kein Medizinprodukt.</strong> Die App begleitet deinen Therapieplan aus der Klinik (Nov. 2024) und ersetzt keine Therapie und keine ärztliche Kontrolle. Was wehtut, lässt du weg.
     </div>
   </section>
 
   <!-- ============ ÜBEN ============ -->
   <section class="screen" id="scr-train">
-    <h2>Heutige Einheit</h2>
+    <h2>Heute</h2>
     <p class="small" id="trainPhaseDesc"></p>
     <div class="card" id="todayList"></div>
-    <button class="btn" onclick="startSession()">Geführte Einheit starten</button>
+    <button class="btn" onclick="startSession()">Einheit starten</button>
     <h2>Alle Phasen</h2>
     <div id="phaseOverview"></div>
   </section>
@@ -249,30 +281,22 @@ a{color:var(--accent-deep);}
   <section class="screen" id="scr-test">
     <h2>Messen</h2>
     <div class="card">
-      <div class="row spread">
-        <div><strong>Baseline-Test</strong><div class="small">Volles Protokoll, ~10 Min. Alle 4–6 Wochen wiederholen.</div></div>
-      </div>
-      <div style="height:8px"></div>
-      <button class="btn" onclick="startBaseline()">Baseline starten</button>
+      <strong>Baseline</strong><div class="small">Der volle Test, 10 Min. Alle 4 bis 6 Wochen wiederholen.</div>
+      <div style="height:10px"></div>
+      <button class="btn" onclick="startBaseline()">Starten</button>
     </div>
     <div class="card">
-      <div class="row spread">
-        <div><strong>Tages-Check</strong><div class="small">Ein Vokal, ein Satz, Anstrengung. ~2 Min.</div></div>
-      </div>
-      <div style="height:8px"></div>
-      <button class="btn secondary" onclick="startQuickCheck()">Tages-Check starten</button>
+      <strong>Tages-Check</strong><div class="small">Zwei Aufnahmen und eine Einschätzung. 2 Min.</div>
+      <div style="height:10px"></div>
+      <button class="btn secondary" onclick="startQuickCheck()">Starten</button>
     </div>
     <div class="card">
-      <div class="row spread">
-        <div><strong>VHI-10-Fragebogen</strong><div class="small">Voice Handicap Index. Wöchentlich. Klinikwert Nov 2024: 25/40.</div></div>
-      </div>
-      <div style="height:8px"></div>
-      <button class="btn secondary" onclick="startVHI()">VHI-10 ausfüllen</button>
+      <strong>VHI-10</strong><div class="small">Zehn Fragen, wie sehr die Stimme dich einschränkt. Einmal pro Woche. In der Klinik (Nov. 2024) waren es 25 von 40.</div>
+      <div style="height:10px"></div>
+      <button class="btn secondary" onclick="startVHI()">Ausfüllen</button>
     </div>
-    <h2>Aufnahme-Regeln</h2>
-    <div class="card small">
-      Immer gleiches Gerät, gleicher Abstand (~30 cm / ein Unterarm), gleicher ruhiger Raum. Konstanz zählt mehr als das Mikrofon. Absolutwerte sind app-intern — es zählen die Trends gegen deine eigene Baseline. Die Lesepassage immer in derselben Sprache aufnehmen.
-    </div>
+    <h2>So nimmst du auf</h2>
+    <div class="card flat small">Gleiches Gerät, 30 cm Abstand, gleicher ruhiger Raum, gleiche Sprache beim Lesen. Es zählt der Trend gegen deine Baseline.</div>
     <div id="baselineHistory"></div>
   </section>
 
@@ -286,11 +310,11 @@ a{color:var(--accent-deep);}
   <section class="screen" id="scr-more">
     <h2>Mikrofon</h2>
     <div class="card">
-      <p class="small">Testen, ob das Mikro funktioniert — sprich und beobachte den Pegel.</p>
+      <p class="small">Sprich und beobachte den Pegel.</p>
       <div class="levelbar"><div class="fill" id="micTestFill"></div></div>
       <div class="row spread"><span class="tiny" id="micTestVal">–</span><span class="tiny" id="micTestPitch">–</span></div>
-      <div style="height:8px"></div>
-      <button class="btn secondary" id="micTestBtn" onclick="toggleMicTest()">Mikro-Test starten</button>
+      <div style="height:10px"></div>
+      <button class="btn secondary" id="micTestBtn" onclick="toggleMicTest()">Testen</button>
       <p class="mic-err" id="micErr"></p>
     </div>
 
@@ -300,43 +324,44 @@ a{color:var(--accent-deep);}
       <div style="height:10px"></div>
       <div class="row spread"><span class="small">Phase</span>
         <select id="phaseSelect" onchange="setPhaseOverride(this.value)">
-          <option value="auto">Automatisch (nach Woche)</option>
-          <option value="1">Phase 1 — Lösen &amp; SOVT</option>
-          <option value="2">Phase 2 — Stimm-Gym &amp; Resonanz</option>
-          <option value="3">Phase 3 — In die Sprache</option>
-          <option value="4">Phase 4 — Projektion &amp; Lärm</option>
+          <option value="auto">Automatisch nach Woche</option>
+          <option value="1">Phase 1 · Lockern</option>
+          <option value="2">Phase 2 · Kraft und Resonanz</option>
+          <option value="3">Phase 3 · Ins Sprechen</option>
+          <option value="4">Phase 4 · Laut werden</option>
         </select>
       </div>
     </div>
 
-    <h2>Klinik-Referenz — Nov 2024</h2>
+    <h2>Klinikwerte Nov. 2024</h2>
     <div class="card">
       <table class="data">
-        <tr><td>Diagnose</td><td>Muskuläre Spannungsdysphonie (Hyperfunktion); Kehlkopf strukturell gesund</td></tr>
-        <tr><td>VHI-10</td><td>25 / 40</td></tr>
-        <tr><td>Anstrengung (Selbsteinschätzung)</td><td>8 / 10</td></tr>
-        <tr><td>Mittlere Sprechstimmlage</td><td>104,8 Hz</td></tr>
+        <tr><td>Diagnose</td><td>Muskuläre Spannungsdysphonie, also zu viel Muskelspannung beim Sprechen. Kehlkopf strukturell gesund.</td></tr>
+        <tr><td>VHI-10</td><td>25/40</td></tr>
+        <tr><td>Anstrengung</td><td>8/10</td></tr>
+        <tr><td>Sprechstimmlage</td><td>104,8 Hz</td></tr>
         <tr><td>CPP Sprechen (ADSV)</td><td>9,2 dB</td></tr>
         <tr><td>CPP Vokal (ADSV)</td><td>15,6 dB</td></tr>
         <tr><td>AVQI</td><td>2,6</td></tr>
         <tr><td>Spitzen-Atemdruck</td><td>11,0 cmH₂O (erhöht)</td></tr>
       </table>
-      <p class="tiny">Die Klinik-CPP-Werte stammen aus anderer Hard- und Software (ADSV) und sind mit den CPPS-Werten dieser App nicht direkt vergleichbar. App-Werte nur mit App-Baselines vergleichen.</p>
+      <p class="tiny">Die Klinik misst CPP mit anderer Technik (ADSV). Klarheit (CPPS) ist ein App-Wert, vergleiche ihn mit späteren App-Messungen.</p>
     </div>
 
     <h2>Daten</h2>
     <div class="card stack">
-      <button class="btn secondary" onclick="exportData()">Backup exportieren (JSON-Datei)</button>
-      <button class="btn ghost" onclick="copyData()">Daten in Zwischenablage kopieren</button>
-      <label class="btn ghost" style="text-align:center; display:block;">Backup importieren…<input type="file" accept=".json,application/json" style="display:none" onchange="importData(this)"></label>
+      <button class="btn secondary" onclick="exportData()">Backup sichern</button>
+      <p class="tiny" style="margin:-4px 0 0">Auf dem iPhone öffnet sich das Teilen-Menü: in Dateien (iCloud) oder Google Drive sichern.</p>
+      <label class="btn ghost" style="text-align:center; display:block;">Backup laden<input type="file" accept=".json,application/json" style="display:none" onchange="importData(this)"></label>
+      <button class="btn ghost" onclick="copyData()">Daten kopieren</button>
       <p class="tiny" id="dataInfo"></p>
-      <button class="btn danger" onclick="wipeData()">Alle Daten löschen</button>
+      <button class="btn danger" onclick="wipeData()">Alles löschen</button>
     </div>
 
     <h2>Über die App</h2>
-    <div class="card small">
-      <p>Gebaut um die evidenzbasierten Methoden aus der logopädischen Untersuchung 2024: halb verschlossene Vokaltrakt-Übungen (Strohhalm, Lippenflattern, Wasserblubbern), Vocal Function Exercises, Resonanzstimme, Stretch-and-Flow und gestuftes Projektionstraining. Alle Audio-Analysen laufen lokal auf deinem Gerät; nichts wird hochgeladen.</p>
-      <p><strong>Sicherheit:</strong> Nichts hier soll wehtun oder schwindelig machen. Leichte Muskelanstrengung ist okay; Schmerz, stechendes Unbehagen oder zunehmende Heiserkeit heißt: aufhören und fachlich abklären. Wenn sich die Stimme nach 8–10 Wochen konsequenten Übens nicht verbessert: HNO/Logopädie-Kontrolle vereinbaren. Die 2024 notierten Schluckbeschwerden wurden nie formal untersucht — beim nächsten Termin erwähnen, falls sie noch auftreten.</p>
+    <div class="card flat small">
+      <p>Die App folgt den Methoden aus deiner logopädischen Untersuchung 2024. Alle Analysen laufen auf deinem Gerät, nichts wird hochgeladen.</p>
+      <p><strong>Sicherheit</strong><br>Leichte Muskelarbeit ist in Ordnung. Bei Schmerz oder zunehmender Heiserkeit aufhören und abklären lassen. Bessert sich die Stimme nach 8 bis 10 Wochen nicht, HNO oder Logopädie aufsuchen. Die Schluckbeschwerden von 2024 wurden nie untersucht. Falls sie noch auftreten, beim nächsten Termin ansprechen.</p>
     </div>
   </section>
 </div>
@@ -354,7 +379,7 @@ a{color:var(--accent-deep);}
 <div class="overlay" id="player">
   <div class="inner">
     <header>
-      <button class="x" onclick="closePlayer()">✕</button>
+      <button class="x" onclick="closePlayer()" aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <span class="ttl" id="plSessionTitle">Einheit</span>
       <span class="step" id="plStep"></span>
     </header>
@@ -367,7 +392,7 @@ a{color:var(--accent-deep);}
 <div class="overlay" id="wizard">
   <div class="inner">
     <header>
-      <button class="x" onclick="closeWizard()">✕</button>
+      <button class="x" onclick="closeWizard()" aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <span class="ttl" id="wzTitle">Test</span>
       <span class="step" id="wzStep"></span>
     </header>
@@ -378,10 +403,7 @@ a{color:var(--accent-deep);}
 
 <script>
 "use strict";
-/* =====================================================================
-   Stimmtrainer — Single-File-App.
-   Alle Audio-Analysen laufen lokal im Browser. Nichts wird hochgeladen.
-   ===================================================================== */
+/* Stimmtrainer — Single-File-App. Alle Audio-Analysen laufen lokal im Browser. Nichts wird hochgeladen. */
 
 /* ---------------- Zustand / Speicher ---------------- */
 const CLINIC = { vhi:25, effort:8, meanF0:104.8, cppSpeech:9.2, cppVowel:15.64, date:"2024-11-14" };
@@ -389,10 +411,7 @@ const LS_KEY = "voiceTrainerData_v1";
 let S = loadState();
 
 function defaultState(){
-  return {
-    program:{ startDate: todayStr(), phaseOverride:"auto" },
-    baselines:[], checks:[], vhi:[], sessions:[], lastExport:null
-  };
+  return { program:{ startDate: todayStr(), phaseOverride:"auto" }, baselines:[], checks:[], vhi:[], sessions:[], lastExport:null };
 }
 function loadState(){
   try{ const raw = localStorage.getItem(LS_KEY); if(raw){ return Object.assign(defaultState(), JSON.parse(raw)); } }catch(e){}
@@ -405,10 +424,10 @@ function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/864e5); }
 
 /* ---------------- Phasen & Übungen ---------------- */
 const PHASES = {
-  1:{ name:"Lösen & SOVT", desc:"Woche 1–2 · Den Druck abbauen: Körper lösen, leichte halb-verschlossene Phonation. Alles weich und mühelos." },
-  2:{ name:"Stimm-Gym & Resonanz", desc:"Woche 3–4 · Vocal Function Exercises für Koordination plus vordere, brummende Resonanz auf Wörtern." },
-  3:{ name:"In die Sprache", desc:"Woche 5–6 · Die leichte, resonante Stimme in Phrasen, Sätze und Lesen tragen." },
-  4:{ name:"Projektion & Lärm", desc:"Ab Woche 7 · Laut werden über Resonanz statt Druck — dann gegen Restaurant-Lärm üben." }
+  1:{ name:"Lockern", desc:"Woche 1 bis 2. Druck raus, Stimme weich einsetzen lassen." },
+  2:{ name:"Kraft und Resonanz", desc:"Woche 3 bis 4. Atem und Stimme koordinieren, Klang nach vorn holen." },
+  3:{ name:"Ins Sprechen", desc:"Woche 5 bis 6. Die leichte Stimme in Sätze und Lesen tragen." },
+  4:{ name:"Laut werden", desc:"Ab Woche 7. Lautstärke über Resonanz aufbauen, dann im Lärm üben." }
 };
 function currentPhase(){
   if(S.program.phaseOverride!=="auto") return parseInt(S.program.phaseOverride,10);
@@ -417,65 +436,62 @@ function currentPhase(){
 }
 function weekNum(){ return Math.floor(Math.max(0,daysBetween(S.program.startDate, todayStr()))/7)+1; }
 
-/* Übungsbibliothek. fb: none | timer | pitch | sustain | record | tone | noise */
 const EX = [
- {id:"neck", ph:1, grp:"Aufwärmen", name:"Nacken & Schultern lösen", time:"90 s", fb:"timer", dur:90,
-  steps:["Rechtes Ohr langsam Richtung rechte Schulter sinken lassen. Atmen. 20–30 s pro Seite.","Schultern fünfmal langsam nach hinten rollen.","Kiefer locker hängen lassen: Lippen zu, Zähne auseinander."],
-  why:"Dein Befund 2024 nennt starke Kieferspannung und Zähneknirschen. Der Druck auf deiner Stimme beginnt oberhalb des Kehlkopfs — löse ihn zuerst."},
- {id:"jaw", ph:1, grp:"Aufwärmen", name:"Kiefer- & Kehlkopfmassage", time:"90 s", fb:"timer", dur:90,
-  steps:["Mit den Fingerspitzen den Kaumuskel (Wange) in langsamen Kreisen massieren, 30 s pro Seite. Mund locker öffnen lassen.","Den Kehlkopf (Schildknorpel) seitlich sanft zwischen Daumen und Finger nehmen: kleine, langsame Kreise; vorsichtig hin- und herbewegen.","Es soll sich lösend anfühlen, nie schmerzen. Wenn es wehtut: weniger Druck."],
-  why:"Manuelle Kehlkopftherapie hat starke Evidenz bei muskulärer Spannungsdysphonie. Du assistierst nur: sanft ist wirksam."},
- {id:"yawnsigh", ph:1, grp:"Aufwärmen", name:"Gähn-Seufzer", time:"5 Wdh.", fb:"pitch",
-  steps:["Ein echtes Gähnen beginnen — den Rachen weit werden lassen.","Oben angekommen: einen weichen, behauchten Seufzer abwärts gleiten lassen — „haaah…“.","Kein Druck, keine Kante. Fünf lockere Wiederholungen."],
-  why:"Die Gähnposition ist das Gegenteil des Zusammenpressens aus deinem Befund. Die fallende Kurve auf dem Bildschirm soll glatt sein, nicht stufig."},
- {id:"liptrill", ph:1, grp:"SOVT", name:"Lippenflattern", time:"5×5 s + 5 Glides", fb:"pitch",
-  steps:["Luft durch locker geschlossene Lippen blasen, bis sie flattern („brrr“) — dann Stimme auf einem bequemen tiefen Ton dazu.","~5 s halten. Stoppen die Lippen: Wangen mit zwei Fingern leicht stützen.","Dann die Tonhöhe fünfmal wie eine kleine Sirene auf- und abgleiten lassen."],
-  why:"Halb verschlossene Übungen erzeugen Gegendruck, der die Stimmlippen mit weniger Aufprall und weniger Druck schwingen lässt — das direkte Gegenmittel zu deinen erhöhten 11 cmH₂O."},
- {id:"straw", ph:1, grp:"SOVT", name:"Strohhalm-Phonation", time:"5×5 s + 5 Glides", fb:"pitch",
-  steps:["Normalen Trinkhalm nehmen. Ein bequemes „uh“ durch den Halm tönen — alle Luft durch den Halm, keine durch die Nase.","Ziel: ein fauler, brummender Kribbel um Lippen und Gesicht. 5 Töne à ~5 s.","Dann fünf langsame Tonhöhen-Glides auf und ab durch den Halm. Federleicht bleiben."],
-  why:"Strohhalm-Phonation ist eine der bestuntersuchten Stimmübungen; sie senkt den Phonationsschwellendruck — Stimmgebung wird billiger."},
- {id:"bubbles", ph:1, grp:"SOVT", name:"Wasserblubbern", time:"5×10 s", fb:"sustain",
-  steps:["Strohhalm in ein Glas mit ~2–3 cm Wasser.","~10 s einen ruhigen, gleichmäßigen Blasenstrom blubbern — gleichmäßige Blasen heißen gleichmäßiger Luftstrom.","Dann ein weiches „uh“ dazu. Das Blubbern bleibt gleichmäßig. Fünf Runden."],
-  why:"Deine Logopädin hat Cup Bubbles ausdrücklich verordnet. Das Wasser gibt sofort Feedback: Drücken spritzt, Pressen stoppt es. Der Zähler läuft, solange das Mikro gleichmäßigen Ton hört."},
- {id:"hum", ph:1, grp:"SOVT", name:"Leichtes Summen", time:"10 Wdh.", fb:"none",
-  steps:["Lippen zu, Zähne auseinander, Kiefer locker. Ein weiches „mmm“ auf bequemem Ton.","Die Stelle suchen, an der Lippen und Nase kribbeln oder vibrieren.","Zehn kurze Summer. Denke „klein und brummig“, nie „kräftig“."],
-  why:"Das Kribbeln heißt: Der Klang schwingt vorn, statt im Hals gepresst zu werden. Das wird dein Anker-Gefühl."},
-
- {id:"vfe1", ph:2, grp:"Vocal Function Exercises", name:"VFE 1 — „iii“ halten", time:"2 Wdh., max. Dauer", fb:"sustain", tone:130.8,
-  steps:["Ein „iii“ leise auf dem Referenzton (unten abspielen) so lange wie möglich halten.","So leise wie möglich, ohne hauchig zu werden. Dünn ist okay; gedrückt nicht.","Zweimal. Die App stoppt die Zeit — beobachte, wie deine Sekunden von Woche zu Woche wachsen."],
-  why:"Stemples Vocal Function Exercises sind das Fitnessprogramm der Stimmtherapie: Sie bauen die Koordination von Atem und Stimmlippen neu auf."},
- {id:"vfe2", ph:2, grp:"Vocal Function Exercises", name:"VFE 2 — Glide aufwärts („wuup“)", time:"2 Wdh.", fb:"pitch",
-  steps:["Vom tiefsten bequemen Ton zum höchsten gleiten — auf „wuup“.","Langsam, leise, verbunden. Reißt die Stimme ab: durch ein Lippenflattern gleiten.","Zweimal. Ziel auf dem Bildschirm: eine ununterbrochene Linie."],
-  why:"Dehnt die Stimmlippen durch den ganzen Umfang — laut Befund schwingt dein oberer Bereich am ungleichmäßigsten."},
- {id:"vfe3", ph:2, grp:"Vocal Function Exercises", name:"VFE 3 — Glide abwärts („buum“)", time:"2 Wdh.", fb:"pitch",
-  steps:["Von einem bequemen hohen Ton zum tiefsten gleiten — auf „buum“.","Die Stimme unten vorn ins Gesicht sinken lassen, nicht hinten in den Hals.","Zweimal."],
-  why:"Abwärts-Glides entspannen den Kehlkopf Richtung deiner natürlichen tiefen Lage — die Stimme, die du vor 2020 hattest."},
- {id:"vfe4", ph:2, grp:"Vocal Function Exercises", name:"VFE 4 — Kraftnoten auf „ol“", time:"3 Töne × 2", fb:"sustain", tones:[98,130.8,164.8],
-  steps:["„Ol“ (wie in „Sol“) leise und maximal lang auf drei Tönen halten: tief, mittel, höher (unten abspielen).","Runde Lippen, lockerer Kiefer, brummiges Gefühl.","Jeden Ton zweimal."],
-  why:"Baut effiziente Ausdauer über deine Sprechlage auf, damit Lautstärke nicht mehr vom Drücken abhängt."},
- {id:"resword", ph:2, grp:"Resonanzstimme", name:"Resonanz-Wörter", time:"~2 Min.", fb:"none",
-  steps:["Weich summen, das Gesichts-Kribbeln spüren, dann öffnen: „mm-ma, mm-me, mm-mi, mm-mo, mm-mu“.","Das Kribbeln im Vokal am Leben halten. Fünf Runden.","Dann erst singend, dann sprechend: „meine meine meine“, „Montag Montag Montag“, „morgen morgen morgen“."],
-  why:"In deiner Untersuchung 2024 war das die eine Technik, die deine Stimme sofort verbessert hat. Das ist die Kernfertigkeit des ganzen Programms."},
-
- {id:"resphrase", ph:3, grp:"Resonantes Sprechen", name:"Resonanz-Sätze", time:"10 Sätze", fb:"record",
-  steps:["Summen, dann jeden Satz mit dem Kribbeln vorn sprechen:","„Meine Mama mag Marmelade.“ · „Montagmorgen malt Marie Männchen.“ · „Am Morgen nimmt Nina neun Nüsse.“ · „Manchmal murmelt Martin monoton.“ · „Nimm nie mehr Marzipan mit.“","Einige aufnehmen — die App bewertet die Klarheit (CPPS). Höher = klarere, leichtere Stimme."],
-  why:"Nasal-lastige Sätze erzwingen die vordere Platzierung. Der Aufnahme-Score ist das Therapeuten-Ohr für zu Hause."},
- {id:"read", ph:3, grp:"Resonantes Sprechen", name:"Leichtes Lesen", time:"~1 Min.", fb:"record",
-  steps:["Die halbe Lesepassage (unter Messen → Baseline) laut in deiner leichtesten, summenden Stimme lesen.","An Kommas pausieren. Jeden Satz leise beginnen lassen.","Aufnehmen: Die App meldet Klarheit (CPPS) und mittlere Tonhöhe."],
-  why:"Überträgt die Technik aus den Übungen in verbundenes, echtes Sprechen."},
- {id:"flow", ph:3, grp:"Flow", name:"Stretch-and-Flow", time:"5 Wdh.", fb:"none",
-  steps:["Handfläche vor den Mund. Einen langsamen, warmen Luftstrom blasen — nur spüren, noch ohne Ton.","Das leiseste mögliche hauchige „huu“ dazugeben, ohne den Luftstrom zu verändern.","Schrittweise klarer werden lassen, Richtung normale Stimme. Erst Luft, dann Stimme. Fünf Wiederholungen."],
-  why:"Flow-Phonation hat Studien-Evidenz genau bei deiner Diagnose. Sie lehrt: viel Luft, wenig Muskel — die Umkehrung deines aktuellen Musters."},
-
- {id:"call", ph:4, grp:"Projektion", name:"Resonanz-Rufe", time:"10 Rufe", fb:"record",
-  steps:["Aus einem Summen heraus quer durch den Raum rufen: „Hallo!“ — „Hier drüben!“ — „Einmal noch, bitte!“","Lautstärke kommt aus dem Kribbeln und dem offenen Raum, nicht aus dem Hals. Hustenreiz = zu viel Druck; 20 % zurücknehmen.","Einige Rufe aufnehmen. Ziel: lauterer Pegel bei weiterhin hoher Klarheit."],
-  why:"Trainiert genau die Fähigkeit, die dir im Restaurant fehlt: Projektion ohne Pressen."},
- {id:"noise", ph:4, grp:"Projektion", name:"Sprechen über Lärm", time:"~3 Min.", fb:"noise",
-  steps:["Kopfhörer aufsetzen. Die App spielt Restaurant-Lärm nur in deine Ohren.","Laut Sätze lesen oder frei erzählen — mit der Resonanzstimme über den gedachten Raum projizieren.","Pegelanzeige beobachten: in der markierten Zone bleiben — laut, aber ruhig, keine Druckspitzen."],
-  why:"Simuliert die Restaurant-Situation gefahrlos. Mit Lärm im Ohr springt der Drück-Reflex an — genau den übst du hier zu überschreiben."},
- {id:"cool", ph:1, grp:"Ausklang", name:"Ausklang-Summer", time:"3 Wdh.", fb:"none", always:true,
-  steps:["Drei sanfte, absteigende Summer — wie ein Seufzer durch „mmm“.","Mit einem langsamen Atemzug abschließen, Schultern sinken lassen."],
-  why:"Beendet die Einheit mit entlastetem Kehlkopf."}
+ {id:"neck", ph:1, grp:"Aufwärmen", name:"Nacken lösen", time:"90 s", fb:"timer", dur:90,
+  steps:["Kopf zur Seite sinken lassen, 30 s pro Seite.","Schultern fünfmal langsam nach hinten rollen.","Kiefer hängen lassen. Lippen zu, Zähne auseinander."],
+  why:"Dein Befund nennt Kieferspannung und Zähneknirschen. Ein lockerer Kiefer entlastet den Kehlkopf."},
+ {id:"jaw", ph:1, grp:"Aufwärmen", name:"Kiefer und Kehlkopf massieren", time:"90 s", fb:"timer", dur:90,
+  steps:["Zähne kurz zusammenbeißen. Der harte Muskel vor dem Ohr ist der Kaumuskel.","Dort langsam kreisen, 30 s pro Seite.","Kehlkopf seitlich locker fassen, sanft hin und her schieben. Nie vorn drücken."],
+  why:"Die Massage lockert die Muskeln, die deine Stimme unter Druck setzen. Bei Schwindel oder Hustenreiz loslassen."},
+ {id:"yawnsigh", ph:1, grp:"Aufwärmen", name:"Gähnen und Seufzen", time:"5 Wdh.", fb:"pitch",
+  steps:["Gähnen ansetzen, Rachen weit werden lassen, Kiefer bleibt locker.","Von oben weich und behaucht abwärts seufzen, „haaah“.","Fünfmal, ohne Druck."],
+  why:"Gähnen öffnet den Rachen so weit, wie es geht. Das ist die Gegenbewegung zum Drücken."},
+ {id:"liptrill", ph:1, grp:"Mit Widerstand", name:"Lippenflattern", time:"5 × 5 s, 5 Gleittöne", fb:"pitch",
+  steps:["Lippen locker. Luft blasen, bis sie flattern.","Stimme dazu auf einem bequemen mittleren Ton. 5 s halten.","Dann fünfmal wie eine Sirene auf und ab gleiten."],
+  why:"Die Lippen bremsen die Luft, die Stimmlippen schwingen mit weniger Druck. In der Klinik war dein Atemdruck mit 11 cmH₂O zu hoch."},
+ {id:"straw", ph:1, grp:"Mit Widerstand", name:"Strohhalm", time:"5 × 5 s, 5 Gleittöne", fb:"pitch",
+  steps:["Dünnen Halm nehmen. Ein bequemes „uh“ durch den Halm summen.","Alle Luft durch den Halm, Wangen bleiben ruhig. 5 × 5 s.","Dann fünfmal langsam und leicht auf und ab gleiten."],
+  why:"Der Halm senkt den Druck, den deine Stimme zum Einsetzen braucht. Sprechen kostet dann weniger Kraft."},
+ {id:"bubbles", ph:1, grp:"Mit Widerstand", name:"Wasserblubbern", time:"5 × 10 s", fb:"sustain",
+  steps:["Halm in ein Glas mit 2 bis 3 cm Wasser stellen.","10 s gleichmäßig blubbern, dann ein weiches „uh“ dazu.","Fünf Runden. Die Blasen bleiben gleichmäßig."],
+  why:"Diese Übung steht in deinem Therapieplan. Spritzt das Wasser, drückst du zu viel."},
+ {id:"hum", ph:1, grp:"Mit Widerstand", name:"Leicht summen", time:"10 Wdh.", fb:"none",
+  steps:["Lippen zu, Zähne auseinander, Kiefer locker.","Ein weiches „mmm“ auf bequemem Ton summen.","Zehnmal kurz summen. Das Kribbeln an Lippen und Nase suchen."],
+  why:"Kribbelt es an den Lippen, sitzt der Klang vorn. Dieses Gefühl brauchst du in allen weiteren Übungen."},
+ {id:"vfe1", ph:2, grp:"Stimmkraft", name:"Ton halten", time:"2 Wdh., maximal lang", fb:"sustain", tone:130.8,
+  steps:["Referenzton anhören und ein leises „iii“ darauf halten, so lange es geht.","So leise wie möglich, aber nicht hauchig.","Zweimal. Die App stoppt die Zeit."],
+  why:"Die Übung baut das Zusammenspiel von Atem und Stimmlippen neu auf. Jede Sekunde mehr ist Fortschritt."},
+ {id:"vfe2", ph:2, grp:"Stimmkraft", name:"Aufwärts gleiten", time:"2 Wdh.", fb:"pitch",
+  steps:["Vom tiefsten zum höchsten bequemen Ton gleiten, auf „wuup“.","Langsam und leise. Bricht die Stimme weg, weiter mit Lippenflattern gleiten.","Zweimal. Die Linie auf dem Bildschirm bleibt durchgehend."],
+  why:"Dehnt die Stimmlippen über den ganzen Umfang. Laut Befund ist dein oberer Bereich am unruhigsten."},
+ {id:"vfe3", ph:2, grp:"Stimmkraft", name:"Abwärts gleiten", time:"2 Wdh.", fb:"pitch",
+  steps:["Von einem bequemen hohen Ton nach unten gleiten, auf „buum“.","Aufhören, bevor es knarrt. Stimme vorn im Gesicht landen lassen.","Zweimal."],
+  why:"Der Weg nach unten löst Spannung im Kehlkopf. Unten nicht drücken, der Ton bleibt weich."},
+ {id:"vfe4", ph:2, grp:"Stimmkraft", name:"Drei Töne halten", time:"3 Töne × 2", fb:"sustain", tones:[98,130.8,164.8],
+  steps:["Referenztöne anhören. „Ol“ wie in „Kohl“ leise und lang halten.","Lippen rund, Kiefer locker.","Jeden der drei Töne zweimal."],
+  why:"Baut Ausdauer über deine ganze Sprechlage auf. Lautstärke braucht dann kein Drücken mehr."},
+ {id:"resword", ph:2, grp:"Resonanz", name:"Resonanz-Wörter", time:"2 Min.", fb:"none",
+  steps:["Summen, dann öffnen. „Mm-ma, mm-me, mm-mi, mm-mo, mm-mu“.","Das Kribbeln im Vokal behalten. Fünf Runden.","Dann sprechen. „Meine, Montag, morgen“, je dreimal."],
+  why:"In der Untersuchung 2024 hat diese Technik deine Stimme auf Anhieb verbessert. Deshalb ist sie fest im Programm."},
+ {id:"resphrase", ph:3, grp:"Resonanz", name:"Resonanz-Sätze", time:"Drei Sätze, je dreimal", fb:"record",
+  sentences:["Meine Mama mag Marmelade.","Manchmal murmelt Martin monoton.","Montagmorgen malt Marie Männchen."],
+  steps:["Summen, dann jeden Satz mit dem Kribbeln vorn sprechen.","Drei Sätze, je dreimal.","Einige Sätze aufnehmen. Die App misst die Klarheit."],
+  why:"Die vielen M und N holen den Klang nach vorn. Die Klarheit zeigt dir, ob es klappt."},
+ {id:"read", ph:3, grp:"Resonanz", name:"Leicht lesen", time:"1 Min.", fb:"record",
+  steps:["Die halbe Lesepassage der Baseline laut lesen, mit dem Kribbeln vorn.","An Kommas pausieren. Jeden Satz leise beginnen.","Aufnehmen. Die App zeigt Klarheit und mittlere Tonhöhe."],
+  why:"Hier wandert die Technik aus den Übungen ins zusammenhängende Sprechen."},
+ {id:"flow", ph:3, grp:"Luftfluss", name:"Erst Luft, dann Stimme", time:"5 Wdh.", fb:"none",
+  steps:["Handfläche vor den Mund. Einen langsamen, warmen Luftstrom blasen, ohne Ton.","Das leiseste hauchige „huu“ dazugeben. Der Luftstrom bleibt gleich.","Langsam klarer werden bis zur normalen Stimme. Fünfmal."],
+  why:"Deine Stimme startet mit zu viel Muskel und zu wenig Luft. Hier drehst du das um."},
+ {id:"call", ph:4, grp:"Projektion", name:"Rufen mit Resonanz", time:"10 Rufe", fb:"record",
+  steps:["Aus dem Summen heraus durch den Raum rufen. „Hallo!“ „Hier drüben!“","Lautstärke aus dem Kribbeln holen, den Hals weit lassen.","Hustenreiz heißt zu viel Druck. 20 % zurücknehmen."],
+  why:"Trainiert, was dir im Restaurant fehlt. Laut werden, ohne zu drücken."},
+ {id:"noise", ph:4, grp:"Projektion", name:"Sprechen im Lärm", time:"3 Min.", fb:"noise",
+  steps:["Kopfhörer aufsetzen. Die App spielt Restaurant-Lärm ins Ohr.","Laut lesen oder frei erzählen, mit dem Kribbeln vorn, wie im Restaurant.","Pegel in der markierten Zone halten. Laut, aber ruhig."],
+  why:"Bei Lärm im Ohr drückst du automatisch. Hier übst du, trotzdem locker zu bleiben."},
+ {id:"cool", ph:1, grp:"Ausklang", name:"Ausklang", time:"3 Wdh.", fb:"none", always:true,
+  steps:["Dreimal sanft abwärts summen, wie ein Seufzer auf „mmm“.","Langsam ausatmen, Schultern sinken lassen."],
+  why:"Die Einheit endet mit entlastetem Kehlkopf."}
 ];
 
 function sessionPlan(){
@@ -489,118 +505,30 @@ function sessionPlan(){
   return ids.map(id=>EX.find(e=>e.id===id));
 }
 
-/* ---------------- Übungs-Animationen (SVG) ---------------- */
+/* ---------------- Übungs-Szenen (SVG) ---------------- */
+const SCENES = {
+  neck:{svg:"<path class=\"ac\" d=\"M154 58C186 68 162 90 152 102\"/> <g transform=\"rotate(22 89.5 108.3)\"><g style=\"animation: d-tilt 6s ease-in-out infinite; transform-origin: 89.5px 108.3px\"><g transform=\"translate(30 8) scale(0.85)\"> <ellipse class=\"stf\" cx=\"32\" cy=\"57\" rx=\"7\" ry=\"10\"/><ellipse class=\"stf\" cx=\"108\" cy=\"57\" rx=\"7\" ry=\"10\"/> <use href=\"#k-front\" x=\"0\" y=\"0\" width=\"140\" height=\"160\"/> <ellipse class=\"bgf\" cx=\"30.5\" cy=\"57\" rx=\"2.4\" ry=\"4.5\"/><ellipse class=\"bgf\" cx=\"109.5\" cy=\"57\" rx=\"2.4\" ry=\"4.5\"/> <ellipse class=\"stf\" cx=\"55\" cy=\"46\" rx=\"9.5\" ry=\"6\"/><ellipse class=\"stf\" cx=\"85\" cy=\"46\" rx=\"9.5\" ry=\"6\"/> <path class=\"st\" d=\"M49 45Q55 51 61 45M79 45Q85 51 91 45\"/> </g></g></g> <path class=\"bgf\" d=\"M0 150L0 82L40 82L76 101L260 101L260 150Z\"/> <path class=\"stf\" d=\"M84 99L104 99L104 108C122 110 140 113 151 122C155 127 157 135 157 144L22 144C22 135 24 127 28 122C39 113 63 110 81 108Z\"/> <circle class=\"acf\" cx=\"144\" cy=\"117\" r=\"4.5\"/> <path class=\"acf\" d=\"M148 108L156.3 102.4L146.6 98.1Z\"/> <text class=\"lblA\" x=\"147\" y=\"30\">Kopf neigen</text> <text class=\"lbl\" x=\"162\" y=\"122\">zur Schulter</text>",cap:"Neige den Kopf sanft zur Schulter"},
+  jaw:{svg:"<use href=\"#k-profile\" x=\"32\" y=\"8\" width=\"112\" height=\"140\"/> <g transform=\"translate(67.8 53.4) rotate(12)\" style=\"filter:brightness(1.3)\"><use href=\"#k-hand\" x=\"0\" y=\"0\" width=\"52.8\" height=\"72.6\"/></g> <g style=\"animation: d-orbit 3s linear infinite; transform-origin: 90px 73px\"><path class=\"ac\" d=\"M90 59A14 14 0 1 1 76 73\"/><path class=\"acf\" d=\"M76 66L69.5 76.5L82.5 76.5Z\"/></g> <text class=\"lblA\" x=\"198\" y=\"68\" text-anchor=\"middle\">Kiefer</text> <text class=\"lblA\" x=\"198\" y=\"90\" text-anchor=\"middle\">massieren</text>",cap:"Massiere den Kiefermuskel kreisend vor dem Ohr"},
+  yawnsigh:{svg:"<use href=\"#k-profile\" x=\"10\" y=\"2\" width=\"104\" height=\"130\"/> <g transform=\"translate(10 2) scale(0.86667)\"> <circle class=\"stf\" cx=\"89.5\" cy=\"73.5\" r=\"5\"/> <ellipse class=\"stf\" cx=\"79\" cy=\"44\" rx=\"9.5\" ry=\"5.5\"/> <ellipse class=\"stf\" cx=\"42\" cy=\"55\" rx=\"7\" ry=\"10\"/> <path class=\"st\" d=\"M46 47.5C34.5 46.5 34.5 63.5 46 62.5\"/> <path class=\"st\" d=\"M43 52.5C40 53.5 40 57.5 43 58.5\"/> <path class=\"st\" d=\"M71 43C75 49 83 49 87 43\"/> <path class=\"st\" d=\"M69 34C73 28.5 82 28.5 87 33\"/> <ellipse class=\"acf\" cx=\"81\" cy=\"80\" rx=\"12\" ry=\"15\"/> <ellipse class=\"st\" cx=\"81\" cy=\"80\" rx=\"4.5\" ry=\"7.5\" style=\"stroke-width:11\"/> <ellipse class=\"acf\" cx=\"81\" cy=\"88.5\" rx=\"5\" ry=\"3\"/> </g> <path class=\"st\" d=\"M102 49c4-3 8 3 12 0s8 3 12 0M101 56c4-3 8 3 12 0s8 3 12 0s8 3 12 0M100 63c4-3 8 3 12 0s8 3 12 0\"/> <g transform=\"translate(101 70) rotate(15) scale(0.73)\"> <path class=\"ac\" d=\"M0 0C15 4 33 9 45 14C60 20 80 31 95 38C112 46 132 54 150 62\"/> <path class=\"ac\" d=\"M135.4 63.5L150 62L141.4 50.1\"/> <circle class=\"acf\" cx=\"0\" cy=\"0\" r=\"8\" style=\"animation: d-fall 3s ease-in-out infinite\"/> </g> <text class=\"lblA\" transform=\"translate(95 95) rotate(37.4)\">aaah</text> <text class=\"lbl\" x=\"190\" y=\"100\" text-anchor=\"middle\">Ton fällt</text>",cap:"Gähnen, dann seufzend abwärts gleiten"},
+  liptrill:{svg:"<g>   <use href=\"#k-profile\" x=\"8\" y=\"8\" width=\"112\" height=\"140\"/>   <path class=\"stf\" d=\"M47.2 49.6C51.2 49.6 54 53.9 54 59.3C54 64.7 51.2 69 47.2 69C43.2 69 40.4 64.7 40.4 59.3C40.4 53.9 43.2 49.6 47.2 49.6Z\"/> </g> <g style=\"animation: d-vib 0.18s ease-in-out infinite\">   <path class=\"acf\" d=\"M86.5 77C89.5 71 99 67.5 105.5 69.5C111.5 71.5 112.8 75.5 108.5 77.2C112.8 79 112.3 83.5 106 85.2C99.5 87 90 84.5 86.5 77Z\"/>   <path class=\"bgf\" d=\"M89.5 77.3C95 76 102 76.1 108.5 77.2C102 78.6 95 78.7 89.5 77.3Z\"/>   <path class=\"st\" d=\"M115.5 68.5C120.5 73 120.5 82 115.5 86.5\"/>   <path class=\"st\" d=\"M122 65C129 71 129 84 122 90\"/> </g> <g>   <path class=\"ac\" d=\"M134 77l5-3.5 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-3.5\"/>   <path class=\"ac\" transform=\"rotate(-20 112 77)\" d=\"M138 77l5-3.5 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-3.5\"/>   <path class=\"ac\" transform=\"rotate(20 112 77)\" d=\"M138 77l5-3.5 5 7 5-7 5 7 5-7 5 7 5-7 5 7 5-3.5\"/> </g> <text class=\"lblA\" x=\"190\" y=\"83\">brrr</text>",cap:"Lippen locker flattern lassen, Ton dazu"},
+  straw:{svg:"<use href=\"#k-profile-o\" x=\"8\" y=\"15\" width=\"96\" height=\"120\"/> <use href=\"#k-straw\" x=\"80\" y=\"30\" width=\"90\" height=\"90\" transform=\"rotate(47.7 125 75)\"/> <g style=\"animation: d-air 1.6s ease-out infinite\"> <path class=\"ac\" d=\"M174 66L190 66\"/> <path class=\"ac\" d=\"M174 75L197 75\"/> <path class=\"ac\" d=\"M174 84L190 84\"/> </g> <text class=\"lblA\" x=\"140\" y=\"56\" text-anchor=\"middle\">mmm</text>",cap:"Durch den Halm summen"},
+  bubbles:{svg:"<g id=\"person\"><use href=\"#k-profile-o\" x=\"42\" y=\"0\" width=\"88\" height=\"110\"/></g> <g id=\"glass\"> <path class=\"bgf\" d=\"M110.6 61.4L157.4 61.4L150.2 142.4C149.75 144.65 148.4 146 145.7 146L122.3 146C119.6 146 118.25 144.65 117.8 142.4Z\"/> <path class=\"acf\" d=\"M111.7 74L156.3 74L150.2 142.4C149.75 144.65 148.4 146 145.7 146L122.3 146C119.6 146 118.25 144.65 117.8 142.4Z\"/> <use href=\"#k-glass\" x=\"98\" y=\"54.2\" width=\"72\" height=\"99\"/> <g transform=\"scale(0.45)\"><circle class=\"bgf\" cx=\"260\" cy=\"165.8\" r=\"5.3\"/><circle class=\"st\" cx=\"260\" cy=\"165.8\" r=\"5.3\"/><circle class=\"bgf\" cx=\"293.3\" cy=\"162.7\" r=\"7.1\"/><circle class=\"st\" cx=\"293.3\" cy=\"162.7\" r=\"7.1\"/><circle class=\"bgf\" cx=\"318\" cy=\"165.6\" r=\"8\"/><circle class=\"st\" cx=\"318\" cy=\"165.6\" r=\"8\"/><circle class=\"bgf\" cx=\"340\" cy=\"162.9\" r=\"6.2\"/><circle class=\"st\" cx=\"340\" cy=\"162.9\" r=\"6.2\"/></g> <use href=\"#k-hand\" width=\"44\" height=\"60.5\" transform=\"translate(150 144.1) rotate(-90) scale(1 -1)\"/> </g> <g id=\"straw\"> <use href=\"#k-straw\" width=\"62\" height=\"62\" transform=\"translate(113.5 55) rotate(-70.3) translate(-51.15 -8.84)\"/> <ellipse class=\"stf\" cx=\"112.8\" cy=\"56\" rx=\"5.5\" ry=\"6\"/> </g> <g id=\"bubbles\" style=\"animation: d-float 2.6s ease-in infinite\"><g transform=\"translate(146 104) scale(0.45)\"> <circle class=\"bgf\" cx=\"0\" cy=\"0\" r=\"4.5\"/><circle class=\"st\" cx=\"0\" cy=\"0\" r=\"4.5\"/> <circle class=\"bgf\" cx=\"5\" cy=\"-12\" r=\"5.5\"/><circle class=\"st\" cx=\"5\" cy=\"-12\" r=\"5.5\"/> <circle class=\"bgf\" cx=\"-2\" cy=\"-24\" r=\"6.5\"/><circle class=\"st\" cx=\"-2\" cy=\"-24\" r=\"6.5\"/> <circle class=\"bgf\" cx=\"6\" cy=\"-36\" r=\"7.5\"/><circle class=\"st\" cx=\"6\" cy=\"-36\" r=\"7.5\"/> <circle class=\"bgf\" cx=\"0\" cy=\"-48\" r=\"8.5\"/><circle class=\"st\" cx=\"0\" cy=\"-48\" r=\"8.5\"/> </g></g> <text class=\"lblA\" x=\"173\" y=\"80\">blubb</text>",cap:"Gleichmäßig durch den Halm ins Wasser blubbern"},
+  hum:{svg:"<g> <use href=\"#k-profile\" x=\"16\" y=\"10\" width=\"112\" height=\"140\"/> <ellipse class=\"stf\" cx=\"89.7\" cy=\"50.8\" rx=\"9\" ry=\"5.2\"/> <path class=\"st\" d=\"M92 45C84.5 43.5 83 56 90.5 57\"/> <path class=\"st\" d=\"M48 49C52 44.5 59 44.5 63 47\"/> <circle class=\"stf\" cx=\"111.2\" cy=\"65.3\" r=\"3.6\"/> <path class=\"st\" d=\"M94 78.8C97.5 80.2 102 80.2 105.5 78.6\"/> </g> <g> <path class=\"ac\" d=\"M111 53L116 46\"/> <path class=\"ac\" d=\"M113 71L120 66\"/> <path class=\"ac\" d=\"M113 79L122 79\"/> <path class=\"ac\" d=\"M113 88L119 94\"/> <g style=\"animation: d-buzz 1.4s ease-in-out infinite\"> <circle class=\"acf\" cx=\"121\" cy=\"57\" r=\"2.4\"/> <circle class=\"acf\" cx=\"127.5\" cy=\"70\" r=\"2.4\"/> <circle class=\"acf\" cx=\"128\" cy=\"88\" r=\"2.4\"/> <circle class=\"acf\" cx=\"121\" cy=\"101\" r=\"2.4\"/> </g> </g> <text class=\"lblA\" x=\"136\" y=\"84\">mmm</text> <path class=\"ref\" d=\"M143 38L126 51\"/> <text class=\"lbl\" x=\"146\" y=\"40\">Kribbeln vorn</text> <path class=\"ref\" d=\"M114 112L108 84\"/> <text class=\"lbl\" x=\"112\" y=\"124\">Lippen zu</text>",cap:"Summe leise, spüre das Kribbeln vorn"},
+  vfe1:{svg:"<g><use href=\"#k-profile-o\" x=\"2\" y=\"12\" width=\"100\" height=\"125\"/><ellipse class=\"stf\" cx=\"84\" cy=\"75\" rx=\"6.5\" ry=\"4.6\"/><circle class=\"bgf\" cx=\"87\" cy=\"75\" r=\"2.4\"/></g> <path class=\"acf\" d=\"M90 73.8C94 72 97.5 70.5 100 68L100 86C97.5 83.5 94 78 90 76.2Z\"/> <g><rect class=\"acf\" x=\"100\" y=\"68\" width=\"118\" height=\"18\" rx=\"9\" style=\"opacity:.22\"/><rect class=\"acf\" x=\"100\" y=\"68\" width=\"50\" height=\"18\" rx=\"9\" style=\"animation: d-fill 8s linear infinite; transform-origin: 100px 77px\"/><g class=\"acf\" style=\"opacity:.75\"><rect x=\"128.5\" y=\"88\" width=\"2.4\" height=\"6\"/><rect x=\"158\" y=\"88\" width=\"2.4\" height=\"6\"/><rect x=\"187.5\" y=\"88\" width=\"2.4\" height=\"6\"/></g></g> <g class=\"st\" style=\"stroke-width:2.6\"><circle cx=\"233\" cy=\"77\" r=\"9.5\"/><path d=\"M233 77L233 71.5M233 77L237.2 77\"/></g> <text class=\"lblA\" x=\"118\" y=\"56\" text-anchor=\"middle\" style=\"font-size:30px;letter-spacing:2.5px\">iii</text> <text class=\"lbl\" x=\"166\" y=\"112\" text-anchor=\"middle\">lange leise</text>",cap:"Halte den Ton leise und lange"},
+  vfe2:{svg:"<g transform=\"translate(4 8) scale(0.9333)\"> <use href=\"#k-profile-o\" x=\"0\" y=\"0\" width=\"120\" height=\"150\"/> <path class=\"bgf\" d=\"M94 65.2C95.5 66.5 97 68 97 70L97 78.5C97 81 96 84 94 87C92 90 89.5 93 87.5 95.5L83 100.5L108 100.5L108 65.2Z\"/> <circle class=\"bgf\" cx=\"95.5\" cy=\"74.5\" r=\"6\"/> <ellipse class=\"stf\" cx=\"42\" cy=\"55\" rx=\"7.5\" ry=\"10.5\"/> <path class=\"bgf\" d=\"M45 46.5C38.5 46.5 35.5 50.5 35.5 55C35.5 59.5 38.5 63.5 45 63.5C40.5 62 39.5 58.5 39.5 55C39.5 51.5 40.5 48 45 46.5Z\"/> <path class=\"stf\" d=\"M89 47C97 51 108 53.5 109.5 58.5C110.5 63 103.5 65.4 94 65.2C93 62 91 55 89 47Z\"/> </g> <path class=\"ref\" d=\"M122 77.5L250 77.5\"/> <path id=\"vfe2c\" class=\"ac\" d=\"M98 77.5C118 77.5 134 72.5 150.7 67.2C168 61.5 178 55.5 193.7 48.3C209 41 226 32 241 24.2L250 19.5\"/> <path class=\"ac\" d=\"M242.2 30.4L250 19.5L236.6 19.8\"/> <g transform=\"translate(112 77.5) scale(0.86)\"><g style=\"animation: d-rise 2.8s ease-in-out infinite\"><circle class=\"bgf\" cx=\"0\" cy=\"0\" r=\"9.9\"/><circle class=\"acf\" cx=\"0\" cy=\"0\" r=\"7\"/></g></g> <text class=\"lbl\" x=\"112\" y=\"100\" text-anchor=\"middle\">tief</text> <text class=\"lbl\" x=\"250\" y=\"13\" text-anchor=\"end\">hoch</text> <text class=\"lblA\" dy=\"-11\"><textPath href=\"#vfe2c\" startOffset=\"36%\">wuup</textPath></text>",cap:"Gleite mit dem Ton von tief nach hoch"},
+  vfe3:{svg:"<defs><marker id=\"vfe3-arrow\" viewBox=\"0 0 10 10\" refX=\"6\" refY=\"5\" markerUnits=\"userSpaceOnUse\" markerWidth=\"16\" markerHeight=\"16\" orient=\"auto\"><path class=\"acf\" d=\"M1 1L9 5L1 9Z\"/></marker></defs> <g> <use href=\"#k-profile-o\" x=\"0\" y=\"10\" width=\"96\" height=\"120\"/> <g transform=\"translate(0 10) scale(0.8)\"> <circle class=\"stf\" cx=\"42\" cy=\"55\" r=\"9.5\"/> <path class=\"bgf\" d=\"M46 47C35 47 35 62 46 62C39 61 39 48 46 47Z\"/> <path class=\"stf\" d=\"M95 65C101 68 102 76 99.5 81C98.5 85 96.5 88 93 92L86 92L86 65Z\"/> <circle class=\"bgf\" cx=\"94.3\" cy=\"75.5\" r=\"4.2\"/> </g> </g> <path class=\"ac\" d=\"M81.5 71C85 55 92 47 100 47C118 50 200 84 250 109\" marker-end=\"url(#vfe3-arrow)\"/> <circle class=\"acf\" cx=\"100\" cy=\"47\" r=\"5.5\" style=\"animation: d-fall 2.8s ease-in-out infinite\"/> <text class=\"lblA\" x=\"159\" y=\"60\" text-anchor=\"middle\" transform=\"rotate(22.5 159 60)\">buum</text> <g> <text class=\"lbl\" x=\"100\" y=\"37\" text-anchor=\"middle\">hoch</text> <text class=\"lbl\" x=\"236\" y=\"134\" text-anchor=\"middle\">tief</text> </g>",cap:"Gleite mit buum von hoch nach tief"},
+  vfe4:{svg:"<g>   <use href=\"#k-profile-o\" x=\"0\" y=\"0\" width=\"120\" height=\"150\"/>   <ellipse class=\"stf\" cx=\"42\" cy=\"55\" rx=\"7\" ry=\"10\"/>   <path class=\"bgf\" d=\"M41.5 47.5C34.5 47.5 33.5 62.5 41.5 62.5C37.5 60 37.5 50 41.5 47.5Z\"/>   <ellipse class=\"bgf\" cx=\"93.5\" cy=\"75.5\" rx=\"5\" ry=\"6.4\"/> </g> <path class=\"ac\" d=\"M103 79C106 81 108.5 84 110 87\"/> <g>   <g><circle class=\"acf\" cx=\"116\" cy=\"98\" r=\"6.5\"/><rect class=\"acf\" x=\"120\" y=\"82\" width=\"2.6\" height=\"16\"/><rect class=\"acf\" x=\"115.5\" y=\"95\" width=\"38\" height=\"6\" rx=\"3\"/></g>   <g><circle class=\"acf\" cx=\"168\" cy=\"78\" r=\"6.5\"/><rect class=\"acf\" x=\"172\" y=\"62\" width=\"2.6\" height=\"16\"/><rect class=\"acf\" x=\"167.5\" y=\"75\" width=\"38\" height=\"6\" rx=\"3\"/></g>   <g><circle class=\"acf\" cx=\"220\" cy=\"58\" r=\"6.5\"/><rect class=\"acf\" x=\"224\" y=\"42\" width=\"2.6\" height=\"16\"/><rect class=\"acf\" x=\"219.5\" y=\"55\" width=\"38\" height=\"6\" rx=\"3\"/></g> </g> <g style=\"animation: d-steps 6s ease-in-out infinite; transform-origin: 116px 98px\"><circle class=\"ac\" cx=\"116\" cy=\"98\" r=\"12\"/></g> <g>   <text class=\"lblA\" x=\"118\" y=\"66\" text-anchor=\"middle\">ol</text>   <text class=\"lbl\" x=\"131\" y=\"127\" text-anchor=\"middle\">tief</text>   <text class=\"lbl\" x=\"236\" y=\"34\" text-anchor=\"middle\">hoch</text> </g>",cap:"Halte drei Töne: tief, mittel, hoch"},
+  resword:{svg:"<use href=\"#k-front\" x=\"0\" y=\"50\" width=\"87.5\" height=\"100\"/> <g> <text class=\"lblA\" x=\"66\" y=\"103\">mm</text> <path class=\"ac\" d=\"M100 97L140 85M131.2 82.9L140 85L133.8 91.6\"/> </g> <g> <use href=\"#k-front\" x=\"112\" y=\"14\" width=\"119\" height=\"136\"/> <ellipse class=\"stf\" cx=\"158.75\" cy=\"53.1\" rx=\"8.5\" ry=\"5\"/> <ellipse class=\"stf\" cx=\"184.25\" cy=\"53.1\" rx=\"8.5\" ry=\"5\"/> <path class=\"st\" d=\"M151.5 51.5Q158.75 58 166 51.5M177 51.5Q184.25 58 191.5 51.5\"/> <ellipse class=\"stf\" cx=\"171.5\" cy=\"79.7\" rx=\"14\" ry=\"3.2\"/> <ellipse class=\"bgf\" cx=\"171.5\" cy=\"83\" rx=\"13\" ry=\"7\" style=\"animation: d-mouth 2.4s ease-in-out infinite; transform-origin: 171.5px 76px\"/> <path class=\"st\" d=\"M158.5 76Q171.5 79 184.5 76\"/> </g> <g> <path class=\"ac\" d=\"M200.7 68A32 32 0 0 1 200.7 94\"/> <path class=\"ac\" d=\"M209.9 63.9A42 42 0 0 1 209.9 98.1\"/> <path class=\"ac\" d=\"M219 59.9A52 52 0 0 1 219 102.1\"/> </g> <text class=\"lblA\" x=\"227\" y=\"87\">ma</text>",cap:"Öffne den Mund vom mm zum ma"},
+  resphrase:{svg:"<g> <use href=\"#k-profile\" x=\"0\" y=\"0\" width=\"120\" height=\"150\"/> <ellipse class=\"stf\" cx=\"42\" cy=\"55\" rx=\"7\" ry=\"10\"/> <path class=\"st\" d=\"M46.5 50C38.5 49.5 38.5 60.5 46.5 61\"/> <ellipse class=\"stf\" cx=\"89.5\" cy=\"73.5\" rx=\"5\" ry=\"2.5\"/> <ellipse class=\"bgf\" cx=\"93\" cy=\"72.5\" rx=\"3.8\" ry=\"5.5\"/> </g> <g style=\"animation: d-buzz 1.6s ease-in-out infinite\"> <circle class=\"acf\" cx=\"108\" cy=\"47\" r=\"2\"/> <path class=\"ac\" d=\"M111 51L115 47\"/> <circle class=\"acf\" cx=\"114\" cy=\"56\" r=\"2.2\"/> <path class=\"ac\" d=\"M112 62L118 63\"/> <circle class=\"acf\" cx=\"112\" cy=\"69\" r=\"2\"/> <path class=\"ac\" d=\"M104 75L110 77\"/> <circle class=\"acf\" cx=\"106\" cy=\"82\" r=\"2\"/> <path class=\"ac\" d=\"M101 88L106 92\"/> </g> <g> <text class=\"lbl\" x=\"96\" y=\"26\">Kribbeln</text> <path class=\"ref\" d=\"M112 31L110 45\"/> </g> <g> <path class=\"st\" d=\"M148 54H216A10 10 0 0 1 226 64V78A10 10 0 0 1 216 88H148A10 10 0 0 1 138 78L126 72L138 66V64A10 10 0 0 1 148 54Z\"/> <text class=\"lbl\" x=\"182\" y=\"76\" text-anchor=\"middle\">Ja, gut.</text> </g> <g> <path class=\"st\" d=\"M162 98L160 91L172 98H230A10 10 0 0 1 240 108V122A10 10 0 0 1 230 132H162A10 10 0 0 1 152 122V108A10 10 0 0 1 162 98Z\"/> <text class=\"lbl\" x=\"196\" y=\"120\" text-anchor=\"middle\">Ich bin da.</text> </g>",cap:"Sprich kurze Sätze, Kribbeln vorn halten"},
+  read:{svg:"<g> <use href=\"#k-profile\" x=\"4\" y=\"14\" width=\"100\" height=\"125\"/> <circle class=\"bgf\" cx=\"72.3\" cy=\"50.7\" r=\"2.1\"/> <circle class=\"stf\" cx=\"73.7\" cy=\"51.6\" r=\"1.9\"/> </g> <path class=\"ref\" d=\"M84 55L167 70\"/> <g style=\"animation: d-buzz 1.6s ease-in-out infinite\"> <path class=\"ac\" d=\"M95 69A6.5 6.5 0 0 1 95 82\"/> <path class=\"ac\" d=\"M99 62A13.5 13.5 0 0 1 99 89\"/> </g> <text class=\"lblA\" x=\"118\" y=\"84\">mmm</text> <g transform=\"rotate(-8 206 94)\"> <path class=\"bgf\" d=\"M176 58L224 58L236 70L236 130L176 130Z\"/> <path class=\"st\" d=\"M176 58L224 58L236 70L236 130L176 130Z\"/> <path class=\"st\" d=\"M224 58L224 70L236 70\"/> <path class=\"st\" style=\"stroke-width:2.5\" d=\"M186 78L222 78M186 90L216 90M186 102L222 102M186 114L210 114\"/> </g>",cap:"Lies leise summend vom Blatt"},
+  flow:{svg:"<g> <use href=\"#k-profile-o\" x=\"2\" y=\"12\" width=\"104\" height=\"130\"/> <g transform=\"translate(2 12) scale(0.8667)\"> <path class=\"stf\" d=\"M71 44C74 40 82 39.5 87 43.5C82 42.3 75 42.6 71 44Z\"/> <circle class=\"stf\" cx=\"80.5\" cy=\"44.6\" r=\"2.6\"/> <ellipse class=\"stf\" cx=\"42\" cy=\"55\" rx=\"7\" ry=\"10\"/> </g> </g> <g style=\"animation: d-air 2.6s linear infinite\"> <path class=\"ac\" d=\"M95 70C105 65 112 75 122 70C128 67 134 65 140 65M136 61L140 65L136 69\"/> <path class=\"ac\" d=\"M95 78C105 73 112 83 122 78C128 75.5 134 77 140 77M136 73L140 77L136 81\"/> <path class=\"ac\" d=\"M95 86C105 81 112 91 122 86C128 83.5 134 87 140 89M136 85L140 89L136 93\"/> </g> <rect class=\"bgf\" x=\"172\" y=\"28\" width=\"88\" height=\"74\"/> <g> <rect class=\"stf\" x=\"84\" y=\"120\" width=\"39\" height=\"16\" rx=\"8\" transform=\"rotate(19.9 84 128)\"/> <circle class=\"stf\" cx=\"120\" cy=\"141\" r=\"8\"/> <rect class=\"stf\" x=\"120\" y=\"133\" width=\"60\" height=\"16\" rx=\"8\" transform=\"rotate(-43.6 120 141)\"/> <g transform=\"translate(140 37) rotate(-6 23 63)\"> <g transform=\"translate(46 0) scale(-1 1)\"> <use href=\"#k-hand\" x=\"0\" y=\"0\" width=\"46\" height=\"63.25\"/> <path class=\"bgf\" transform=\"scale(0.575)\" d=\"M57 64C61 72 62.5 82 61.5 93C60 82 58.8 72 55 65.5Z\"/> </g> </g> </g> <text class=\"lblA\" x=\"108\" y=\"106\" text-anchor=\"middle\">huu</text>",cap:"Spüre den Luftstrom auf der Handfläche"},
+  call:{svg:"<g> <path class=\"st\" d=\"M248 16L248 124L2 147\"/> <use href=\"#k-front\" x=\"210\" y=\"90\" width=\"32\" height=\"36.6\"/> </g> <g transform=\"translate(0 -4) rotate(6 44 140)\"> <use href=\"#k-profile-wide\" x=\"0\" y=\"28\" width=\"88\" height=\"110\"/> <ellipse class=\"stf\" cx=\"58\" cy=\"60\" rx=\"8\" ry=\"4.5\"/> <path class=\"st\" d=\"M52 64C55 61 61 61 64 64\"/> <ellipse class=\"stf\" cx=\"30.8\" cy=\"68.3\" rx=\"5.6\" ry=\"7.6\"/> <path class=\"bgf\" d=\"M29 64.5C33.5 65 33.5 71.5 29 72C31.8 70.5 31.8 66 29 64.5Z\"/> </g> <g> <path class=\"st\" d=\"M94.9 72.6A20 20 0 0 1 94.9 99.4\"/> <path class=\"st\" style=\"stroke-width:5\" d=\"M108.2 60.6A38 38 0 0 1 108.2 111.4\"/> <path class=\"st\" style=\"stroke-width:6.5; animation: d-pulse 2.4s ease-out infinite; transform-origin: 80px 86px\" d=\"M125.7 50.3A58 58 0 0 1 125.7 121.7\"/> </g> <text class=\"lblA\" x=\"148\" y=\"78\" transform=\"rotate(-8 148 78)\"><tspan font-size=\"12\">H</tspan><tspan font-size=\"14\">a</tspan><tspan font-size=\"16\">l</tspan><tspan font-size=\"18\">l</tspan><tspan font-size=\"20\">o</tspan><tspan font-size=\"23\">!</tspan></text>",cap:"Ruf laut quer durch den Raum"},
+  noise:{svg:"<g style=\"animation: d-vib 0.18s linear infinite\"> <path class=\"ac\" transform=\"rotate(9 12 44)\" d=\"M12 44l9-5 9 10 9-10 9 10 9-10 9 10 9-10 9 5\"/> <path class=\"ac\" d=\"M12 64l9-5 9 10 9-10 9 10 9-10 9 10 9-10 9 5\"/> <path class=\"ac\" transform=\"rotate(-9 12 84)\" d=\"M12 84l9-5 9 10 9-10 9 10 9-10 9 10 9-10 9 5\"/> <g transform=\"translate(260 0) scale(-1 1)\"> <path class=\"ac\" transform=\"rotate(9 12 44)\" d=\"M12 44l9-5 9 10 9-10 9 10 9-10 9 10 9-10 9 5\"/> <path class=\"ac\" d=\"M12 64l9-5 9 10 9-10 9 10 9-10 9 10 9-10 9 5\"/> <path class=\"ac\" transform=\"rotate(-9 12 84)\" d=\"M12 84l9-5 9 10 9-10 9 10 9-10 9 10 9-10 9 5\"/> </g> </g> <text class=\"lblA\" x=\"50\" y=\"30\" text-anchor=\"middle\">Lärm</text> <text class=\"lblA\" x=\"210\" y=\"30\" text-anchor=\"middle\">Lärm</text> <g> <use href=\"#k-front\" x=\"77.5\" y=\"22\" width=\"105\" height=\"120\"/> <ellipse class=\"stf\" cx=\"130\" cy=\"79.8\" rx=\"12.5\" ry=\"3.6\"/> <rect class=\"bgf\" x=\"122.5\" y=\"75.5\" width=\"15\" height=\"9\" rx=\"4\"/> <rect class=\"stf\" x=\"125\" y=\"80.5\" width=\"10\" height=\"2.4\" rx=\"1.2\"/> </g> <g> <path class=\"st\" d=\"M184 92H240Q250 92 250 102V116Q250 126 240 126H184Q174 126 174 116L160 86L174 102Q174 92 184 92Z\"/> <text class=\"lblA\" x=\"212\" y=\"115\" text-anchor=\"middle\">klar</text> </g>",cap:"Sprich klar trotz Lärm von beiden Seiten"},
+  cool:{svg:"<g> <use href=\"#k-profile\" x=\"6\" y=\"8\" width=\"108.8\" height=\"136\"/> <g transform=\"translate(6 8) scale(0.9067)\"> <ellipse class=\"stf\" cx=\"42\" cy=\"55\" rx=\"8.5\" ry=\"11.5\"/> <path class=\"st\" d=\"M35 52C38.5 59.5 46.5 59.5 50 52\"/> <path class=\"st\" d=\"M33 41C38 37 46 36.5 52 39\"/> </g> <path class=\"st\" d=\"M2 144L120 144\"/> </g> <g> <path class=\"ref\" d=\"M4 112L32 97M74 99L120 115\"/> <path class=\"ac\" d=\"M18 107L18 119M90 107L90 116\"/> <path class=\"acf\" d=\"M10.5 117L18 127L25.5 117ZM82.5 114L90 124L97.5 114Z\"/> </g> <g transform=\"translate(98 76)\"> <path class=\"ref\" d=\"M8 0L122 0\"/> <g transform=\"scale(0.85)\"> <path class=\"ac\" d=\"M0 0C30 6 62 22 95 38C120 50 132 55 142 59\"/> <path class=\"acf\" d=\"M150 62L135.5 63.8L141.4 50.2Z\"/> <circle class=\"acf\" cx=\"0\" cy=\"0\" r=\"6.5\" style=\"animation: d-fall 3.2s ease-in infinite\"/> </g> <path class=\"ac\" d=\"M5 -6L9 -11M1 8L5 13\"/> </g> <text class=\"lblA\" x=\"114\" y=\"66\">mmm</text> <text class=\"lbl\" x=\"238\" y=\"80\" text-anchor=\"middle\">hoch</text> <text class=\"lbl\" x=\"222\" y=\"146\" text-anchor=\"middle\">tief</text>",cap:"Summe abwärts, lass die Schultern sinken"}
+};
 function demoSvg(id){
-  const W="<svg viewBox='0 0 240 130' aria-hidden='true'>";
-  const scenes={
-   neck:{cap:"Kopf langsam zur Seite neigen — beide Richtungen",svg:
-    "<path class='ref' d='M76 26 A48 48 0 0 1 164 26'/>"+
-    "<path class='acf' d='M78 30 l-8 -1 5 -7 z'/><path class='acf' d='M162 30 l8 -1 -5 -7 z'/>"+
-    "<g style='transform-origin:120px 96px;animation:d-tilt 6s ease-in-out infinite'>"+
-    "<circle class='st' cx='120' cy='56' r='20'/><circle class='stf' cx='113' cy='52' r='2'/><circle class='stf' cx='127' cy='52' r='2'/><path class='st' d='M120 76 L120 92'/></g>"+
-    "<path class='st' d='M62 116 Q120 98 178 116'/>"},
-   jaw:{cap:"Fingerspitzen kreisen sanft auf dem Kaumuskel",svg:
-    "<circle class='st' cx='120' cy='56' r='32'/><circle class='stf' cx='109' cy='48' r='2.5'/><circle class='stf' cx='131' cy='48' r='2.5'/><path class='st' d='M112 70 Q120 74 128 70'/>"+
-    "<circle class='ref' cx='95' cy='64' r='11'/><circle class='ref' cx='145' cy='64' r='11'/>"+
-    "<g style='transform-origin:95px 64px;animation:d-orbit 2.2s linear infinite'><circle class='acf' cx='95' cy='55' r='4.5'/></g>"+
-    "<g style='transform-origin:145px 64px;animation:d-orbit 2.2s linear infinite'><circle class='acf' cx='145' cy='55' r='4.5'/></g>"+
-    "<text class='lbl' x='120' y='121' text-anchor='middle'>sanft kreisen — Mund locker</text>"},
-   yawnsigh:{cap:"Weit öffnen wie beim Gähnen — dann seufzend abwärts",svg:
-    "<circle class='st' cx='58' cy='48' r='24'/><circle class='stf' cx='50' cy='42' r='2.5'/><circle class='stf' cx='66' cy='42' r='2.5'/>"+
-    "<g style='transform-origin:58px 60px;animation:d-mouth 4s ease-in-out infinite'><ellipse class='stf' cx='58' cy='60' rx='7' ry='11' opacity='.55'/></g>"+
-    "<path class='ref' d='M96 34 Q160 48 232 98'/>"+
-    "<circle class='acf' cx='96' cy='34' r='5' style='animation:d-fall 4s ease-in infinite'/>"+
-    "<text class='lblA' x='150' y='42'>haaah…</text>"},
-   liptrill:{cap:"Lippen flattern lassen wie ein Pferd — dann Ton dazu",svg:
-    "<circle class='st' cx='56' cy='52' r='24'/><circle class='stf' cx='63' cy='45' r='2.5'/><path class='st' d='M80 46 l10 5'/>"+
-    "<g style='animation:d-vib .18s linear infinite'><path class='st' d='M78 58 Q90 52 100 58'/></g>"+
-    "<g style='animation:d-vib .18s linear infinite reverse'><path class='st' d='M78 66 Q90 72 100 66'/></g>"+
-    "<path class='ac' d='M112 54 q8 7 0 14' style='animation:d-air 1.6s linear infinite'/>"+
-    "<path class='ac' d='M112 54 q8 7 0 14' style='animation:d-air 1.6s linear infinite .55s'/>"+
-    "<path class='ac' d='M112 54 q8 7 0 14' style='animation:d-air 1.6s linear infinite 1.1s'/>"+
-    "<text class='lblA' x='150' y='40'>brrr</text>"+
-    "<text class='lbl' x='120' y='121' text-anchor='middle'>locker, kein Druck</text>"},
-   straw:{cap:"Ton federleicht durch den Strohhalm summen",svg:
-    "<circle class='st' cx='52' cy='54' r='22'/><circle class='stf' cx='59' cy='47' r='2.5'/><path class='st' d='M74 48 l9 5'/>"+
-    "<path class='st' d='M74 58 L180 54 M74 66 L180 62'/>"+
-    "<circle class='acf' cx='86' cy='60' r='3.5' style='animation:d-air 1.4s linear infinite'/>"+
-    "<circle class='acf' cx='86' cy='60' r='3.5' style='animation:d-air 1.4s linear infinite .7s'/>"+
-    "<text class='lblA' x='120' y='40'>uuh</text>"+
-    "<text class='lbl' x='120' y='121' text-anchor='middle'>ganze Luft durch den Halm</text>"},
-   bubbles:{cap:"Blasen als Feedback: gleichmäßig = perfekt",svg:
-    "<path class='st' d='M146 40 L152 106 L206 106 L212 40'/><path class='ac' d='M150 70 L208 70' opacity='.5'/>"+
-    "<path class='st' d='M104 24 L172 94'/>"+
-    "<circle class='acf' cx='176' cy='92' r='4' style='animation:d-float 1.8s ease-out infinite'/>"+
-    "<circle class='acf' cx='188' cy='95' r='3' style='animation:d-float 1.8s ease-out infinite .6s'/>"+
-    "<circle class='acf' cx='168' cy='97' r='3' style='animation:d-float 1.8s ease-out infinite 1.2s'/>"+
-    "<text class='lbl' x='72' y='110'>2–3 cm</text><text class='lbl' x='72' y='124'>Wasser</text>"},
-   hum:{cap:"„Mmm“ — das Kribbeln an Lippen und Nase suchen",svg:
-    "<circle class='st' cx='90' cy='58' r='30'/><circle class='stf' cx='80' cy='50' r='2.5'/><circle class='stf' cx='100' cy='50' r='2.5'/><path class='st' d='M78 70 Q90 74 102 70'/>"+
-    "<path class='ac' d='M132 52 q10 12 0 24' style='animation:d-buzz 1.2s ease-in-out infinite'/>"+
-    "<path class='ac' d='M144 46 q14 16 0 36' style='animation:d-buzz 1.2s ease-in-out infinite .3s'/>"+
-    "<path class='ac' d='M156 40 q18 20 0 48' style='animation:d-buzz 1.2s ease-in-out infinite .6s'/>"+
-    "<text class='lblA' x='176' y='40'>mmm</text>"},
-   vfe1:{cap:"Einen Ton halten, so lange und leise es geht",svg:
-    "<text class='lblA' x='40' y='46' font-size='22'>iii</text>"+
-    "<path class='ref' d='M40 72 L200 72'/>"+
-    "<rect class='acf' x='40' y='66' width='160' height='12' rx='6' style='transform-origin:40px 72px;animation:d-fill 8s linear infinite'/>"+
-    "<text class='lbl' x='120' y='108' text-anchor='middle'>leise · gleichmäßig · maximal lang</text>"},
-   vfe2:{cap:"Vom tiefsten zum höchsten Ton — eine Linie, kein Bruch",svg:
-    "<path class='ref' d='M45 100 Q120 88 195 36'/>"+
-    "<circle class='acf' cx='45' cy='100' r='5' style='animation:d-rise 4s ease-in-out infinite'/>"+
-    "<text class='lblA' x='170' y='24'>wuup</text><text class='lbl' x='40' y='120'>tief</text><text class='lbl' x='180' y='58'>hoch</text>"},
-   vfe3:{cap:"Von oben nach ganz unten — vorn im Gesicht landen",svg:
-    "<path class='ref' d='M45 36 Q120 48 195 100'/>"+
-    "<circle class='acf' cx='45' cy='36' r='5' style='animation:d-fall 4s ease-in-out infinite'/>"+
-    "<text class='lblA' x='160' y='122'>buum</text><text class='lbl' x='40' y='24'>hoch</text>"},
-   vfe4:{cap:"Drei Töne nacheinander weich halten",svg:
-    "<path class='ref' d='M48 92 L96 92 M100 72 L148 72 M152 52 L200 52'/>"+
-    "<circle class='acf' cx='60' cy='92' r='5' style='animation:d-steps 6s ease-in-out infinite'/>"+
-    "<text class='lbl' x='72' y='112' text-anchor='middle'>tief</text><text class='lbl' x='124' y='112' text-anchor='middle'>mittel</text><text class='lbl' x='176' y='112' text-anchor='middle'>hoch</text>"},
-   resword:{cap:"Aus dem Summen ins Wort — Vibration bleibt vorn",svg:
-    "<circle class='st' cx='72' cy='58' r='28'/><circle class='stf' cx='63' cy='50' r='2.5'/><circle class='stf' cx='81' cy='50' r='2.5'/><path class='st' d='M60 70 Q72 74 84 70'/>"+
-    "<path class='ac' d='M112 58 L156 58 M148 50 L158 58 L148 66' style='animation:d-buzz 1.4s ease-in-out infinite'/>"+
-    "<text class='lblA' x='168' y='50'>mm-ma</text>"+
-    "<text class='lbl' x='168' y='72'>Kribbeln hält</text>"},
-   resphrase:{cap:"Satz für Satz — das Kribbeln vorn behalten",svg:
-    "<circle class='st' cx='58' cy='60' r='24'/><circle class='stf' cx='50' cy='53' r='2.5'/><circle class='stf' cx='66' cy='53' r='2.5'/><path class='st' d='M48 70 Q58 74 68 70'/>"+
-    "<path class='ac' d='M90 52 q8 8 0 16' style='animation:d-buzz 1.2s ease-in-out infinite'/>"+
-    "<rect class='st' x='108' y='34' width='110' height='50' rx='11'/><path class='st' d='M118 84 l-4 12 14 -10'/>"+
-    "<text class='lblA' x='118' y='56' font-size='13'>Meine Mama</text>"+
-    "<text class='lbl' x='118' y='74'>mag Marmelade.</text>"},
-   read:{cap:"Lesen mit leichter, summender Stimme — leise beginnen",svg:
-    "<path class='st' d='M52 82 Q92 68 120 80 Q148 68 188 82 L188 34 Q148 22 120 34 Q92 22 52 34 Z M120 34 L120 80'/>"+
-    "<path class='ac' d='M60 104 q10 -8 20 0 t20 0 t20 0 t20 0 t20 0 t20 0' stroke-dasharray='6 6' style='animation:d-wave 1.6s linear infinite'/>"+
-    "<text class='lbl' x='120' y='126' text-anchor='middle'>an Kommas pausieren</text>"},
-   flow:{cap:"Luft zuerst auf der Hand spüren — dann Stimme dazu",svg:
-    "<circle class='st' cx='50' cy='56' r='20'/><circle class='stf' cx='56' cy='50' r='2.5'/><circle class='st' cx='70' cy='60' r='4'/>"+
-    "<circle class='acf' cx='84' cy='58' r='3.5' style='animation:d-air 1.6s linear infinite'/>"+
-    "<circle class='acf' cx='84' cy='58' r='3.5' style='animation:d-air 1.6s linear infinite .8s'/>"+
-    "<rect class='st' x='160' y='34' width='30' height='50' rx='11'/>"+
-    "<path class='st' d='M165 34 v-8 M173 34 v-11 M181 34 v-9 M189 40 h9'/>"+
-    "<text class='lblA' x='108' y='40'>huu</text>"+
-    "<text class='lbl' x='120' y='118' text-anchor='middle'>warmer, langsamer Luftstrom</text>"},
-   call:{cap:"Aus dem Summen heraus rufen — Weite statt Druck",svg:
-    "<circle class='st' cx='66' cy='58' r='26'/><circle class='stf' cx='57' cy='50' r='2.5'/><circle class='stf' cx='75' cy='50' r='2.5'/><ellipse class='stf' cx='66' cy='70' rx='5' ry='7' opacity='.5'/>"+
-    "<g style='transform-origin:104px 58px'><path class='ac' d='M104 44 q14 14 0 28' style='animation:d-pulse 1.5s ease-out infinite'/></g>"+
-    "<g style='transform-origin:104px 58px'><path class='ac' d='M116 36 q22 22 0 44' style='animation:d-pulse 1.5s ease-out infinite .5s'/></g>"+
-    "<g style='transform-origin:104px 58px'><path class='ac' d='M128 28 q30 30 0 60' style='animation:d-pulse 1.5s ease-out infinite 1s'/></g>"+
-    "<text class='lblA' x='158' y='46' style='animation:d-buzz 1.5s ease-in-out infinite'>Hallo!</text>"+
-    "<text class='lbl' x='158' y='66'>quer durch</text><text class='lbl' x='158' y='82'>den Raum</text>"},
-   noise:{cap:"Lärm nur im Ohr — die Stimme bleibt ruhig darüber",svg:
-    "<circle class='stf' cx='36' cy='26' r='2' opacity='.6' style='animation:d-buzz .9s infinite'/><circle class='stf' cx='196' cy='20' r='2' opacity='.6' style='animation:d-buzz .9s infinite .3s'/><circle class='stf' cx='216' cy='44' r='2' opacity='.6' style='animation:d-buzz .9s infinite .6s'/><circle class='stf' cx='24' cy='52' r='2' opacity='.6' style='animation:d-buzz .9s infinite .45s'/>"+
-    "<circle class='st' cx='120' cy='58' r='24'/><circle class='stf' cx='112' cy='52' r='2.5'/><circle class='stf' cx='128' cy='52' r='2.5'/><path class='st' d='M112 68 Q120 71 128 68'/>"+
-    "<path class='st' d='M94 52 A26 26 0 0 1 146 52'/>"+
-    "<rect class='st' x='88' y='52' width='11' height='20' rx='5'/><rect class='st' x='141' y='52' width='11' height='20' rx='5'/>"+
-    "<path class='ac' d='M52 106 q10 -7 20 0 t20 0 t20 0 t20 0 t20 0 t20 0' stroke-dasharray='6 6' style='animation:d-wave 1.4s linear infinite'/>"+
-    "<text class='lbl' x='30' y='16'>Lärm</text><text class='lblA' x='120' y='126' text-anchor='middle' font-size='12'>ruhig &amp; klar sprechen</text>"},
-   cool:{cap:"Absteigend aussummen — Schultern sinken lassen",svg:
-    "<path class='ref' d='M50 40 Q90 46 120 66'/><path class='ref' d='M110 56 Q145 64 165 84'/>"+
-    "<circle class='acf' cx='50' cy='40' r='5' style='animation:d-fall 3.4s ease-in-out infinite'/>"+
-    "<text class='lblA' x='176' y='100'>mmm…</text>"}
-  };
-  const sc=scenes[id]; if(!sc) return "";
-  return "<div class='demo'>"+W+sc.svg+"</svg><div class='cap'>"+sc.cap+"</div></div>";
+  const sc=SCENES[id]; if(!sc) return "";
+  return "<div class='demo'><svg viewBox='0 0 260 150' aria-hidden='true'>"+sc.svg+"</svg><div class='cap'>"+sc.cap+"</div></div>";
 }
 
 /* ---------------- Audio-Engine ---------------- */
@@ -608,13 +536,27 @@ const AU = { ctx:null, stream:null, analyser:null, source:null, proc:null,
   running:false, recording:false, recBufs:[], recLen:0, maxRecSec:75,
   frame:new Float32Array(4096), onFrame:null, raf:0, noiseNodes:null, toneNodes:null };
 
+function micErrText(err){
+  const n = err && err.name;
+  if(n==="NotAllowedError" || n==="SecurityError" || n==="PermissionDeniedError") return "Mikrofon nicht erlaubt. Bitte im Browser oder in den Einstellungen freigeben und die Seite neu laden.";
+  if(n==="NotFoundError" || n==="DevicesNotFoundError" || n==="OverconstrainedError") return "Kein Mikrofon gefunden.";
+  if(n==="NotReadableError" || n==="AbortError" || n==="TrackStartError") return "Das Mikrofon wird von einer anderen App benutzt. Dort schließen und nochmal versuchen.";
+  if(err && err.message && !(err instanceof DOMException)) return err.message;
+  return "Mikrofon nicht erreichbar. Bitte Seite neu laden.";
+}
+let micGen=0;
 async function micStart(){
   if(AU.running) return true;
+  if(AU.starting) return false;
+  AU.starting=true;
+  const gen=++micGen;
   try{
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("Mikrofon-API in diesem Kontext nicht verfügbar. App über die Start-Datei (http://localhost) oder als gehostete Seite öffnen.");
-    AU.stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false, channelCount:1}});
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("Das Mikrofon ist hier nicht erreichbar. Öffne die App über die Start-Datei oder als gehostete Seite.");
+    const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false, channelCount:1}});
     AU.ctx = AU.ctx || new (window.AudioContext||window.webkitAudioContext)();
     if(AU.ctx.state==="suspended") await AU.ctx.resume();
+    if(gen!==micGen){ stream.getTracks().forEach(t=>t.stop()); return false; }
+    AU.stream = stream;
     AU.source = AU.ctx.createMediaStreamSource(AU.stream);
     AU.analyser = AU.ctx.createAnalyser(); AU.analyser.fftSize = 4096;
     AU.source.connect(AU.analyser);
@@ -631,14 +573,16 @@ async function micStart(){
     loopFrames();
     return true;
   }catch(err){
+    const msg = micErrText(err);
     const el = document.getElementById("micErr");
-    if(el) el.textContent = "Mikrofon-Fehler: " + (err.message||err.name);
-    const fb = document.querySelector(".feedback .mic-inline-err");
-    if(fb) fb.textContent = "Mikrofon nicht verfügbar: " + (err.message||err.name);
+    if(el) el.textContent = msg;
+    const fb = document.querySelector(".overlay.active .feedback .mic-inline-err");
+    if(fb) fb.textContent = msg;
     return false;
-  }
+  }finally{ AU.starting=false; }
 }
 function micStop(){
+  micGen++;
   cancelAnimationFrame(AU.raf);
   if(AU.stream){ AU.stream.getTracks().forEach(t=>t.stop()); AU.stream=null; }
   if(AU.proc){ try{AU.proc.disconnect();}catch(e){} AU.proc=null; }
@@ -664,12 +608,13 @@ function recStop(){
   for(const b of AU.recBufs){ out.set(b,o); o+=b.length; }
   AU.recBufs=[]; return {samples:out, sr:AU.ctx.sampleRate};
 }
-
-/* Referenzton */
-function tonePlay(freq, sec){
-  toneStop();
+function audioUnlock(){
   if(!AU.ctx) AU.ctx = new (window.AudioContext||window.webkitAudioContext)();
   if(AU.ctx.state==="suspended") AU.ctx.resume();
+}
+function tonePlay(freq, sec){
+  toneStop();
+  audioUnlock();
   const o=AU.ctx.createOscillator(), g=AU.ctx.createGain();
   o.type="sine"; o.frequency.value=freq;
   g.gain.setValueAtTime(0,AU.ctx.currentTime);
@@ -681,8 +626,6 @@ function tonePlay(freq, sec){
   AU.toneNodes={o,g};
 }
 function toneStop(){ if(AU.toneNodes){ try{AU.toneNodes.o.stop();}catch(e){} AU.toneNodes=null; } }
-
-/* Restaurant-Lärm (Kopfhörer) */
 function noiseStart(vol){
   noiseStop();
   if(!AU.ctx) AU.ctx = new (window.AudioContext||window.webkitAudioContext)();
@@ -705,7 +648,6 @@ function noiseStop(){ if(AU.noiseNodes){ try{AU.noiseNodes.src.stop(); AU.noiseN
 
 /* ---------------- DSP ---------------- */
 function rmsOf(b){ let s=0; for(let i=0;i<b.length;i++) s+=b[i]*b[i]; return Math.sqrt(s/b.length); }
-
 function detectPitch(buf,sr){
   const dec=4, N=Math.floor(buf.length/dec), x=new Float32Array(N);
   for(let i=0;i<N;i++){ const j=i*dec; x[i]=(buf[j]+buf[j+1]+buf[j+2]+buf[j+3])*0.25; }
@@ -733,8 +675,6 @@ function detectPitch(buf,sr){
   }
   return {f0:srd/lag, conf:bestC};
 }
-
-/* iterative Radix-2-FFT (in-place, re/im) */
 function fft(re,im){
   const n=re.length;
   for(let i=1,j=0;i<n;i++){ let bit=n>>1; for(;j&bit;bit>>=1) j^=bit; j^=bit;
@@ -754,8 +694,6 @@ function fft(re,im){
     }
   }
 }
-
-/* Vollanalyse einer Aufnahme */
 function analyzeRec(rec){
   const srT=16000, dec=Math.max(1,Math.round(rec.sr/srT)), sr=rec.sr/dec;
   const N=Math.floor(rec.samples.length/dec);
@@ -886,35 +824,31 @@ function nav(id){
   if(id==="more") renderMore();
   window.scrollTo(0,0);
 }
-
 function latestBaseline(){ return S.baselines.length?S.baselines[S.baselines.length-1]:null; }
 function latestCheck(){ return S.checks.length?S.checks[S.checks.length-1]:null; }
 
 function renderHome(){
   const ph=currentPhase();
-  document.getElementById("phaseChip").textContent="Phase "+ph+" · Wo. "+weekNum();
+  document.getElementById("phaseChip").textContent="Phase "+ph+" · Woche "+weekNum();
   const bl=latestBaseline(), ck=latestCheck();
   const doneToday=S.sessions.some(s=>s.date===todayStr());
-  // Begrüßung
   const h=new Date().getHours();
   document.getElementById("greetTxt").textContent = h<11?"Guten Morgen":(h<18?"Guten Tag":"Guten Abend");
-  document.getElementById("heroSub").textContent = (doneToday?"Heute trainiert ✓ · ":"")+"Phase "+ph+" — "+PHASES[ph].name+" · "+sessionPlan().length+" Übungen";
-  // Wochen-Ring (letzte 7 Tage)
+  document.getElementById("heroSub").textContent = (doneToday?"Heute trainiert · ":"")+"Phase "+ph+" · "+PHASES[ph].name+" · "+sessionPlan().length+" Übungen";
   let week=0;
   for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); if(S.sessions.some(s=>s.date===todayStr(d))) week++; }
   const C=452.4;
   document.getElementById("ringProg").style.strokeDashoffset = String(C*(1-week/7));
-  document.getElementById("ringLbl").textContent = week+" von 7 Tagen diese Woche";
-  // Mini-Statistiken
+  document.getElementById("ringLbl").textContent = week+" von 7 Tagen trainiert";
   let stats="";
   if(ck){
-    if(ck.cppsSpeech!=null) stats+=miniStat("Klarheit", ck.cppsSpeech.toFixed(1)+" dB", bl&&bl.cppsSpeech!=null?ck.cppsSpeech-bl.cppsSpeech:null, true);
-    if(ck.mpt!=null) stats+=miniStat("Tonhaltedauer", ck.mpt.toFixed(1)+" s", bl&&bl.mpt!=null?ck.mpt-bl.mpt:null, true);
+    if(ck.cppsSpeech!=null) stats+=miniStat("Klarheit", de(ck.cppsSpeech,1)+" dB", bl&&bl.cppsSpeech!=null?ck.cppsSpeech-bl.cppsSpeech:null, true);
+    if(ck.mpt!=null) stats+=miniStat("Tonhaltedauer", de(ck.mpt,1)+" s", bl&&bl.mpt!=null?ck.mpt-bl.mpt:null, true);
     if(ck.effort!=null) stats+=miniStat("Anstrengung", ck.effort+"/10", bl&&bl.effort!=null?ck.effort-bl.effort:null, false);
   }
   document.getElementById("heroStats").innerHTML=stats;
   document.getElementById("homeBaselineHint").innerHTML = bl?""
-    :"<div class='notice acc'><strong>Erster Schritt: Baseline aufnehmen.</strong> Alles wird daran gemessen. Unter <em>Messen → Baseline</em> (~10 Min., ruhiger Raum).</div>";
+    :"<div class='notice acc'><strong>Zuerst die Baseline.</strong> Dein Ausgangswert, 10 Min. im ruhigen Raum. Du findest sie unter Messen.</div>";
   const dots=[]; let count=0;
   for(let i=13;i>=0;i--){
     const d=new Date(); d.setDate(d.getDate()-i); const ds=todayStr(d);
@@ -922,24 +856,23 @@ function renderHome(){
     dots.push("<div class='d"+(on?" on":"")+"' title='"+ds+"'></div>");
   }
   document.getElementById("weekDots").innerHTML=dots.join("");
-  document.getElementById("streakTxt").textContent=count+" / 14";
+  document.getElementById("streakTxt").textContent=count+" von 14";
   const pts=S.checks.filter(c=>c.cppsSpeech!=null).map(c=>({t:c.date,v:c.cppsSpeech}));
   document.getElementById("homeTrend").innerHTML = pts.length>=2
-    ? "<div class='small' style='margin-bottom:4px'><strong>Klarheits-Trend</strong> · CPPS beim Sprechen (höher = klarer)</div>"+lineChart(pts,{unit:"dB",h:110, ref:bl&&bl.cppsSpeech!=null?[{v:bl.cppsSpeech,label:"Baseline"}]:[]})
-    : "<div class='small'><strong>Klarheits-Trend</strong><br>Erscheint nach den ersten zwei Tages-Checks.</div>";
+    ? "<div class='small' style='margin-bottom:4px'><strong>Klarheit Sprechen</strong> · Beim Lesen, höher ist besser</div>"+lineChart(pts,{unit:"dB",h:130, ref:bl&&bl.cppsSpeech!=null?[{v:bl.cppsSpeech,label:"Baseline"}]:[]})
+    : "<div class='small'><strong>Klarheit Sprechen</strong><br>Erscheint nach dem zweiten Tages-Check.</div>";
   const le=S.lastExport?daysBetween(S.lastExport,todayStr()):999;
   document.getElementById("backupHint").innerHTML = (S.checks.length+S.baselines.length>3 && le>14)
-    ? "<div class='notice'>Lange kein Backup mehr. iPhone-Browser können Web-App-Daten nach längerer Inaktivität löschen — unter <em>Mehr → Daten</em> ein JSON-Backup exportieren.</div>" : "";
+    ? "<div class='notice'>Lange kein Backup. Safari kann die Daten dieser App nach längerer Pause löschen. Unter Mehr ein Backup sichern.</div>" : "";
 }
 function miniStat(lbl,val,delta,higherBetter){
   let d="";
   if(delta!=null&&Math.abs(delta)>0.05){
     const good=(delta>0)===higherBetter;
-    d="<span class='delta "+(good?"up":"down")+"'>"+(delta>0?"+":"")+(Math.round(delta*10)/10)+"</span>";
+    d="<span class='delta "+(good?"up":"down")+"'>"+(delta>0?"+":"")+(Number.isInteger(delta)?String(delta):de(delta,1))+"</span>";
   }
   return "<div><div class='tiny'>"+lbl+"</div><div style='font-weight:700;font-variant-numeric:tabular-nums'>"+val+" "+d+"</div></div>";
 }
-
 function renderTrain(){
   const ph=currentPhase();
   document.getElementById("trainPhaseDesc").textContent=PHASES[ph].desc;
@@ -948,61 +881,59 @@ function renderTrain(){
     "<div class='ex-item'><div class='num'>"+(i+1)+"</div><div class='t'><div class='n'>"+e.name+"</div><div class='d'>"+e.grp+" · "+e.time+"</div></div>"+
     "<button class='btn small ghost' onclick='openExercise(\""+e.id+"\")'>Öffnen</button></div>").join("");
   document.getElementById("phaseOverview").innerHTML=[1,2,3,4].map(p=>
-    "<div class='card"+(p===ph?"":" flat")+"'><div class='row spread'><strong>Phase "+p+" — "+PHASES[p].name+"</strong>"+(p===ph?"<span class='pill acc'>aktuell</span>":"")+"</div>"+
+    "<div class='card"+(p===ph?"":" flat")+"'><div class='row spread'><strong>Phase "+p+" · "+PHASES[p].name+"</strong>"+(p===ph?"<span class='pill acc'>aktuell</span>":"")+"</div>"+
     "<p class='small'>"+PHASES[p].desc+"</p></div>").join("");
 }
-
 function renderTestScreen(){
   const h=document.getElementById("baselineHistory");
   if(!S.baselines.length){ h.innerHTML=""; return; }
-  let rows=S.baselines.map(b=>"<tr><td>"+fmtDate(b.date)+"</td><td>"+n1(b.mpt)+"</td><td>"+n1(b.cppsVowel)+"</td><td>"+n1(b.cppsSpeech)+"</td><td>"+(b.meanF0?Math.round(b.meanF0):"–")+"</td><td>"+(b.vhi!=null?b.vhi:"–")+"</td></tr>").join("");
-  h.innerHTML="<h2>Baselines</h2><div class='card'><table class='data'><tr><th>Datum</th><th>MPT s</th><th>CPPS Vokal</th><th>CPPS Sprechen</th><th>F0 Hz</th><th>VHI</th></tr>"+rows+"</table></div>";
+  let rows=S.baselines.map(b=>"<tr><td>"+fmtDate(b.date)+"</td><td>"+n1(b.mpt)+"</td><td>"+n1(b.cppsSpeech)+"</td><td>"+(b.vhi!=null?b.vhi:"–")+"</td></tr>").join("");
+  h.innerHTML="<h2>Baselines</h2><div class='card'><table class='data'><tr><th>Datum</th><th>Tonhalten (s)</th><th>Klarheit Sprechen</th><th>VHI</th></tr>"+rows+"</table></div>";
 }
-function n1(v){ return v==null?"–":(Math.round(v*10)/10).toFixed(1); }
-
+function de(v,d){ return v==null||!isFinite(v)?"–":Number(v).toFixed(d==null?1:d).replace(".",","); }
+function n1(v){ return de(v,1); }
 function renderProgress(){
   const el=document.getElementById("progressBody");
   const bl=latestBaseline();
   if(!bl && !S.checks.length && !S.vhi.length){
-    el.innerHTML="<div class='card small'>Noch keine Daten. Zuerst eine Baseline aufnehmen (Tab „Messen“), dann täglich den Tages-Check machen — hier erscheinen dann die Verläufe.</div>"; return;
+    el.innerHTML="<div class='card flat small'>Noch keine Daten. Nimm unter Messen eine Baseline auf, danach zeigt der Tages-Check hier deinen Verlauf.</div>"; return;
   }
   let html="";
   const mk=(title,sub,pts,opt)=> pts.length? "<div class='card'><div class='small'><strong>"+title+"</strong> · "+sub+"</div>"+lineChart(pts,opt)+"</div>":"";
-  html+=mk("Stimmklarheit — Sprechen","CPPS beim Lesen, höher ist besser",
+  html+=mk("Klarheit Sprechen","Beim Lesen, höher ist besser",
     S.checks.filter(c=>c.cppsSpeech!=null).map(c=>({t:c.date,v:c.cppsSpeech})),
     {unit:"dB",ref:bl&&bl.cppsSpeech!=null?[{v:bl.cppsSpeech,label:"Baseline"}]:[]});
-  html+=mk("Stimmklarheit — Vokal","CPPS beim gehaltenen „aah“",
+  html+=mk("Klarheit Vokal","Gehaltenes „aah“, höher ist besser",
     S.checks.filter(c=>c.cppsVowel!=null).map(c=>({t:c.date,v:c.cppsVowel})),
     {unit:"dB",ref:bl&&bl.cppsVowel!=null?[{v:bl.cppsVowel,label:"Baseline"}]:[]});
-  html+=mk("Max. Tonhaltedauer","Längstes „aah“, höher ist besser",
+  html+=mk("Tonhaltedauer","Längstes „aah“ in Sekunden, mehr ist besser",
     S.checks.filter(c=>c.mpt!=null).map(c=>({t:c.date,v:c.mpt})),
     {unit:"s",ref:bl&&bl.mpt!=null?[{v:bl.mpt,label:"Baseline"}]:[]});
-  html+=mk("Anstrengung","Selbsteinschätzung 1–10, niedriger ist besser",
+  html+=mk("Anstrengung","Deine Einschätzung von 1 bis 10, niedriger ist besser",
     S.checks.filter(c=>c.effort!=null).map(c=>({t:c.date,v:c.effort})),
     {unit:"/10",ymin:0,ymax:10,ref:[{v:CLINIC.effort,label:"Klinik 2024"}]});
-  html+=mk("Mittlere Sprechstimmlage","Beim Lesen",
+  html+=mk("Sprechstimmlage","Mittlere Tonhöhe beim Lesen",
     S.checks.filter(c=>c.meanF0!=null).map(c=>({t:c.date,v:c.meanF0})),
     {unit:"Hz",ref:[{v:CLINIC.meanF0,label:"Klinik 2024"}]});
-  html+=mk("VHI-10","Stimm-Handicap, niedriger ist besser (≥11 auffällig)",
+  html+=mk("VHI-10","Ab 11 auffällig, niedriger ist besser",
     S.vhi.map(v=>({t:v.date,v:v.score})),
     {unit:"/40",ymin:0,ymax:40,ref:[{v:CLINIC.vhi,label:"Klinik 2024"},{v:11,label:"Normgrenze"}]});
-  el.innerHTML=html||"<div class='card small'>Noch keine darstellbaren Daten.</div>";
+  el.innerHTML=html||"<div class='card flat small'>Noch nichts zu zeigen.</div>";
 }
-
 function renderMore(){
   document.getElementById("startDateInput").value=S.program.startDate;
   document.getElementById("phaseSelect").value=S.program.phaseOverride;
   const n=S.baselines.length+S.checks.length+S.vhi.length+S.sessions.length;
-  document.getElementById("dataInfo").textContent = n+" Einträge lokal in diesem Browser gespeichert. Letztes Backup: "+(S.lastExport?fmtDate(S.lastExport):"nie")+".";
+  document.getElementById("dataInfo").textContent = n+" Einträge in diesem Browser. "+(S.lastExport?"Letztes Backup am "+fmtDate(S.lastExport)+".":"Noch kein Backup.");
 }
 function setStartDate(v){ if(v){ S.program.startDate=v; save(); renderHome(); } }
 function setPhaseOverride(v){ S.program.phaseOverride=v; save(); renderHome(); }
 
-/* ---------------- Charts (SVG mit Flächen-Gradient) ---------------- */
+/* ---------------- Charts ---------------- */
 let CHART_UID=0;
 function lineChart(pts,opt){
   opt=opt||{};
-  const W=480,H=opt.h||150,padL=34,padR=12,padT=12,padB=22;
+  const W=360,H=opt.h||170,padL=44,padR=14,padT=16,padB=26;
   const gid="cg"+(++CHART_UID);
   const vs=pts.map(p=>p.v);
   const refs=(opt.ref||[]).filter(r=>r.v!=null);
@@ -1012,34 +943,36 @@ function lineChart(pts,opt){
   const X=i=>pts.length===1?(padL+(W-padL-padR)/2):padL+(W-padL-padR)*i/(pts.length-1);
   const Y=v=>padT+(H-padT-padB)*(1-(v-lo)/(hi-lo));
   let s="<div class='chartbox'><svg viewBox='0 0 "+W+" "+H+"' role='img'>";
-  s+="<defs><linearGradient id='"+gid+"' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='var(--chart)' stop-opacity='.28'/><stop offset='1' stop-color='var(--chart)' stop-opacity='0'/></linearGradient></defs>";
+  s+="<defs><linearGradient id='"+gid+"' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='var(--chart)' stop-opacity='.26'/><stop offset='1' stop-color='var(--chart)' stop-opacity='0'/></linearGradient></defs>";
   for(let g=0;g<3;g++){
     const v=lo+(hi-lo)*(g+1)/4, y=Y(v);
-    s+="<line x1='"+padL+"' y1='"+y+"' x2='"+(W-padR)+"' y2='"+y+"' stroke='var(--line)' stroke-width='1'/>";
-    s+="<text x='"+(padL-5)+"' y='"+(y+3)+"' text-anchor='end' font-size='9' fill='var(--muted)'>"+fmtV(v)+"</text>";
+    s+="<line x1='"+padL+"' y1='"+y+"' x2='"+(W-padR)+"' y2='"+y+"' stroke='var(--grid)' stroke-width='1.2'/>";
+    s+="<text x='"+(padL-7)+"' y='"+(y+4)+"' text-anchor='end' font-size='12' fill='var(--muted)'>"+fmtV(v)+"</text>";
   }
   if(pts.length>1){
     let d="M";
     pts.forEach((p,i)=>{ d+=(i?"L":"")+X(i).toFixed(1)+" "+Y(p.v).toFixed(1)+" "; });
     const baseY=H-padB;
     s+="<path d='"+d+"L "+X(pts.length-1).toFixed(1)+" "+baseY+" L "+X(0).toFixed(1)+" "+baseY+" Z' fill='url(#"+gid+")' stroke='none'/>";
-    s+="<path d='"+d+"' fill='none' stroke='var(--chart)' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/>";
+    s+="<path d='"+d+"' fill='none' stroke='var(--chart)' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/>";
   }
   for(const r of refs){
     const y=Y(r.v);
-    s+="<line x1='"+padL+"' y1='"+y+"' x2='"+(W-padR)+"' y2='"+y+"' stroke='var(--ref)' stroke-width='1.4' stroke-dasharray='5 4'/>";
-    s+="<text x='"+(W-padR)+"' y='"+(y-4)+"' text-anchor='end' font-size='9' fill='var(--muted)'>"+r.label+" "+fmtV(r.v)+"</text>";
+    const txt=r.label+" "+fmtV(r.v), tw=txt.length*6.6+14;
+    s+="<line x1='"+padL+"' y1='"+y+"' x2='"+(W-padR)+"' y2='"+y+"' stroke='var(--ref)' stroke-width='2' stroke-dasharray='6 5'/>";
+    s+="<rect x='"+(W-padR-tw)+"' y='"+(y-19)+"' width='"+tw+"' height='16' rx='8' fill='var(--surface2)'/>";
+    s+="<text x='"+(W-padR-tw/2)+"' y='"+(y-7)+"' text-anchor='middle' font-size='11' fill='var(--ink2)'>"+txt+"</text>";
   }
   pts.forEach((p,i)=>{
     const last=i===pts.length-1;
-    s+="<circle cx='"+X(i).toFixed(1)+"' cy='"+Y(p.v).toFixed(1)+"' r='"+(last?5:3.5)+"' fill='"+(last?"var(--chart)":"var(--surface)")+"' stroke='var(--chart)' stroke-width='2' data-cap='"+fmtDate(p.t)+": "+fmtV(p.v)+(opt.unit?" "+opt.unit:"")+"'/>";
+    s+="<circle cx='"+X(i).toFixed(1)+"' cy='"+Y(p.v).toFixed(1)+"' r='"+(last?7:5)+"' fill='"+(last?"var(--chart)":"var(--surface)")+"' stroke='var(--chart)' stroke-width='3' data-cap='"+fmtDate(p.t)+": "+fmtV(p.v)+(opt.unit?" "+opt.unit:"")+"'/>";
   });
-  s+="<text x='"+padL+"' y='"+(H-6)+"' font-size='9' fill='var(--muted)'>"+fmtDate(pts[0].t)+"</text>";
-  if(pts.length>1) s+="<text x='"+(W-padR)+"' y='"+(H-6)+"' text-anchor='end' font-size='9' fill='var(--muted)'>"+fmtDate(pts[pts.length-1].t)+"</text>";
+  s+="<text x='"+padL+"' y='"+(H-7)+"' font-size='12' fill='var(--muted)'>"+fmtDate(pts[0].t)+"</text>";
+  if(pts.length>1) s+="<text x='"+(W-padR)+"' y='"+(H-7)+"' text-anchor='end' font-size='12' fill='var(--muted)'>"+fmtDate(pts[pts.length-1].t)+"</text>";
   s+="</svg><div class='chart-cap'></div></div>";
   return s;
 }
-function fmtV(v){ return Math.abs(v)>=100?Math.round(v):(Math.round(v*10)/10); }
+function fmtV(v){ return Math.abs(v)>=100?Math.round(v):de(v,1); }
 document.addEventListener("click",e=>{
   const c=e.target.closest("circle[data-cap]");
   if(c){ const box=c.closest(".chartbox"); if(box) box.querySelector(".chart-cap").textContent=c.getAttribute("data-cap"); }
@@ -1047,7 +980,6 @@ document.addEventListener("click",e=>{
 
 /* ---------------- Übungs-Player ---------------- */
 const PL={list:[],idx:0,timer:null,live:null,doneIds:new Set()};
-
 function startSession(){ PL.list=sessionPlan(); PL.idx=0; PL.doneIds=new Set();
   document.getElementById("plSessionTitle").textContent="Einheit Phase "+currentPhase();
   openOverlay("player"); showExercise(); }
@@ -1058,7 +990,11 @@ let wakeLock=null;
 async function wakeOn(){ try{ if(navigator.wakeLock&&!wakeLock){ wakeLock=await navigator.wakeLock.request("screen"); wakeLock.addEventListener("release",()=>{wakeLock=null;}); } }catch(e){} }
 function wakeOff(){ try{ if(wakeLock){ wakeLock.release(); wakeLock=null; } }catch(e){} }
 function openOverlay(id){ document.getElementById(id).classList.add("active"); document.body.style.overflow="hidden"; wakeOn(); }
-function closeOverlayEl(id){ document.getElementById(id).classList.remove("active"); document.body.style.overflow=""; wakeOff(); micStop(); }
+function closeOverlayEl(id){
+  const ov=document.getElementById(id); ov.classList.remove("active");
+  const body=ov.querySelector("#plBody, #wzBody"); if(body) body.innerHTML="";
+  document.body.style.overflow=""; wakeOff(); micStop();
+}
 function closePlayer(){ stopLive(); closeOverlayEl("player");
   if(PL.doneIds.size>=Math.max(3,PL.list.length-2) && PL.list.length>1){ logSession(); }
   renderHome(); }
@@ -1074,26 +1010,26 @@ function stopLive(){
 function renderDots(elId,total,idx){
   document.getElementById(elId).innerHTML=Array.from({length:total},(_,i)=>"<i class='"+(i<=idx?"on":"")+"'></i>").join("");
 }
-
 function showExercise(){
   stopLive();
   const e=PL.list[PL.idx];
-  document.getElementById("plStep").textContent=(PL.idx+1)+" / "+PL.list.length;
+  document.getElementById("plStep").textContent=(PL.idx+1)+" von "+PL.list.length;
   renderDots("plDots",PL.list.length,PL.idx);
   let h="<div class='ex-title'>"+e.name+"</div><div class='ex-meta'>"+e.grp+" · "+e.time+"</div>";
   h+=demoSvg(e.id);
-  h+="<div class='instr'><ol>"+e.steps.map(s2=>"<li>"+s2+"</li>").join("")+"</ol><div class='why'><strong>Warum:</strong> "+e.why+"</div></div>";
+  h+="<div class='instr'><ol>"+e.steps.map(s2=>"<li>"+s2+"</li>").join("")+"</ol><div class='why'><strong>Warum</strong><br>"+e.why+"</div></div>";
+  if(e.sentences){ h+="<div class='sent'>"+e.sentences.map(s2=>"<div>"+s2+"</div>").join("")+"</div>"; }
   if(e.tone||e.tones){
     const ts=e.tones||[e.tone];
     h+="<div class='card'><div class='small' style='margin-bottom:6px'>Referenztöne</div><div class='row wrap'>"+
-      ts.map(t=>"<button class='btn small secondary' onclick='tonePlay("+t+",1.8)'>♪ "+noteName(t)+"</button>").join("")+"</div></div>";
+      ts.map(t=>"<button class='btn small secondary' onclick='tonePlay("+t+",1.8)'>"+noteName(t)+"</button>").join("")+"</div></div>";
   }
   h+=feedbackHtml(e);
   h+="<div class='controls'>";
   if(PL.idx>0) h+="<button class='btn ghost' onclick='prevEx()'>Zurück</button>";
-  h+="<button class='btn' onclick='doneEx()'>"+(PL.idx<PL.list.length-1?"Fertig → weiter":"Abschließen")+"</button></div>";
+  h+="<button class='btn' onclick='doneEx()'>Fertig</button></div>";
   document.getElementById("plBody").innerHTML=h;
-  window.scrollTo(0,0);
+  document.getElementById("player").scrollTop=0;
   initFeedback(e,"plBody");
 }
 function prevEx(){ PL.idx=Math.max(0,PL.idx-1); showExercise(); }
@@ -1107,15 +1043,13 @@ function noteName(f){
   const n=Math.round(12*Math.log2(f/440))+57;
   return names[((n%12)+12)%12]+Math.floor(n/12)+" · "+Math.round(f)+" Hz";
 }
-
-/* Feedback-Widgets */
 function feedbackHtml(e){
   switch(e.fb){
-    case "timer": return "<div class='feedback'><div class='bigval' id='fbTimer'>"+e.dur+"<span class='unit'> s</span></div><button class='btn small secondary' id='fbTimerBtn' style='margin-top:8px'>Timer starten</button></div>";
-    case "pitch": return "<div class='feedback'><canvas id='fbCanvas' width='640' height='300'></canvas><div class='row spread' style='margin-top:6px'><span class='tiny'>Tonhöhenverlauf</span><span class='tiny' id='fbHz'>–</span></div><button class='btn small secondary' id='fbMicBtn' style='margin-top:6px'>Mikro aktivieren</button><div class='mic-inline-err tiny'></div></div>";
-    case "sustain": return "<div class='feedback'><div class='bigval'><span id='fbSec'>0.0</span><span class='unit'> s Ton</span></div><div class='levelbar'><div class='fill' id='fbFill'></div></div><div class='tiny' id='fbHz'>–</div><button class='btn small secondary' id='fbMicBtn' style='margin-top:6px'>Mikro aktivieren</button><div class='mic-inline-err tiny'></div></div>";
-    case "record": return "<div class='feedback'><div id='fbRecRes' class='small' style='min-height:20px'>Eine Wiederholung aufnehmen und den Klarheits-Score erhalten.</div><div class='levelbar'><div class='fill' id='fbFill'></div></div><button class='btn small' id='fbRecBtn' style='margin-top:8px'>● Aufnehmen</button><div class='mic-inline-err tiny'></div></div>";
-    case "noise": return "<div class='feedback'><div class='small' style='margin-bottom:6px'>Restaurant-Lärm (Kopfhörer!)</div><div class='slider-row'><span class='tiny'>Lautst.</span><input type='range' id='fbNoiseVol' min='0' max='100' value='30'></div><button class='btn small secondary' id='fbNoiseBtn'>Lärm starten</button><div style='height:10px'></div><div class='levelbar'><div class='zone' id='fbZone' style='left:55%;right:15%'></div><div class='fill' id='fbFill'></div></div><div class='tiny'>Dein Pegel — ruhig in der markierten Zone halten.</div><button class='btn small secondary' id='fbMicBtn' style='margin-top:6px'>Mikro aktivieren</button><div class='mic-inline-err tiny'></div></div>";
+    case "timer": return "<div class='feedback'><div class='bigval' id='fbTimer'>"+e.dur+"<span class='unit'> s</span></div><button class='btn small secondary' id='fbTimerBtn' style='margin-top:8px'>Starten</button></div>";
+    case "pitch": return "<div class='feedback'><canvas id='fbCanvas'></canvas><div class='row spread' style='margin-top:6px'><span class='tiny'>Tonhöhe</span><span class='tiny' id='fbHz'>–</span></div><button class='btn small secondary' id='fbMicBtn' style='margin-top:6px'>Mikro an</button><div class='mic-inline-err tiny'></div></div>";
+    case "sustain": return "<div class='feedback'><div class='bigval'><span id='fbSec'>0,0</span><span class='unit'> s</span></div><div class='levelbar'><div class='fill' id='fbFill'></div></div><div class='tiny' id='fbHz'>–</div><button class='btn small secondary' id='fbMicBtn' style='margin-top:6px'>Mikro an</button><div class='mic-inline-err tiny'></div></div>";
+    case "record": return "<div class='feedback'><div id='fbRecRes' class='small' style='min-height:20px'>Eine Wiederholung aufnehmen. Die App misst die Klarheit.</div><div class='levelbar'><div class='fill' id='fbFill'></div></div><button class='btn small' id='fbRecBtn' style='margin-top:8px'>Aufnehmen</button><div class='mic-inline-err tiny'></div></div>";
+    case "noise": return "<div class='feedback'><div class='small' style='margin-bottom:6px'>Restaurant-Lärm, nur mit Kopfhörern</div><div class='slider-row'><span class='tiny'>Lautstärke</span><input type='range' id='fbNoiseVol' min='0' max='100' value='30'></div><button class='btn small secondary' id='fbNoiseBtn'>Lärm an</button><div style='height:10px'></div><div class='levelbar'><div class='zone' id='fbZone' style='left:55%;right:15%'></div><div class='fill' id='fbFill'></div></div><div class='tiny'>Pegel in der Zone halten.</div><button class='btn small secondary' id='fbMicBtn' style='margin-top:6px'>Mikro an</button><div class='mic-inline-err tiny'></div></div>";
     default: return "";
   }
 }
@@ -1124,12 +1058,14 @@ function initFeedback(e,rootId){
   if(e.fb==="timer"){
     const btn=root.querySelector("#fbTimerBtn"), disp=root.querySelector("#fbTimer");
     let left=e.dur;
+    const show=()=>{ disp.innerHTML=Math.max(0,left)+"<span class='unit'> s</span>"; };
     btn.onclick=()=>{
+      audioUnlock();
       if(PL.timer){ clearInterval(PL.timer); PL.timer=null; btn.textContent="Weiter"; return; }
+      if(left<=0){ left=e.dur; show(); }
       btn.textContent="Pause";
-      PL.timer=setInterval(()=>{ left-=1;
-        disp.innerHTML=Math.max(0,left)+"<span class='unit'> s</span>";
-        if(left<=0){ clearInterval(PL.timer); PL.timer=null; btn.textContent="Fertig ✓"; try{tonePlay(660,.3);}catch(_){} }
+      PL.timer=setInterval(()=>{ left-=1; show();
+        if(left<=0){ clearInterval(PL.timer); PL.timer=null; btn.textContent="Nochmal"; try{tonePlay(660,.3);}catch(_){} }
       },1000);
     };
   }
@@ -1140,16 +1076,19 @@ function initFeedback(e,rootId){
 }
 function initPitchTrace(root){
   const cv=root.querySelector("#fbCanvas"), btn=root.querySelector("#fbMicBtn"), hz=root.querySelector("#fbHz");
+  const dpr=Math.min(3,window.devicePixelRatio||1);
+  const cw=cv.clientWidth||320, ch=cv.clientHeight||160;
+  cv.width=Math.round(cw*dpr); cv.height=Math.round(ch*dpr);
   const ctx=cv.getContext("2d");
   const hist=[]; const MAXH=240;
   const css=getComputedStyle(document.documentElement);
-  const col=css.getPropertyValue("--chart").trim()||"#F4A83C", grid=css.getPropertyValue("--line").trim()||"#333", mut=css.getPropertyValue("--muted").trim()||"#888";
+  const col=css.getPropertyValue("--chart").trim()||"#D6550C", grid=css.getPropertyValue("--grid").trim()||"rgba(0,0,0,.14)", mut=css.getPropertyValue("--muted").trim()||"#888";
   function draw(){
     ctx.clearRect(0,0,cv.width,cv.height);
     const yOf=f=>cv.height-(Math.log2(f/60)/Math.log2(520/60))*cv.height;
-    ctx.strokeStyle=grid; ctx.fillStyle=mut; ctx.font="16px sans-serif"; ctx.lineWidth=1;
-    [80,110,150,220,330,440].forEach(f=>{ const y=yOf(f); ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(cv.width,y); ctx.stroke(); ctx.fillText(f,4,y-3); });
-    ctx.strokeStyle=col; ctx.lineWidth=3; ctx.lineJoin="round"; ctx.beginPath();
+    ctx.strokeStyle=grid; ctx.fillStyle=mut; ctx.font="600 "+(12*dpr)+"px "+(css.getPropertyValue("--font")||"sans-serif"); ctx.lineWidth=1*dpr;
+    [80,110,150,220,330,440].forEach(f=>{ const y=yOf(f); ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(cv.width,y); ctx.stroke(); ctx.fillText(f,6*dpr,y-4*dpr); });
+    ctx.strokeStyle=col; ctx.lineWidth=3*dpr; ctx.lineJoin="round"; ctx.lineCap="round"; ctx.beginPath();
     let started=false;
     hist.forEach((p,i)=>{
       if(p==null){ started=false; return; }
@@ -1189,7 +1128,7 @@ function initSustain(root){
       if(fr.db<-55){ if(root._sil==null) root._sil=now; if(now-root._sil>700) t=0; }
       else root._sil=null;
       last=now;
-      sec.textContent=t.toFixed(1);
+      sec.textContent=de(t,1);
       fill.style.width=Math.min(100,Math.max(0,(fr.db+60)/50*100))+"%";
       hz.textContent=fr.f0&&fr.conf>0.5?Math.round(fr.f0)+" Hz":"–";
     };
@@ -1202,15 +1141,15 @@ function initRecord(root,e){
     if(!recOn){
       const ok=await micStart(); if(!ok) return;
       AU.onFrame=fr=>{ fill.style.width=Math.min(100,Math.max(0,(fr.db+60)/50*100))+"%"; };
-      recStart(); recOn=true; btn.textContent="■ Stopp & bewerten"; res.textContent="Aufnahme läuft…";
+      recStart(); recOn=true; btn.textContent="Stopp"; res.textContent="Aufnahme läuft";
     }else{
-      const rec=recStop(); recOn=false; btn.textContent="● Aufnehmen";
-      res.textContent="Analysiere…";
+      const rec=recStop(); recOn=false; btn.textContent="Aufnehmen";
+      res.textContent="Wird ausgewertet";
       setTimeout(()=>{
         const a=analyzeRec(rec);
         res.innerHTML = a.cpps!=null
-          ? "<strong>Klarheit "+a.cpps.toFixed(1)+" dB</strong>"+(a.meanF0?" · "+Math.round(a.meanF0)+" Hz":"")+(a.meanDb!=null?" · Pegel "+Math.round(a.meanDb+100):"")+"<br><span class='tiny'>Höhere Klarheit bei gleichem oder höherem Pegel = gewonnen.</span>"
-          : "Zu wenig stimmhaftes Material — bitte eine längere Aufnahme.";
+          ? "<strong>Klarheit "+de(a.cpps,1)+" dB</strong>"+(a.meanF0?" · "+Math.round(a.meanF0)+" Hz":"")+(a.meanDb!=null?" · Pegel "+Math.round(a.meanDb+100):"")+"<br><span class='tiny'>Mehr Klarheit bei gleichem Pegel ist ein Fortschritt.</span>"
+          : "Zu kurz. Bitte länger aufnehmen.";
       },30);
     }
   };
@@ -1218,7 +1157,7 @@ function initRecord(root,e){
 function initNoise(root){
   const nBtn=root.querySelector("#fbNoiseBtn"), vol=root.querySelector("#fbNoiseVol"), mBtn=root.querySelector("#fbMicBtn"), fill=root.querySelector("#fbFill");
   let on=false;
-  nBtn.onclick=()=>{ if(!on){ noiseStart(vol.value/100*.8); nBtn.textContent="Lärm stoppen"; on=true; } else { noiseStop(); nBtn.textContent="Lärm starten"; on=false; } };
+  nBtn.onclick=()=>{ if(!on){ noiseStart(vol.value/100*.8); nBtn.textContent="Lärm aus"; on=true; } else { noiseStop(); nBtn.textContent="Lärm an"; on=false; } };
   vol.oninput=()=>noiseSetVol(vol.value/100*.8);
   mBtn.onclick=async()=>{
     const ok=await micStart(); if(!ok) return; mBtn.style.display="none";
@@ -1228,124 +1167,115 @@ function initNoise(root){
 
 /* ---------------- Test-Wizards ---------------- */
 const WZ={steps:[],idx:0,data:{},mode:null};
-
 function closeWizard(){ stopLive(); AU.onFrame=null; closeOverlayEl("wizard"); }
-
 function wzShow(){
   stopLive(); AU.onFrame=null;
   const st=WZ.steps[WZ.idx];
-  document.getElementById("wzStep").textContent=(WZ.idx+1)+" / "+WZ.steps.length;
+  document.getElementById("wzStep").textContent=(WZ.idx+1)+" von "+WZ.steps.length;
   renderDots("wzDots",WZ.steps.length,WZ.idx);
   document.getElementById("wzBody").innerHTML=st.html;
-  window.scrollTo(0,0);
+  document.getElementById("wizard").scrollTop=0;
   if(st.init) st.init();
 }
 function wzNext(){ if(WZ.idx<WZ.steps.length-1){ WZ.idx++; wzShow(); } }
-
-function recStepHtml(title, instr, btnLabel, extra){
+function recStepHtml(title, instr, extra){
   return "<div class='ex-title'>"+title+"</div>"+
     "<div class='instr'><ol>"+instr.map(s=>"<li>"+s+"</li>").join("")+"</ol></div>"+
     (extra||"")+
-    "<div class='feedback'><div class='bigval'><span id='wzSec'>0.0</span><span class='unit'> s</span></div>"+
+    "<div class='feedback'><div class='bigval'><span id='wzSec'>0,0</span><span class='unit'> s</span></div>"+
     "<div class='levelbar'><div class='fill' id='wzFill'></div></div><div class='tiny' id='wzHz'>–</div>"+
     "<div class='mic-inline-err tiny'></div>"+
-    "<button class='btn' id='wzRecBtn' style='margin-top:10px'>● "+btnLabel+"</button></div>"+
+    "<button class='btn' id='wzRecBtn' style='margin-top:10px'>Aufnehmen</button></div>"+
     "<div id='wzRes' class='card' style='display:none'></div>"+
-    "<div class='controls'><button class='btn ghost' id='wzRedo' style='display:none'>Wiederholen</button><button class='btn' id='wzNextBtn' disabled onclick='wzNext()'>Weiter</button></div>";
+    "<div class='controls'><button class='btn' id='wzNextBtn' disabled onclick='wzNext()'>Weiter</button></div>";
 }
 function initRecStep(onDone){
   const btn=document.getElementById("wzRecBtn"), fill=document.getElementById("wzFill"),
         sec=document.getElementById("wzSec"), hz=document.getElementById("wzHz"),
-        redo=document.getElementById("wzRedo"), nextB=document.getElementById("wzNextBtn"),
-        resEl=document.getElementById("wzRes");
+        nextB=document.getElementById("wzNextBtn"), resEl=document.getElementById("wzRes");
   let recOn=false, t0=0, tick=null;
-  function arm(){
-    btn.onclick=async()=>{
-      if(!recOn){
-        const ok=await micStart(); if(!ok) return;
-        AU.onFrame=fr=>{
-          fill.style.width=Math.min(100,Math.max(0,(fr.db+60)/50*100))+"%";
-          hz.textContent=fr.f0&&fr.conf>0.5?Math.round(fr.f0)+" Hz":"–";
-        };
-        recStart(); recOn=true; t0=performance.now();
-        tick=setInterval(()=>{ sec.textContent=((performance.now()-t0)/1000).toFixed(1); },100);
-        btn.textContent="■ Stopp";
-      }else{
-        clearInterval(tick); recOn=false;
-        const rec=recStop(); btn.textContent="Analysiere…"; btn.disabled=true;
-        setTimeout(()=>{
-          const a=analyzeRec(rec);
-          btn.disabled=false; btn.textContent="● Neu aufnehmen";
-          redo.style.display=""; nextB.disabled=false;
-          resEl.style.display="";
-          onDone(a,resEl);
-          if(a.clipped) resEl.innerHTML+="<div class='tiny' style='color:var(--warn)'>⚠ Aufnahme übersteuert — etwas mehr Abstand zum Mikro, dann wiederholen.</div>";
-          else if(a.loudDb!=null&&a.loudDb<-45) resEl.innerHTML+="<div class='tiny' style='color:var(--warn)'>⚠ Sehr leise Aufnahme — näher ans Mikro oder Eingabegerät prüfen, dann wiederholen.</div>";
-        },30);
-      }
-    };
-  }
-  redo.onclick=()=>{ resEl.style.display="none"; nextB.disabled=true; sec.textContent="0.0"; };
-  arm();
+  btn.onclick=async()=>{
+    if(!recOn){
+      const ok=await micStart(); if(!ok) return;
+      AU.onFrame=fr=>{
+        fill.style.width=Math.min(100,Math.max(0,(fr.db+60)/50*100))+"%";
+        hz.textContent=fr.f0&&fr.conf>0.5?Math.round(fr.f0)+" Hz":"–";
+      };
+      resEl.style.display="none"; nextB.disabled=true;
+      recStart(); recOn=true; t0=performance.now();
+      tick=setInterval(()=>{ sec.textContent=de((performance.now()-t0)/1000,1); },100);
+      btn.textContent="Stopp";
+    }else{
+      clearInterval(tick); recOn=false;
+      const rec=recStop(); btn.textContent="Wird ausgewertet"; btn.disabled=true;
+      setTimeout(()=>{
+        const a=analyzeRec(rec);
+        btn.disabled=false; btn.textContent="Nochmal";
+        nextB.disabled=false; resEl.style.display="";
+        onDone(a,resEl);
+        if(a.clipped) resEl.innerHTML+="<div class='tiny' style='color:var(--warn)'>Übersteuert. Etwas mehr Abstand, dann nochmal.</div>";
+        else if(a.loudDb!=null&&a.loudDb<-45) resEl.innerHTML+="<div class='tiny' style='color:var(--warn)'>Sehr leise. Näher ans Mikrofon, dann nochmal.</div>";
+      },30);
+    }
+  };
 }
-
 const PASSAGE_DE="Einst stritten sich Nordwind und Sonne, wer von ihnen beiden wohl der Stärkere wäre, als ein Wanderer, der in einen warmen Mantel gehüllt war, des Weges daherkam. Sie wurden einig, dass derjenige für den Stärkeren gelten sollte, der den Wanderer zwingen würde, seinen Mantel abzunehmen. Der Nordwind blies mit aller Macht, aber je mehr er blies, desto fester hüllte sich der Wanderer in seinen Mantel ein. Endlich gab der Nordwind den Kampf auf. Nun erwärmte die Sonne die Luft mit ihren freundlichen Strahlen, und schon nach wenigen Augenblicken zog der Wanderer seinen Mantel aus. Da musste der Nordwind zugeben, dass die Sonne von ihnen beiden der Stärkere war.";
 const PASSAGE_EN="When the sunlight strikes raindrops in the air, they act as a prism and form a rainbow. The rainbow is a division of white light into many beautiful colors. These take the shape of a long round arch, with its path high above, and its two ends apparently beyond the horizon. There is, according to legend, a boiling pot of gold at one end. People look, but no one ever finds it. When a man looks for something beyond his reach, his friends say he is looking for the pot of gold at the end of the rainbow.";
-
 function passageHtml(){
   return "<div class='row spread' style='margin:8px 0 4px'><span class='small'><strong>Lesepassage</strong></span>"+
    "<select id='wzLang' onchange='document.getElementById(\"wzPassage\").textContent=this.value===\"en\"?PASSAGE_EN:PASSAGE_DE'><option value='de'>Deutsch</option><option value='en'>English</option></select></div>"+
    "<div class='passage' id='wzPassage'>"+PASSAGE_DE+"</div>";
 }
+function effortHtml(intro){
+  return "<div class='ex-title'>Anstrengung heute</div>"+(intro?"<p class='small'>"+intro+"</p>":"")+
+   "<div class='feedback'><div class='bigval' id='wzEffVal'>5</div><div class='slider-row'><input type='range' min='1' max='10' value='5' id='wzEff' oninput='document.getElementById(\"wzEffVal\").textContent=this.value'></div><div class='effort-lbls'><span>1 · mühelos</span><span>10 · erschöpfend</span></div></div>";
+}
+const VHI_SCALE="0 nie · 1 fast nie · 2 manchmal · 3 fast immer · 4 immer";
 
 /* --- Baseline --- */
 function startBaseline(){
   WZ.mode="baseline"; WZ.data={date:todayStr()}; WZ.idx=0;
-  document.getElementById("wzTitle").textContent="Baseline-Test";
+  document.getElementById("wzTitle").textContent="Baseline";
   const D=WZ.data;
   WZ.steps=[
    {html:"<div class='ex-title'>Vorbereitung</div><div class='instr'><ol>"+
-     ["Ruhiger Raum, Tür zu.","Gerät ~30 cm vor dem Mund (ein angewinkelter Unterarm). Immer derselbe Abstand.","Aufrecht sitzen oder stehen. Wasser bereitstellen.","Es folgen 6 kurze Aufgaben und zwei Einschätzungen. ~10 Minuten."].map(s=>"<li>"+s+"</li>").join("")+
-     "</ol></div><div class='controls'><button class='btn' onclick='wzNext()'>Los geht's</button></div>"},
-   {html:recStepHtml("1 · Gehaltenes „aah“",["Locker einatmen und „aaah“ in bequemer Höhe und Lautstärke so lange wie möglich halten.","Aufnahme direkt nach dem Tonende stoppen.","Der beste von bis zu 3 Versuchen zählt — gern wiederholen."],"Aufnehmen"),
+     ["Ruhiger Raum, Tür zu.","Gerät 30 cm vor dem Mund, etwa ein Unterarm. Immer derselbe Abstand.","Aufrecht sitzen oder stehen. Wasser bereitstellen.","Sechs kurze Aufgaben, zwei Einschätzungen, 10 Min."].map(s=>"<li>"+s+"</li>").join("")+
+     "</ol></div><div class='controls'><button class='btn' onclick='wzNext()'>Starten</button></div>"},
+   {html:recStepHtml("1 · „Aah“ halten",["Locker einatmen, „aah“ bequem halten, so lange es geht.","Direkt nach dem Ton stoppen.","Der beste von bis zu drei Versuchen zählt."]),
     init:()=>initRecStep((a,el)=>{
       if(D.mpt==null||a.voicedSec>D.mpt){ D.mpt=a.voicedSec; D.cppsVowel=a.cpps; D.vowelF0=a.meanF0; }
-      el.innerHTML="<strong>"+a.voicedSec.toFixed(1)+" s</strong> stimmhaft · Klarheit "+n1(a.cpps)+" dB · "+(a.meanF0?Math.round(a.meanF0)+" Hz":"")+"<div class='tiny'>Bester bisher: "+D.mpt.toFixed(1)+" s. Typisch für Männer: ≥ 20 s.</div>";
+      el.innerHTML="<strong>"+de(a.voicedSec,1)+" s</strong> gehalten · Klarheit "+n1(a.cpps)+" dB · "+(a.meanF0?Math.round(a.meanF0)+" Hz":"")+"<div class='tiny'>Bester Versuch "+de(D.mpt,1)+" s. Typisch für Männer sind 20 s oder mehr.</div>";
     })},
-   {html:recStepHtml("2 · Langes „sss“",["Tief einatmen, dann ein gleichmäßiges, stimmloses „sssss“ so lange wie möglich.","Nur Luftgeräusch — kein Ton."],"Aufnehmen"),
+   {html:recStepHtml("2 · Langes „sss“",["Tief einatmen, dann ein gleichmäßiges „sss“, so lange es geht.","Nur Luft, kein Ton."]),
     init:()=>initRecStep((a,el)=>{
       D.sDur=Math.max(D.sDur||0, a.audibleSec||0);
-      el.innerHTML="<strong>"+(a.audibleSec?a.audibleSec.toFixed(1):"–")+" s</strong> gleichmäßiges „s“.<div class='tiny'>Für den s/z-Vergleich folgt jetzt das „z“.</div>";
+      el.innerHTML="<strong>"+(a.audibleSec?de(a.audibleSec,1):"–")+" s</strong> gleichmäßiges „s“.<div class='tiny'>Jetzt das „z“ für den Vergleich.</div>";
     })},
-   {html:recStepHtml("3 · Langes „zzz“",["Wie eben, aber stimmhaft: „zzzzz“ wie eine Biene, so lange wie möglich."],"Aufnehmen"),
+   {html:recStepHtml("3 · Langes „zzz“",["Wie eben, jetzt mit Stimme. „Zzz“ wie eine Biene, so lange es geht."]),
     init:()=>initRecStep((a,el)=>{
       D.zDur=Math.max(D.zDur||0,a.voicedSec);
       D.sz=(D.sDur&&D.zDur)?D.sDur/D.zDur:null;
-      el.innerHTML="<strong>"+a.voicedSec.toFixed(1)+" s</strong>"+(D.sz?" · s/z-Verhältnis "+D.sz.toFixed(2):"")+"<div class='tiny'>s/z nahe 1,0 ist typisch; deutlich über 1,4 spricht für ineffiziente Stimmgebung.</div>";
+      el.innerHTML="<strong>"+de(a.voicedSec,1)+" s</strong>"+(D.sz?" · s/z-Verhältnis "+de(D.sz,2):"")+"<div class='tiny'>Nahe 1,0 ist typisch. Über 1,4 deutet auf Luftverlust beim Tönen hin.</div>";
     })},
-   {html:recStepHtml("4 · Lesen",["Die ganze Passage laut in normaler Stimme lesen.","Natürliches Tempo, normale Lautstärke."],"Aufnehmen",passageHtml()),
+   {html:recStepHtml("4 · Lesen",["Die ganze Passage laut lesen.","Natürliches Tempo, normale Lautstärke."],passageHtml()),
     init:()=>initRecStep((a,el)=>{
       D.cppsSpeech=a.cpps; D.meanF0=a.meanF0; D.sdF0=a.sdF0;
-      el.innerHTML="Klarheit <strong>"+n1(a.cpps)+" dB</strong> · mittlere Tonhöhe "+(a.meanF0?Math.round(a.meanF0)+" Hz":"–")+" · Variabilität "+(a.sdF0?Math.round(a.sdF0)+" Hz":"–");
+      el.innerHTML="Klarheit <strong>"+n1(a.cpps)+" dB</strong> · Tonhöhe "+(a.meanF0?Math.round(a.meanF0)+" Hz":"–")+" · Schwankung "+(a.sdF0?Math.round(a.sdF0)+" Hz":"–");
     })},
-   {html:recStepHtml("5 · Tonhöhen-Glides",["Vom tiefsten zum höchsten Ton gleiten („wuup“), dann zurück nach unten („buum“).","Zwei volle Auf-Ab-Glides in einer Aufnahme. Leise ist okay; der Umfang zählt, nicht die Schönheit."],"Aufnehmen"),
+   {html:recStepHtml("5 · Gleittöne",["Vom tiefsten zum höchsten Ton gleiten, „wuup“, dann zurück, „buum“.","Zweimal auf und ab in einer Aufnahme. Leise ist okay, der Umfang zählt."]),
     init:()=>initRecStep((a,el)=>{
       D.glideST=a.semitones;
-      el.innerHTML="Umfang <strong>"+(a.semitones?a.semitones.toFixed(1):"–")+" Halbtöne</strong> ("+(a.minF0?Math.round(a.minF0):"–")+"–"+(a.maxF0?Math.round(a.maxF0):"–")+" Hz)<div class='tiny'>Klinik Nov 2024: oberes Ende 259 Hz.</div>";
+      el.innerHTML="Umfang <strong>"+(a.semitones?de(a.semitones,1):"–")+" Halbtöne</strong>, "+(a.minF0?Math.round(a.minF0):"–")+" bis "+(a.maxF0?Math.round(a.maxF0):"–")+" Hz<div class='tiny'>In der Klinik (Nov. 2024) lag das obere Ende bei 259 Hz.</div>";
     })},
-   {html:recStepHtml("6 · Leise — mittel — LAUT",["„Aah“ dreimal in einer Aufnahme halten: erst so leise wie möglich, dann bequem, dann so laut wie <em>ohne Drücken und Husten</em> möglich.","Je ~3 s, kurze Pause dazwischen."],"Aufnehmen"),
+   {html:recStepHtml("6 · Leise, mittel, laut",["„Aah“ dreimal halten. Erst so leise wie möglich, dann bequem, dann laut, ohne zu drücken.","Je 3 s, kurze Pause dazwischen."]),
     init:()=>initRecStep((a,el)=>{
       D.loudCpps=a.cpps; D.dynRange=a.dynRangeDb;
-      el.innerHTML="Klarheit über alle Stufen: <strong>"+n1(a.cpps)+" dB</strong> · Lautstärke-Spanne "+n1(a.dynRangeDb)+" dB<div class='tiny'>Klinik 2024: sehr enge 4,5 dB. Ziel über die Zeit: größere Spanne bei erhaltener Klarheit.</div>";
+      el.innerHTML="Klarheit <strong>"+n1(a.cpps)+" dB</strong> · Spanne "+n1(a.dynRangeDb)+" dB<div class='tiny'>In der Klinik waren es enge 4,5 dB. Ziel ist eine größere Spanne bei gleicher Klarheit.</div>";
     })},
-   {html:"<div class='ex-title'>Anstrengung heute</div><p class='small'>Wie viel Anstrengung kostet dich Sprechen aktuell? (Klinik Nov 2024: 8/10)</p>"+
-     "<div class='feedback'><div class='bigval' id='wzEffVal'>5</div><div class='slider-row'><input type='range' min='1' max='10' value='5' id='wzEff' oninput='document.getElementById(\"wzEffVal\").textContent=this.value'></div><div class='effort-lbls'><span>1 · mühelos</span><span>10 · erschöpfend</span></div></div>"+
+   {html:effortHtml("Wie anstrengend ist Sprechen gerade? In der Klinik (Nov. 2024) waren es 8 von 10.")+
      "<div class='controls'><button class='btn' onclick='WZ.data.effort=parseInt(document.getElementById(\"wzEff\").value,10); wzNext()'>Weiter</button></div>"},
-   {html:"<div class='ex-title'>VHI-10</div><p class='small'>0 = nie · 4 = immer</p><div class='card' id='wzVhi'></div><div class='controls'><button class='btn' id='wzVhiDone' disabled>Baseline abschließen</button></div>",
-    init:()=>initVhiForm("wzVhi","wzVhiDone",(score,answers)=>{
-      WZ.data.vhi=score; WZ.data.vhiAnswers=answers;
-      finishBaseline();
-    })}
+   {html:"<div class='ex-title'>VHI-10</div><p class='small'>"+VHI_SCALE+"</p><div class='card' id='wzVhi'></div><div class='controls'><button class='btn' id='wzVhiDone' disabled>Speichern</button></div>",
+    init:()=>initVhiForm("wzVhi","wzVhiDone",(score,answers)=>{ WZ.data.vhi=score; WZ.data.vhiAnswers=answers; finishBaseline(); })}
   ];
   openOverlay("wizard"); wzShow();
 }
@@ -1357,19 +1287,19 @@ function finishBaseline(){
   save();
   const b=S.baselines[S.baselines.length-1];
   document.getElementById("wzBody").innerHTML=
-    "<div class='ex-title'>Baseline gespeichert ✓</div>"+
+    "<div class='ex-title'>Baseline gespeichert</div>"+
     "<div class='card'><table class='data'>"+
-    "<tr><td>Max. Tonhaltedauer</td><td><strong>"+n1(b.mpt)+" s</strong></td></tr>"+
-    "<tr><td>s/z-Verhältnis</td><td>"+(b.sz?b.sz.toFixed(2):"–")+"</td></tr>"+
-    "<tr><td>Klarheit Vokal (CPPS)</td><td>"+n1(b.cppsVowel)+" dB</td></tr>"+
-    "<tr><td>Klarheit Sprechen (CPPS)</td><td>"+n1(b.cppsSpeech)+" dB</td></tr>"+
-    "<tr><td>Mittlere Sprechstimmlage</td><td>"+(b.meanF0?Math.round(b.meanF0)+" Hz":"–")+" <span class='tiny'>(Klinik: 105 Hz)</span></td></tr>"+
-    "<tr><td>Tonhöhenumfang</td><td>"+n1(b.glideST)+" HT</td></tr>"+
-    "<tr><td>Lautstärke-Spanne</td><td>"+n1(b.dynRange)+" dB <span class='tiny'>(Klinik: 4,5 dB)</span></td></tr>"+
-    "<tr><td>Anstrengung</td><td>"+b.effort+"/10 <span class='tiny'>(Klinik: 8/10)</span></td></tr>"+
-    "<tr><td>VHI-10</td><td>"+b.vhi+"/40 <span class='tiny'>(Klinik: 25/40)</span></td></tr>"+
-    "</table><p class='tiny'>App-CPPS-Werte sind app-intern; nur mit späteren App-Messungen vergleichen, nicht mit den ADSV-Werten der Klinik.</p></div>"+
-    "<div class='controls'><button class='btn' onclick='closeWizard(); nav(\"progress\")'>Verlauf ansehen</button></div>";
+    "<tr><td>Tonhaltedauer</td><td><strong>"+n1(b.mpt)+" s</strong></td></tr>"+
+    "<tr><td>s/z-Verhältnis</td><td>"+de(b.sz,2)+"</td></tr>"+
+    "<tr><td>Klarheit Vokal</td><td>"+n1(b.cppsVowel)+" dB</td></tr>"+
+    "<tr><td>Klarheit Sprechen</td><td>"+n1(b.cppsSpeech)+" dB</td></tr>"+
+    "<tr><td>Sprechstimmlage</td><td>"+(b.meanF0?Math.round(b.meanF0)+" Hz":"–")+" <span class='tiny'>Klinik 105 Hz</span></td></tr>"+
+    "<tr><td>Tonhöhenumfang</td><td>"+n1(b.glideST)+" Halbtöne</td></tr>"+
+    "<tr><td>Lautstärkespanne</td><td>"+n1(b.dynRange)+" dB <span class='tiny'>Klinik 4,5 dB</span></td></tr>"+
+    "<tr><td>Anstrengung</td><td>"+b.effort+"/10 <span class='tiny'>Klinik 8/10</span></td></tr>"+
+    "<tr><td>VHI-10</td><td>"+b.vhi+"/40 <span class='tiny'>Klinik 25/40</span></td></tr>"+
+    "</table><p class='tiny'>Klarheit (CPPS) ist ein App-Wert. Vergleiche ihn mit späteren App-Messungen.</p></div>"+
+    "<div class='controls'><button class='btn' onclick='closeWizard(); nav(\"progress\")'>Verlauf</button></div>";
 }
 
 /* --- Tages-Check --- */
@@ -1378,14 +1308,13 @@ function startQuickCheck(){
   document.getElementById("wzTitle").textContent="Tages-Check";
   const D=WZ.data;
   WZ.steps=[
-   {html:recStepHtml("1 · Gehaltenes „aah“",["Locker einatmen, „aaah“ in normaler Lautstärke so lange wie bequem halten."],"Aufnehmen"),
+   {html:recStepHtml("1 · „Aah“ halten",["Locker einatmen, „aah“ normal laut halten, so lange es geht. Direkt nach dem Ton stoppen."]),
     init:()=>initRecStep((a,el)=>{ D.mpt=a.voicedSec; D.cppsVowel=a.cpps;
-      el.innerHTML="<strong>"+a.voicedSec.toFixed(1)+" s</strong> · Klarheit "+n1(a.cpps)+" dB"; })},
-   {html:recStepHtml("2 · Ein Satz",["Laut und in normaler Stimme lesen: „Einst stritten sich Nordwind und Sonne, wer von ihnen beiden wohl der Stärkere wäre.“"],"Aufnehmen"),
+      el.innerHTML="<strong>"+de(a.voicedSec,1)+" s</strong> gehalten · Klarheit "+n1(a.cpps)+" dB"; })},
+   {html:recStepHtml("2 · Ein Satz",["Laut und normal lesen. „Einst stritten sich Nordwind und Sonne, wer von ihnen beiden wohl der Stärkere wäre.“"]),
     init:()=>initRecStep((a,el)=>{ D.cppsSpeech=a.cpps; D.meanF0=a.meanF0;
       el.innerHTML="Klarheit <strong>"+n1(a.cpps)+" dB</strong> · "+(a.meanF0?Math.round(a.meanF0)+" Hz":""); })},
-   {html:"<div class='ex-title'>Anstrengung heute</div><div class='feedback'><div class='bigval' id='wzEffVal'>5</div><div class='slider-row'><input type='range' min='1' max='10' value='5' id='wzEff' oninput='document.getElementById(\"wzEffVal\").textContent=this.value'></div><div class='effort-lbls'><span>1 · mühelos</span><span>10 · erschöpfend</span></div></div>"+
-    "<div class='controls'><button class='btn' onclick='finishCheck()'>Check speichern</button></div>"}
+   {html:effortHtml("")+"<div class='controls'><button class='btn' onclick='finishCheck()'>Speichern</button></div>"}
   ];
   openOverlay("wizard"); wzShow();
 }
@@ -1399,16 +1328,18 @@ function finishCheck(){
   const bl=latestBaseline();
   let cmp="";
   if(bl){
-    const rows=[["Tonhaltedauer",D.mpt,bl.mpt," s",true],["Klarheit Vokal",D.cppsVowel,bl.cppsVowel," dB",true],["Klarheit Sprechen",D.cppsSpeech,bl.cppsSpeech," dB",true],["Anstrengung",D.effort,bl.effort,"/10",false]];
+    const int=v=>v==null?"–":String(v);
+    const rows=[["Tonhaltedauer",D.mpt,bl.mpt," s",true,n1],["Klarheit Vokal",D.cppsVowel,bl.cppsVowel," dB",true,n1],["Klarheit Sprechen",D.cppsSpeech,bl.cppsSpeech," dB",true,n1],["Anstrengung",D.effort,bl.effort,"/10",false,int]];
     cmp="<div class='card'><table class='data'><tr><th>Wert</th><th>Heute</th><th>Baseline</th></tr>"+
       rows.filter(r=>r[1]!=null&&r[2]!=null).map(r=>{
+        const f=r[5];
         const good=(r[1]-r[2]>0)===r[4];
         const d=r[1]-r[2];
-        return "<tr><td>"+r[0]+"</td><td><strong>"+n1(r[1])+r[3]+"</strong> <span class='delta "+(Math.abs(d)<0.05?"flat":(good?"up":"down"))+"'>"+(d>0?"+":"")+n1(d)+"</span></td><td>"+n1(r[2])+r[3]+"</td></tr>";
+        return "<tr><td>"+r[0]+"</td><td><strong>"+f(r[1])+r[3]+"</strong> <span class='delta "+(Math.abs(d)<0.05?"flat":(good?"up":"down"))+"'>"+(d>0?"+":"")+f(d)+"</span></td><td>"+f(r[2])+r[3]+"</td></tr>";
       }).join("")+"</table></div>";
   }
-  document.getElementById("wzBody").innerHTML="<div class='ex-title'>Check gespeichert ✓</div>"+cmp+
-   "<div class='controls'><button class='btn' onclick='closeWizard(); nav(\"progress\")'>Verlauf ansehen</button></div>";
+  document.getElementById("wzBody").innerHTML="<div class='ex-title'>Gespeichert</div>"+cmp+
+   "<div class='controls'><button class='btn' onclick='closeWizard(); nav(\"progress\")'>Verlauf</button></div>";
 }
 
 /* --- VHI-10 --- */
@@ -1417,21 +1348,21 @@ const VHI_Q=[
  "In lauter Umgebung versteht man mich schlecht.",
  "Meine Stimmprobleme schränken mein Privat- und Sozialleben ein.",
  "Wegen meiner Stimme fühle ich mich von Gesprächen ausgeschlossen.",
- "Wegen meiner Stimme habe ich berufliche/finanzielle Einbußen.",
+ "Meine Stimmprobleme verursachen Einkommensverluste.",
  "Ich muss mich anstrengen, um meine Stimme zu produzieren.",
  "Die Klarheit meiner Stimme ist unvorhersehbar.",
  "Meine Stimmprobleme belasten mich.",
- "Wegen meiner Stimme fühle ich mich beeinträchtigt.",
+ "Meine Stimme macht mich behindert.",
  "Ich werde gefragt: „Was ist mit deiner Stimme los?“"];
 function startVHI(){
   WZ.mode="vhi"; WZ.idx=0;
   document.getElementById("wzTitle").textContent="VHI-10";
-  WZ.steps=[{html:"<div class='ex-title'>VHI-10</div><p class='small'>0 = nie · 1 = fast nie · 2 = manchmal · 3 = fast immer · 4 = immer</p><div class='card' id='wzVhi'></div><div class='controls'><button class='btn' id='wzVhiDone' disabled>Speichern</button></div>",
+  WZ.steps=[{html:"<div class='ex-title'>VHI-10</div><p class='small'>"+VHI_SCALE+"</p><div class='card' id='wzVhi'></div><div class='controls'><button class='btn' id='wzVhiDone' disabled>Speichern</button></div>",
     init:()=>initVhiForm("wzVhi","wzVhiDone",(score,answers)=>{
       S.vhi.push({date:todayStr(),score,answers}); save();
-      document.getElementById("wzBody").innerHTML="<div class='ex-title'>VHI-10: "+score+"/40</div>"+
-        "<p class='small'>Klinik Nov 2024: 25/40 · Normal: unter 11.</p>"+
-        "<div class='controls'><button class='btn' onclick='closeWizard(); nav(\"progress\")'>Verlauf ansehen</button></div>";
+      document.getElementById("wzBody").innerHTML="<div class='ex-title'>VHI-10 "+score+" von 40</div>"+
+        "<p class='small'>In der Klinik (Nov. 2024) waren es 25 von 40. Normal ist unter 11.</p>"+
+        "<div class='controls'><button class='btn' onclick='closeWizard(); nav(\"progress\")'>Verlauf</button></div>";
     })}];
   openOverlay("wizard"); wzShow();
 }
@@ -1451,37 +1382,51 @@ function initVhiForm(boxId,btnId,onDone){
   btn.onclick=()=>onDone(ans.reduce((a,b)=>a+b,0),ans);
 }
 
-/* ---------------- Mikro-Test (Mehr) ---------------- */
+/* ---------------- Mikro-Test ---------------- */
 let micTestOn=false;
 async function toggleMicTest(){
   const btn=document.getElementById("micTestBtn");
   if(!micTestOn){
     const ok=await micStart(); if(!ok) return;
-    micTestOn=true; btn.textContent="Mikro-Test stoppen";
+    micTestOn=true; btn.textContent="Stopp";
     AU.onFrame=fr=>{
       document.getElementById("micTestFill").style.width=Math.min(100,Math.max(0,(fr.db+60)/50*100))+"%";
-      document.getElementById("micTestVal").textContent="Pegel "+Math.round(fr.db)+" dBFS";
+      document.getElementById("micTestVal").textContent="Pegel "+Math.round(fr.db+100);
       document.getElementById("micTestPitch").textContent=fr.f0&&fr.conf>0.5?"Tonhöhe "+Math.round(fr.f0)+" Hz":"–";
     };
   }else{
-    micTestOn=false; btn.textContent="Mikro-Test starten";
+    micTestOn=false; btn.textContent="Testen";
     AU.onFrame=null; micStop();
   }
 }
 
-/* ---------------- Daten Export/Import ---------------- */
+/* ---------------- Daten: Backup, Laden ---------------- */
 function exportData(){
-  S.lastExport=todayStr(); save();
-  const blob=new Blob([JSON.stringify(S,null,1)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="stimmtrainer-backup-"+todayStr()+".json";
-  document.body.appendChild(a); a.click(); a.remove();
-  renderMore();
+  const today=todayStr();
+  const json=JSON.stringify(Object.assign({},S,{lastExport:today}),null,1);
+  const name="stimmtrainer-backup-"+today+".json";
+  const done=()=>{ S.lastExport=today; save(); renderMore(); alertInline("Backup gesichert."); };
+  const download=()=>{
+    const blob=new Blob([json],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    done();
+  };
+  let file=null;
+  try{ file=new File([json],name,{type:"application/json"}); }catch(e){ file=null; }
+  if(file && navigator.canShare && navigator.canShare({files:[file]})){
+    // share muss synchron in der Klick-Geste starten (iOS); gespeichert wird erst bei Erfolg
+    navigator.share({files:[file],title:"Stimmtrainer Backup"})
+      .then(done)
+      .catch(err=>{ if(err && err.name==="AbortError"){ renderMore(); } else { download(); } });
+  } else {
+    download();
+  }
 }
 async function copyData(){
-  try{ await navigator.clipboard.writeText(JSON.stringify(S)); alertInline("In die Zwischenablage kopiert."); }
-  catch(e){ alertInline("Zwischenablage blockiert — bitte Export nutzen."); }
+  try{ await navigator.clipboard.writeText(JSON.stringify(S)); alertInline("Daten kopiert."); }
+  catch(e){ alertInline("Zwischenablage blockiert. Bitte Backup sichern."); }
 }
 function importData(inp){
   const f=inp.files&&inp.files[0]; if(!f) return;
@@ -1489,23 +1434,23 @@ function importData(inp){
   r.onload=()=>{
     try{
       const d=JSON.parse(r.result);
-      if(!d.program||!Array.isArray(d.checks)) throw new Error("Keine Stimmtrainer-Backup-Datei.");
+      if(!d.program||!Array.isArray(d.checks)) throw new Error("kein Backup");
       S=Object.assign(defaultState(),d); save();
-      alertInline("Backup importiert: "+(S.checks.length)+" Checks, "+(S.baselines.length)+" Baselines.");
+      const n=S.checks.length, m=S.baselines.length;
+      alertInline("Backup geladen: "+(n===1?"1 Tages-Check":n+" Tages-Checks")+", "+(m===1?"1 Baseline":m+" Baselines")+".");
       renderHome(); renderMore();
-    }catch(e){ alertInline("Import fehlgeschlagen: "+e.message); }
+    }catch(e){ alertInline(e.message==="kein Backup" ? "Laden fehlgeschlagen. Das ist kein Stimmtrainer-Backup." : "Laden fehlgeschlagen. Die Datei ist beschädigt oder kein JSON."); }
   };
   r.readAsText(f); inp.value="";
 }
 function wipeData(){
   const el=document.getElementById("dataInfo");
-  if(el.dataset.confirm!=="1"){ el.dataset.confirm="1"; el.textContent="Zum Bestätigen innerhalb von 5 s erneut auf „Alle Daten löschen“ tippen — das kann nicht rückgängig gemacht werden."; setTimeout(()=>{el.dataset.confirm="0"; renderMore();},5000); return; }
+  if(el.dataset.confirm!=="1"){ el.dataset.confirm="1"; el.textContent="Innerhalb von 5 s nochmal tippen, dann ist alles weg. Kein Zurück."; setTimeout(()=>{el.dataset.confirm="0"; renderMore();},5000); return; }
   S=defaultState(); save(); renderHome(); renderMore();
-  el.textContent="Alle Daten gelöscht.";
+  el.textContent="Alles gelöscht.";
 }
 function alertInline(msg){ const el=document.getElementById("dataInfo"); if(el) el.textContent=msg; }
 
-/* ---------------- Start ---------------- */
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden && document.querySelector(".overlay.active")) wakeOn(); });
 renderHome();
 </script>
