@@ -261,7 +261,6 @@ a{color:var(--primary-text); font-weight:600;}
       <div class="dots" id="weekDots"></div>
     </div>
     <div class="card" id="homeTrend"></div>
-    <div id="backupHint"></div>
     <div class="notice neutral">
       <strong>Kein Medizinprodukt.</strong> Die App begleitet deinen Therapieplan aus der Klinik (Nov. 2024) und ersetzt keine Therapie und keine ärztliche Kontrolle. Was wehtut, lässt du weg.
     </div>
@@ -350,8 +349,9 @@ a{color:var(--primary-text); font-weight:600;}
 
     <h2>Daten</h2>
     <div class="card stack">
+      <p class="tiny" style="margin:0">Deine Ergebnisse speichert die App automatisch auf diesem Gerät, doppelt abgelegt. Auf dem Home-Bildschirm bleiben sie auch nach langen Pausen erhalten. Ein Backup brauchst du nur für einen Gerätewechsel.</p>
       <button class="btn secondary" onclick="exportData()">Backup sichern</button>
-      <p class="tiny" style="margin:-4px 0 0">Auf dem iPhone öffnet sich das Teilen-Menü: in Dateien (iCloud) oder Google Drive sichern.</p>
+      <p class="tiny" style="margin:-4px 0 0">Öffnet das Teilen-Menü: in Dateien (iCloud) oder Google Drive sichern.</p>
       <label class="btn ghost" style="text-align:center; display:block;">Backup laden<input type="file" accept=".json,application/json" style="display:none" onchange="importData(this)"></label>
       <button class="btn ghost" onclick="copyData()">Daten kopieren</button>
       <p class="tiny" id="dataInfo"></p>
@@ -417,7 +417,11 @@ function loadState(){
   try{ const raw = localStorage.getItem(LS_KEY); if(raw){ return Object.assign(defaultState(), JSON.parse(raw)); } }catch(e){}
   return defaultState();
 }
-function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+/* Doppelt gespeichert: localStorage plus IndexedDB als zweite Ablage auf dem Gerät. */
+function idbOpen(){ return new Promise((res,rej)=>{ try{ const q=indexedDB.open("stimmtrainer",1); q.onupgradeneeded=()=>q.result.createObjectStore("kv"); q.onsuccess=()=>res(q.result); q.onerror=()=>rej(q.error); }catch(e){ rej(e); } }); }
+function idbSave(v){ idbOpen().then(db=>{ try{ db.transaction("kv","readwrite").objectStore("kv").put(JSON.stringify(v),"state"); }catch(e){} }).catch(()=>{}); }
+function idbLoad(){ return idbOpen().then(db=>new Promise(res=>{ try{ const q=db.transaction("kv").objectStore("kv").get("state"); q.onsuccess=()=>{ try{ res(q.result?JSON.parse(q.result):null); }catch(e){ res(null); } }; q.onerror=()=>res(null); }catch(e){ res(null); } })).catch(()=>null); }
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} idbSave(S); }
 function todayStr(d){ const x=d||new Date(); return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0"); }
 function fmtDate(s){ const [y,m,d]=s.split("-"); return d+"."+m+"."+y.slice(2); }
 function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/864e5); }
@@ -437,26 +441,26 @@ function currentPhase(){
 function weekNum(){ return Math.floor(Math.max(0,daysBetween(S.program.startDate, todayStr()))/7)+1; }
 
 const EX = [
- {id:"neck", ph:1, grp:"Aufwärmen", name:"Nacken lösen", time:"90 s", fb:"timer", dur:90,
-  steps:["Kopf zur Seite sinken lassen, 30 s pro Seite.","Schultern fünfmal langsam nach hinten rollen.","Kiefer hängen lassen. Lippen zu, Zähne auseinander."],
+ {id:"neck", ph:1, grp:"Aufwärmen", name:"Nacken lösen", time:"60 s", fb:"timer", dur:60,
+  steps:["Kopf zur Seite sinken lassen, 20 s pro Seite.","Schultern dreimal langsam nach hinten rollen.","Kiefer hängen lassen. Lippen zu, Zähne auseinander."],
   why:"Dein Befund nennt Kieferspannung und Zähneknirschen. Ein lockerer Kiefer entlastet den Kehlkopf."},
- {id:"jaw", ph:1, grp:"Aufwärmen", name:"Kiefer und Kehlkopf massieren", time:"90 s", fb:"timer", dur:90,
-  steps:["Zähne kurz zusammenbeißen. Der harte Muskel vor dem Ohr ist der Kaumuskel.","Dort langsam kreisen, 30 s pro Seite.","Kehlkopf seitlich locker fassen, sanft hin und her schieben. Nie vorn drücken."],
+ {id:"jaw", ph:1, grp:"Aufwärmen", name:"Kiefer und Kehlkopf massieren", time:"60 s", fb:"timer", dur:60,
+  steps:["Zähne kurz zusammenbeißen. Der harte Muskel vor dem Ohr ist der Kaumuskel.","Dort langsam kreisen, 20 s pro Seite.","Kehlkopf seitlich locker fassen, sanft hin und her schieben. Nie vorn drücken."],
   why:"Die Massage lockert die Muskeln, die deine Stimme unter Druck setzen. Bei Schwindel oder Hustenreiz loslassen."},
- {id:"yawnsigh", ph:1, grp:"Aufwärmen", name:"Gähnen und Seufzen", time:"5 Wdh.", fb:"pitch",
-  steps:["Gähnen ansetzen, Rachen weit werden lassen, Kiefer bleibt locker.","Von oben weich und behaucht abwärts seufzen, „haaah“.","Fünfmal, ohne Druck."],
+ {id:"yawnsigh", ph:1, grp:"Aufwärmen", name:"Gähnen und Seufzen", time:"3 Wdh.", fb:"pitch",
+  steps:["Gähnen ansetzen, Rachen weit werden lassen, Kiefer bleibt locker.","Von oben weich und behaucht abwärts seufzen, „haaah“.","Dreimal, ohne Druck."],
   why:"Gähnen öffnet den Rachen so weit, wie es geht. Das ist die Gegenbewegung zum Drücken."},
- {id:"liptrill", ph:1, grp:"Mit Widerstand", name:"Lippenflattern", time:"5 × 5 s, 5 Gleittöne", fb:"pitch",
-  steps:["Lippen locker. Luft blasen, bis sie flattern.","Stimme dazu auf einem bequemen mittleren Ton. 5 s halten.","Dann fünfmal wie eine Sirene auf und ab gleiten."],
+ {id:"liptrill", ph:1, grp:"Mit Widerstand", name:"Lippenflattern", time:"3 × 5 s, 3 Gleittöne", fb:"pitch",
+  steps:["Lippen locker. Luft blasen, bis sie flattern.","Stimme dazu auf einem bequemen mittleren Ton. 5 s halten, dreimal.","Dann dreimal wie eine Sirene auf und ab gleiten."],
   why:"Die Lippen bremsen die Luft, die Stimmlippen schwingen mit weniger Druck. In der Klinik war dein Atemdruck mit 11 cmH₂O zu hoch."},
- {id:"straw", ph:1, grp:"Mit Widerstand", name:"Strohhalm", time:"5 × 5 s, 5 Gleittöne", fb:"pitch",
-  steps:["Dünnen Halm nehmen. Ein bequemes „uh“ durch den Halm summen.","Alle Luft durch den Halm, Wangen bleiben ruhig. 5 × 5 s.","Dann fünfmal langsam und leicht auf und ab gleiten."],
+ {id:"straw", ph:1, grp:"Mit Widerstand", name:"Strohhalm", time:"4 × 5 s, 3 Gleittöne", fb:"pitch",
+  steps:["Dünnen Halm nehmen. Ein bequemes „uh“ durch den Halm summen.","Alle Luft durch den Halm, Wangen bleiben ruhig. 4 × 5 s.","Dann dreimal langsam und leicht auf und ab gleiten."],
   why:"Der Halm senkt den Druck, den deine Stimme zum Einsetzen braucht. Sprechen kostet dann weniger Kraft."},
- {id:"bubbles", ph:1, grp:"Mit Widerstand", name:"Wasserblubbern", time:"5 × 10 s", fb:"sustain",
-  steps:["Halm in ein Glas mit 2 bis 3 cm Wasser stellen.","10 s gleichmäßig blubbern, dann ein weiches „uh“ dazu.","Fünf Runden. Die Blasen bleiben gleichmäßig."],
+ {id:"bubbles", ph:1, grp:"Mit Widerstand", name:"Wasserblubbern", time:"3 × 10 s", fb:"sustain",
+  steps:["Halm in ein Glas mit 2 bis 3 cm Wasser stellen.","10 s gleichmäßig blubbern, dann ein weiches „uh“ dazu.","Drei Runden. Die Blasen bleiben gleichmäßig."],
   why:"Diese Übung steht in deinem Therapieplan. Spritzt das Wasser, drückst du zu viel."},
- {id:"hum", ph:1, grp:"Mit Widerstand", name:"Leicht summen", time:"10 Wdh.", fb:"none",
-  steps:["Lippen zu, Zähne auseinander, Kiefer locker.","Ein weiches „mmm“ auf bequemem Ton summen.","Zehnmal kurz summen. Das Kribbeln an Lippen und Nase suchen."],
+ {id:"hum", ph:1, grp:"Mit Widerstand", name:"Leicht summen", time:"5 Wdh.", fb:"none",
+  steps:["Lippen zu, Zähne auseinander, Kiefer locker.","Ein weiches „mmm“ auf bequemem Ton summen.","Fünfmal kurz summen. Das Kribbeln an Lippen und Nase suchen."],
   why:"Kribbelt es an den Lippen, sitzt der Klang vorn. Dieses Gefühl brauchst du in allen weiteren Übungen."},
  {id:"vfe1", ph:2, grp:"Stimmkraft", name:"Ton halten", time:"2 Wdh., maximal lang", fb:"sustain", tone:130.8,
   steps:["Referenzton anhören und ein leises „iii“ darauf halten, so lange es geht.","So leise wie möglich, aber nicht hauchig.","Zweimal. Die App stoppt die Zeit."],
@@ -467,15 +471,15 @@ const EX = [
  {id:"vfe3", ph:2, grp:"Stimmkraft", name:"Abwärts gleiten", time:"2 Wdh.", fb:"pitch",
   steps:["Von einem bequemen hohen Ton nach unten gleiten, auf „buum“.","Aufhören, bevor es knarrt. Stimme vorn im Gesicht landen lassen.","Zweimal."],
   why:"Der Weg nach unten löst Spannung im Kehlkopf. Unten nicht drücken, der Ton bleibt weich."},
- {id:"vfe4", ph:2, grp:"Stimmkraft", name:"Drei Töne halten", time:"3 Töne × 2", fb:"sustain", tones:[98,130.8,164.8],
-  steps:["Referenztöne anhören. „Ol“ wie in „Kohl“ leise und lang halten.","Lippen rund, Kiefer locker.","Jeden der drei Töne zweimal."],
+ {id:"vfe4", ph:2, grp:"Stimmkraft", name:"Drei Töne halten", time:"3 Töne", fb:"sustain", tones:[98,130.8,164.8],
+  steps:["Referenztöne anhören. „Ol“ wie in „Kohl“ leise und lang halten.","Lippen rund, Kiefer locker.","Jeden der drei Töne einmal, an guten Tagen zweimal."],
   why:"Baut Ausdauer über deine ganze Sprechlage auf. Lautstärke braucht dann kein Drücken mehr."},
- {id:"resword", ph:2, grp:"Resonanz", name:"Resonanz-Wörter", time:"2 Min.", fb:"none",
-  steps:["Summen, dann öffnen. „Mm-ma, mm-me, mm-mi, mm-mo, mm-mu“.","Das Kribbeln im Vokal behalten. Fünf Runden.","Dann sprechen. „Meine, Montag, morgen“, je dreimal."],
+ {id:"resword", ph:2, grp:"Resonanz", name:"Resonanz-Wörter", time:"1 Min.", fb:"none",
+  steps:["Summen, dann öffnen. „Mm-ma, mm-me, mm-mi, mm-mo, mm-mu“.","Das Kribbeln im Vokal behalten. Drei Runden.","Dann sprechen. „Meine, Montag, morgen“, je zweimal."],
   why:"In der Untersuchung 2024 hat diese Technik deine Stimme auf Anhieb verbessert. Deshalb ist sie fest im Programm."},
- {id:"resphrase", ph:3, grp:"Resonanz", name:"Resonanz-Sätze", time:"Drei Sätze, je dreimal", fb:"record",
+ {id:"resphrase", ph:3, grp:"Resonanz", name:"Resonanz-Sätze", time:"Drei Sätze, je zweimal", fb:"record",
   sentences:["Meine Mama mag Marmelade.","Manchmal murmelt Martin monoton.","Montagmorgen malt Marie Männchen."],
-  steps:["Summen, dann jeden Satz mit dem Kribbeln vorn sprechen.","Drei Sätze, je dreimal.","Einige Sätze aufnehmen. Die App misst die Klarheit."],
+  steps:["Summen, dann jeden Satz mit dem Kribbeln vorn sprechen.","Drei Sätze, je zweimal.","Einige Sätze aufnehmen. Die App misst die Klarheit."],
   why:"Die vielen M und N holen den Klang nach vorn. Die Klarheit zeigt dir, ob es klappt."},
  {id:"read", ph:3, grp:"Resonanz", name:"Leicht lesen", time:"1 Min.", fb:"record",
   steps:["Die halbe Lesepassage der Baseline laut lesen, mit dem Kribbeln vorn.","An Kommas pausieren. Jeden Satz leise beginnen.","Aufnehmen. Die App zeigt Klarheit und mittlere Tonhöhe."],
@@ -483,10 +487,10 @@ const EX = [
  {id:"flow", ph:3, grp:"Luftfluss", name:"Erst Luft, dann Stimme", time:"5 Wdh.", fb:"none",
   steps:["Handfläche vor den Mund. Einen langsamen, warmen Luftstrom blasen, ohne Ton.","Das leiseste hauchige „huu“ dazugeben. Der Luftstrom bleibt gleich.","Langsam klarer werden bis zur normalen Stimme. Fünfmal."],
   why:"Deine Stimme startet mit zu viel Muskel und zu wenig Luft. Hier drehst du das um."},
- {id:"call", ph:4, grp:"Projektion", name:"Rufen mit Resonanz", time:"10 Rufe", fb:"record",
+ {id:"call", ph:4, grp:"Projektion", name:"Rufen mit Resonanz", time:"Sechs Rufe", fb:"record",
   steps:["Aus dem Summen heraus durch den Raum rufen. „Hallo!“ „Hier drüben!“","Lautstärke aus dem Kribbeln holen, den Hals weit lassen.","Hustenreiz heißt zu viel Druck. 20 % zurücknehmen."],
   why:"Trainiert, was dir im Restaurant fehlt. Laut werden, ohne zu drücken."},
- {id:"noise", ph:4, grp:"Projektion", name:"Sprechen im Lärm", time:"3 Min.", fb:"noise",
+ {id:"noise", ph:4, grp:"Projektion", name:"Sprechen im Lärm", time:"2 Min.", fb:"noise",
   steps:["Kopfhörer aufsetzen. Die App spielt Restaurant-Lärm ins Ohr.","Laut lesen oder frei erzählen, mit dem Kribbeln vorn, wie im Restaurant.","Pegel in der markierten Zone halten. Laut, aber ruhig."],
   why:"Bei Lärm im Ohr drückst du automatisch. Hier übst du, trotzdem locker zu bleiben."},
  {id:"cool", ph:1, grp:"Ausklang", name:"Ausklang", time:"3 Wdh.", fb:"none", always:true,
@@ -494,16 +498,28 @@ const EX = [
   why:"Die Einheit endet mit entlastetem Kehlkopf."}
 ];
 
+/* Kurze Tageseinheiten (5 bis 8 Min.): die Auswahl rotiert von Tag zu Tag,
+   damit über die Woche trotzdem alles drankommt. */
 function sessionPlan(){
   const ph = currentPhase();
-  const ids = {
-    1:["neck","jaw","yawnsigh","liptrill","straw","bubbles","hum","cool"],
-    2:["neck","jaw","yawnsigh","straw","vfe1","vfe2","vfe3","vfe4","resword","cool"],
-    3:["jaw","straw","vfe2","vfe4","resword","resphrase","read","flow","cool"],
-    4:["jaw","straw","vfe4","resphrase","flow","call","noise","cool"]
-  }[ph];
+  const d = Math.max(0, daysBetween(S.program.startDate, todayStr()));
+  const w = ["neck","jaw","yawnsigh"][d%3];
+  const w2 = ["jaw","yawnsigh"][d%2];
+  let ids;
+  if(ph===1){
+    const r = ["liptrill","bubbles","hum"];
+    ids = [w, "straw", r[d%3], r[(d+1)%3], "cool"];
+  } else if(ph===2){
+    ids = [w, "straw"].concat(d%2 ? ["vfe3","vfe4"] : ["vfe1","vfe2"], ["resword","cool"]);
+  } else if(ph===3){
+    ids = d%2 ? [w2,"straw","flow","resphrase","cool"] : [w2,"straw","resphrase","read","cool"];
+  } else {
+    ids = d%2 ? [w2,"straw","resphrase","noise","cool"] : [w2,"straw","flow","call","cool"];
+  }
   return ids.map(id=>EX.find(e=>e.id===id));
 }
+const EX_MIN = {neck:1,jaw:1,yawnsigh:1,liptrill:1,straw:1.5,bubbles:1,hum:1,vfe1:1.5,vfe2:1,vfe3:1,vfe4:1.5,resword:1,resphrase:1.5,read:1.5,flow:1,call:1.5,noise:2,cool:0.5};
+function planMinutes(){ return Math.max(5, Math.round(sessionPlan().reduce((a,e)=>a+(EX_MIN[e.id]||1),0))); }
 
 /* ---------------- Übungs-Szenen (SVG) ---------------- */
 const SCENES = {
@@ -834,7 +850,7 @@ function renderHome(){
   const doneToday=S.sessions.some(s=>s.date===todayStr());
   const h=new Date().getHours();
   document.getElementById("greetTxt").textContent = h<11?"Guten Morgen":(h<18?"Guten Tag":"Guten Abend");
-  document.getElementById("heroSub").textContent = (doneToday?"Heute trainiert · ":"")+"Phase "+ph+" · "+PHASES[ph].name+" · "+sessionPlan().length+" Übungen";
+  document.getElementById("heroSub").textContent = (doneToday?"Heute trainiert · ":"")+"Phase "+ph+" · "+PHASES[ph].name+" · ca. "+planMinutes()+" Min.";
   let week=0;
   for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); if(S.sessions.some(s=>s.date===todayStr(d))) week++; }
   const C=452.4;
@@ -861,9 +877,6 @@ function renderHome(){
   document.getElementById("homeTrend").innerHTML = pts.length>=2
     ? "<div class='small' style='margin-bottom:4px'><strong>Klarheit Sprechen</strong> · Beim Lesen, höher ist besser</div>"+lineChart(pts,{unit:"dB",h:130, ref:bl&&bl.cppsSpeech!=null?[{v:bl.cppsSpeech,label:"Baseline"}]:[]})
     : "<div class='small'><strong>Klarheit Sprechen</strong><br>Erscheint nach dem zweiten Tages-Check.</div>";
-  const le=S.lastExport?daysBetween(S.lastExport,todayStr()):999;
-  document.getElementById("backupHint").innerHTML = (S.checks.length+S.baselines.length>3 && le>14)
-    ? "<div class='notice'>Lange kein Backup. Safari kann die Daten dieser App nach längerer Pause löschen. Unter Mehr ein Backup sichern.</div>" : "";
 }
 function miniStat(lbl,val,delta,higherBetter){
   let d="";
@@ -875,7 +888,7 @@ function miniStat(lbl,val,delta,higherBetter){
 }
 function renderTrain(){
   const ph=currentPhase();
-  document.getElementById("trainPhaseDesc").textContent=PHASES[ph].desc;
+  document.getElementById("trainPhaseDesc").textContent=PHASES[ph].desc+" Die Auswahl wechselt täglich, heute ca. "+planMinutes()+" Min.";
   const plan=sessionPlan();
   document.getElementById("todayList").innerHTML=plan.map((e,i)=>
     "<div class='ex-item'><div class='num'>"+(i+1)+"</div><div class='t'><div class='n'>"+e.name+"</div><div class='d'>"+e.grp+" · "+e.time+"</div></div>"+
@@ -924,7 +937,7 @@ function renderMore(){
   document.getElementById("startDateInput").value=S.program.startDate;
   document.getElementById("phaseSelect").value=S.program.phaseOverride;
   const n=S.baselines.length+S.checks.length+S.vhi.length+S.sessions.length;
-  document.getElementById("dataInfo").textContent = n+" Einträge in diesem Browser. "+(S.lastExport?"Letztes Backup am "+fmtDate(S.lastExport)+".":"Noch kein Backup.");
+  document.getElementById("dataInfo").textContent = n+" Einträge, automatisch gespeichert."+(S.lastExport?" Letztes Backup am "+fmtDate(S.lastExport)+".":"");
 }
 function setStartDate(v){ if(v){ S.program.startDate=v; save(); renderHome(); } }
 function setPhaseOverride(v){ S.program.phaseOverride=v; save(); renderHome(); }
@@ -1453,6 +1466,17 @@ function alertInline(msg){ const el=document.getElementById("dataInfo"); if(el) 
 
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden && document.querySelector(".overlay.active")) wakeOn(); });
 renderHome();
+/* Speicher dauerhaft markieren; falls localStorage leer ist, aus der zweiten Ablage wiederherstellen. */
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
+(function(){
+  const empty = !S.checks.length && !S.baselines.length && !S.sessions.length && !S.vhi.length;
+  if(!empty){ idbSave(S); return; }
+  idbLoad().then(d=>{
+    if(d && ((d.checks&&d.checks.length)||(d.baselines&&d.baselines.length)||(d.sessions&&d.sessions.length)||(d.vhi&&d.vhi.length))){
+      S=Object.assign(defaultState(),d); save(); renderHome();
+    }
+  });
+})();
 </script>
 </body>
 </html>
