@@ -255,6 +255,7 @@ a{color:var(--primary-text); font-weight:600;}
     </div>
     <button class="btn secondary" onclick="startQuickCheck()">Tages-Check</button>
     <div id="homeBaselineHint"></div>
+    <div id="syncHint"></div>
     <h2>Deine Routine</h2>
     <div class="card">
       <div class="row spread"><span class="small">Letzte 14 Tage</span><span class="small" id="streakTxt"></span></div>
@@ -347,14 +348,12 @@ a{color:var(--primary-text); font-weight:600;}
       <p class="tiny">Die Klinik misst CPP mit anderer Technik (ADSV). Klarheit (CPPS) ist ein App-Wert, vergleiche ihn mit späteren App-Messungen.</p>
     </div>
 
+    <h2>Synchronisation</h2>
+    <div class="card stack" id="syncCard"></div>
+
     <h2>Daten</h2>
     <div class="card stack">
-      <p class="tiny" style="margin:0">Deine Ergebnisse speichert die App automatisch auf diesem Gerät, doppelt abgelegt. Auf dem Home-Bildschirm bleiben sie auch nach langen Pausen erhalten. Ein Backup brauchst du nur für einen Gerätewechsel.</p>
-      <button class="btn secondary" onclick="exportData()">Backup sichern</button>
-      <p class="tiny" style="margin:-4px 0 0">Öffnet das Teilen-Menü: in Dateien (iCloud) oder Google Drive sichern.</p>
-      <label class="btn ghost" style="text-align:center; display:block;">Backup laden<input type="file" accept=".json,application/json" style="display:none" onchange="importData(this)"></label>
-      <button class="btn ghost" onclick="copyData()">Daten kopieren</button>
-      <p class="tiny" id="dataInfo"></p>
+      <p class="tiny" id="dataInfo" style="margin:0"></p>
       <button class="btn danger" onclick="wipeData()">Alles löschen</button>
     </div>
 
@@ -417,11 +416,7 @@ function loadState(){
   try{ const raw = localStorage.getItem(LS_KEY); if(raw){ return Object.assign(defaultState(), JSON.parse(raw)); } }catch(e){}
   return defaultState();
 }
-/* Doppelt gespeichert: localStorage plus IndexedDB als zweite Ablage auf dem Gerät. */
-function idbOpen(){ return new Promise((res,rej)=>{ try{ const q=indexedDB.open("stimmtrainer",1); q.onupgradeneeded=()=>q.result.createObjectStore("kv"); q.onsuccess=()=>res(q.result); q.onerror=()=>rej(q.error); }catch(e){ rej(e); } }); }
-function idbSave(v){ idbOpen().then(db=>{ try{ db.transaction("kv","readwrite").objectStore("kv").put(JSON.stringify(v),"state"); }catch(e){} }).catch(()=>{}); }
-function idbLoad(){ return idbOpen().then(db=>new Promise(res=>{ try{ const q=db.transaction("kv").objectStore("kv").get("state"); q.onsuccess=()=>{ try{ res(q.result?JSON.parse(q.result):null); }catch(e){ res(null); } }; q.onerror=()=>res(null); }catch(e){ res(null); } })).catch(()=>null); }
-function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} idbSave(S); }
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} scheduleSync(); }
 function todayStr(d){ const x=d||new Date(); return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0"); }
 function fmtDate(s){ const [y,m,d]=s.split("-"); return d+"."+m+"."+y.slice(2); }
 function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/864e5); }
@@ -937,10 +932,11 @@ function renderMore(){
   document.getElementById("startDateInput").value=S.program.startDate;
   document.getElementById("phaseSelect").value=S.program.phaseOverride;
   const n=S.baselines.length+S.checks.length+S.vhi.length+S.sessions.length;
-  document.getElementById("dataInfo").textContent = n+" Einträge, automatisch gespeichert."+(S.lastExport?" Letztes Backup am "+fmtDate(S.lastExport)+".":"");
+  document.getElementById("dataInfo").textContent = n+" Einträge auf diesem Gerät"+(SY.token?", mit GitHub abgeglichen.":".");
+  renderSync();
 }
-function setStartDate(v){ if(v){ S.program.startDate=v; save(); renderHome(); } }
-function setPhaseOverride(v){ S.program.phaseOverride=v; save(); renderHome(); }
+function setStartDate(v){ if(v){ S.program.startDate=v; S.program.ts=Date.now(); save(); renderHome(); } }
+function setPhaseOverride(v){ S.program.phaseOverride=v; S.program.ts=Date.now(); save(); renderHome(); }
 
 /* ---------------- Charts ---------------- */
 let CHART_UID=0;
@@ -1012,7 +1008,7 @@ function closePlayer(){ stopLive(); closeOverlayEl("player");
   if(PL.doneIds.size>=Math.max(3,PL.list.length-2) && PL.list.length>1){ logSession(); }
   renderHome(); }
 function logSession(){
-  if(!S.sessions.some(s=>s.date===todayStr())){ S.sessions.push({date:todayStr(),phase:currentPhase(),count:PL.doneIds.size}); save(); }
+  if(!S.sessions.some(s=>s.date===todayStr())){ S.sessions.push({date:todayStr(),phase:currentPhase(),count:PL.doneIds.size,ts:Date.now()}); save(); }
 }
 function stopLive(){
   if(PL.timer){ clearInterval(PL.timer); PL.timer=null; }
@@ -1295,8 +1291,8 @@ function startBaseline(){
 function finishBaseline(){
   const D=WZ.data;
   S.baselines.push({date:D.date,mpt:D.mpt||null,sz:D.sz||null,cppsVowel:D.cppsVowel||null,cppsSpeech:D.cppsSpeech||null,
-    meanF0:D.meanF0||null,sdF0:D.sdF0||null,glideST:D.glideST||null,loudCpps:D.loudCpps||null,dynRange:D.dynRange||null,effort:D.effort||null,vhi:D.vhi!=null?D.vhi:null});
-  S.vhi.push({date:D.date,score:D.vhi,answers:D.vhiAnswers});
+    meanF0:D.meanF0||null,sdF0:D.sdF0||null,glideST:D.glideST||null,loudCpps:D.loudCpps||null,dynRange:D.dynRange||null,effort:D.effort||null,vhi:D.vhi!=null?D.vhi:null,ts:Date.now()});
+  S.vhi.push({date:D.date,score:D.vhi,answers:D.vhiAnswers,ts:Date.now()});
   save();
   const b=S.baselines[S.baselines.length-1];
   document.getElementById("wzBody").innerHTML=
@@ -1335,7 +1331,7 @@ function finishCheck(){
   const D=WZ.data;
   D.effort=parseInt(document.getElementById("wzEff").value,10);
   const i=S.checks.findIndex(c=>c.date===D.date);
-  const rec={date:D.date,mpt:D.mpt||null,cppsVowel:D.cppsVowel||null,cppsSpeech:D.cppsSpeech||null,meanF0:D.meanF0||null,effort:D.effort};
+  const rec={date:D.date,mpt:D.mpt||null,cppsVowel:D.cppsVowel||null,cppsSpeech:D.cppsSpeech||null,meanF0:D.meanF0||null,effort:D.effort,ts:Date.now()};
   if(i>=0) S.checks[i]=rec; else S.checks.push(rec);
   save();
   const bl=latestBaseline();
@@ -1372,7 +1368,7 @@ function startVHI(){
   document.getElementById("wzTitle").textContent="VHI-10";
   WZ.steps=[{html:"<div class='ex-title'>VHI-10</div><p class='small'>"+VHI_SCALE+"</p><div class='card' id='wzVhi'></div><div class='controls'><button class='btn' id='wzVhiDone' disabled>Speichern</button></div>",
     init:()=>initVhiForm("wzVhi","wzVhiDone",(score,answers)=>{
-      S.vhi.push({date:todayStr(),score,answers}); save();
+      S.vhi.push({date:todayStr(),score,answers,ts:Date.now()}); save();
       document.getElementById("wzBody").innerHTML="<div class='ex-title'>VHI-10 "+score+" von 40</div>"+
         "<p class='small'>In der Klinik (Nov. 2024) waren es 25 von 40. Normal ist unter 11.</p>"+
         "<div class='controls'><button class='btn' onclick='closeWizard(); nav(\"progress\")'>Verlauf</button></div>";
@@ -1413,70 +1409,130 @@ async function toggleMicTest(){
   }
 }
 
-/* ---------------- Daten: Backup, Laden ---------------- */
-function exportData(){
-  const today=todayStr();
-  const json=JSON.stringify(Object.assign({},S,{lastExport:today}),null,1);
-  const name="stimmtrainer-backup-"+today+".json";
-  const done=()=>{ S.lastExport=today; save(); renderMore(); alertInline("Backup gesichert."); };
-  const download=()=>{
-    const blob=new Blob([json],{type:"application/json"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob); a.download=name;
-    document.body.appendChild(a); a.click(); a.remove();
-    done();
-  };
-  let file=null;
-  try{ file=new File([json],name,{type:"application/json"}); }catch(e){ file=null; }
-  if(file && navigator.canShare && navigator.canShare({files:[file]})){
-    // share muss synchron in der Klick-Geste starten (iOS); gespeichert wird erst bei Erfolg
-    navigator.share({files:[file],title:"Stimmtrainer Backup"})
-      .then(done)
-      .catch(err=>{ if(err && err.name==="AbortError"){ renderMore(); } else { download(); } });
-  } else {
-    download();
+/* ---------------- Synchronisation (privates GitHub-Repository) ---------------- */
+const SYNC_KEY="voiceTrainerSync_v1";
+const SYNC_API="https://api.github.com/repos/YannickD117/vox-t4k9-data/contents/stimmtrainer.json";
+const TOKEN_URL="https://github.com/settings/personal-access-tokens/new?name=Stimmtrainer+Sync&description=Synchronisiert+die+Stimmtrainer-App&target_name=YannickD117&expires_in=none&contents=write";
+let SY=loadSync(), syncBusy=false, syncAgain=false, syncTimer=null;
+function loadSync(){ try{ return JSON.parse(localStorage.getItem(SYNC_KEY))||{}; }catch(e){ return {}; } }
+function saveSync(){ try{ localStorage.setItem(SYNC_KEY, JSON.stringify(SY)); }catch(e){} }
+function b64enc(str){ const b=new TextEncoder().encode(str); let bin=""; for(let i=0;i<b.length;i+=8192) bin+=String.fromCharCode.apply(null,b.subarray(i,i+8192)); return btoa(bin); }
+function b64dec(b64){ const bin=atob(b64.replace(/\s/g,"")); const b=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) b[i]=bin.charCodeAt(i); return new TextDecoder().decode(b); }
+function ghHeaders(){ return {"Authorization":"Bearer "+SY.token, "Accept":"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28"}; }
+function httpErr(status){ const e=new Error("HTTP "+status); e.status=status; return e; }
+async function ghGet(){
+  const r=await fetch(SYNC_API+"?t="+Date.now(), {headers:ghHeaders(), cache:"no-store"});
+  if(r.status===404) return {data:null, sha:null};
+  if(!r.ok) throw httpErr(r.status);
+  const j=await r.json();
+  return {data:JSON.parse(b64dec(j.content)), sha:j.sha};
+}
+async function ghPut(data, sha){
+  const body={message:"Stimmtrainer "+todayStr(), content:b64enc(JSON.stringify(data,null,1))};
+  if(sha) body.sha=sha;
+  const r=await fetch(SYNC_API, {method:"PUT", headers:Object.assign({"Content-Type":"application/json"},ghHeaders()), body:JSON.stringify(body)});
+  if(r.status===409||r.status===422){ const e=httpErr(r.status); e.conflict=true; throw e; }
+  if(!r.ok) throw httpErr(r.status);
+}
+/* Zusammenführen: pro Eintrag gewinnt der neuere (ts); nichts geht verloren. */
+function mergeStates(a,b){
+  const wiped=Math.max(a.wipedAt||0, b.wipedAt||0);
+  const keys={ checks:r=>r.date, sessions:r=>r.date, baselines:r=>r.date+"|"+(r.ts||0), vhi:r=>r.date+"|"+(r.ts||0)+"|"+r.score };
+  const out=defaultState();
+  for(const k of Object.keys(keys)){
+    const m=new Map();
+    for(const r of [].concat(a[k]||[], b[k]||[])){
+      if(wiped && (r.ts||0)<wiped) continue;
+      const key=keys[k](r), cur=m.get(key);
+      if(!cur || (r.ts||0)>(cur.ts||0)) m.set(key,r);
+    }
+    out[k]=[...m.values()].sort((x,y)=>x.date<y.date?-1:x.date>y.date?1:(x.ts||0)-(y.ts||0));
+  }
+  const pa=a.program||{}, pb=b.program||{};
+  out.program=Object.assign({}, (pb.ts||0)>(pa.ts||0)?pb:pa);
+  if(!out.program.startDate) out.program.startDate=todayStr();
+  if(!out.program.phaseOverride) out.program.phaseOverride="auto";
+  if(wiped) out.wipedAt=wiped;
+  delete out.lastExport;
+  return out;
+}
+function same(a,b){ return JSON.stringify(mergeStates(a,a))===JSON.stringify(mergeStates(b,b)); }
+function scheduleSync(){ if(!SY.token) return; clearTimeout(syncTimer); syncTimer=setTimeout(syncNow,1200); }
+async function syncNow(){
+  if(!SY.token) return;
+  if(syncBusy){ syncAgain=true; return; }
+  syncBusy=true; SY.state="busy"; renderSync();
+  try{
+    for(let attempt=0; attempt<3; attempt++){
+      const {data, sha}=await ghGet();
+      const merged=data?mergeStates(S,data):mergeStates(S,S);
+      if(!same(merged,S)){ S=merged; try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} rerenderCurrent(); }
+      if(!data || !same(merged,data)){
+        try{ await ghPut(merged, sha); }catch(e){ if(e.conflict && attempt<2) continue; throw e; }
+      }
+      break;
+    }
+    SY.state="ok"; SY.last=Date.now(); SY.err=null;
+  }catch(e){
+    SY.state="error";
+    SY.err = (e.status===401) ? "auth" : (e.status===403||e.status===404) ? "access" : "offline";
+  }finally{
+    saveSync(); syncBusy=false; renderSync();
+    if(syncAgain){ syncAgain=false; syncNow(); }
   }
 }
-async function copyData(){
-  try{ await navigator.clipboard.writeText(JSON.stringify(S)); alertInline("Daten kopiert."); }
-  catch(e){ alertInline("Zwischenablage blockiert. Bitte Backup sichern."); }
+function rerenderCurrent(){
+  if(document.querySelector(".overlay.active")) return;
+  const act=document.querySelector(".screen.active"); const id=act?act.id.replace("scr-",""):"home";
+  if(id==="home") renderHome(); if(id==="train") renderTrain(); if(id==="test") renderTestScreen();
+  if(id==="progress") renderProgress(); if(id==="more") renderMore();
 }
-function importData(inp){
-  const f=inp.files&&inp.files[0]; if(!f) return;
-  const r=new FileReader();
-  r.onload=()=>{
-    try{
-      const d=JSON.parse(r.result);
-      if(!d.program||!Array.isArray(d.checks)) throw new Error("kein Backup");
-      S=Object.assign(defaultState(),d); save();
-      const n=S.checks.length, m=S.baselines.length;
-      alertInline("Backup geladen: "+(n===1?"1 Tages-Check":n+" Tages-Checks")+", "+(m===1?"1 Baseline":m+" Baselines")+".");
-      renderHome(); renderMore();
-    }catch(e){ alertInline(e.message==="kein Backup" ? "Laden fehlgeschlagen. Das ist kein Stimmtrainer-Backup." : "Laden fehlgeschlagen. Die Datei ist beschädigt oder kein JSON."); }
-  };
-  r.readAsText(f); inp.value="";
+function connectSync(){
+  const el=document.getElementById("syncToken"); const t=(el&&el.value||"").trim();
+  if(!t){ SY.err="empty"; renderSync(); return; }
+  SY={token:t}; saveSync(); el.value=""; syncNow();
+}
+function disconnectSync(){ SY={}; saveSync(); renderSync(); }
+function fmtTime(ts){ const d=new Date(ts); const today=todayStr(d)===todayStr(); return (today?"heute":"am "+fmtDate(todayStr(d)))+" um "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+function renderSync(){
+  const box=document.getElementById("syncCard");
+  if(box){
+    if(!SY.token){
+      box.innerHTML="<p class='small' style='margin:0'>Deine Ergebnisse werden automatisch in deinem privaten GitHub-Repository gesichert und auf jedem Gerät abgeglichen. Einmal einrichten:</p>"+
+        "<ol class='small' style='margin:0 0 0 18px; padding:0'><li>„Token erstellen“ öffnen. Bei Repository access „Only select repositories“ wählen, dann <strong>vox-t4k9-data</strong>.</li><li>Unten „Generate token“ tippen und den Token kopieren.</li><li>Hier einfügen und verbinden.</li></ol>"+
+        "<a class='btn secondary' style='text-align:center; text-decoration:none; display:block' href='"+TOKEN_URL+"' target='_blank' rel='noopener'>Token erstellen</a>"+
+        "<input id='syncToken' type='password' autocomplete='off' autocapitalize='off' spellcheck='false' placeholder='Token einfügen' style='font-family:var(--font); font-size:16px; min-height:48px; padding:10px 14px; border:1.5px solid var(--line-strong); border-radius:14px; background:var(--surface); color:var(--ink); width:100%'>"+
+        "<button class='btn' onclick='connectSync()'>Verbinden</button>"+
+        (SY.err==="empty"?"<p class='tiny' style='color:var(--bad); margin:0'>Bitte zuerst den Token einfügen.</p>":"");
+    } else {
+      let st;
+      if(SY.state==="busy") st="Wird abgeglichen";
+      else if(SY.err==="auth") st="Der Token ist ungültig oder abgelaufen. Trennen und neu verbinden.";
+      else if(SY.err==="access") st="Kein Zugriff auf vox-t4k9-data. Beim Token das Repository auswählen und Contents auf „Read and write“ stellen.";
+      else if(SY.err==="offline") st="Gerade offline. Der Abgleich folgt beim nächsten Öffnen.";
+      else st=SY.last?"Abgeglichen "+fmtTime(SY.last)+".":"Verbunden.";
+      const bad=SY.err==="auth"||SY.err==="access";
+      box.innerHTML="<div class='row' style='gap:10px'><span style='width:10px; height:10px; border-radius:50%; flex-shrink:0; background:"+(bad?"var(--bad)":SY.err?"var(--warn)":"var(--good)")+"'></span><span class='small'>"+st+"</span></div>"+
+        "<div class='controls' style='margin-top:4px'><button class='btn ghost' onclick='syncNow()'>Abgleichen</button><button class='btn ghost' onclick='disconnectSync()'>Trennen</button></div>";
+    }
+  }
+  const hint=document.getElementById("syncHint");
+  if(hint) hint.innerHTML=(SY.token && (SY.err==="auth"||SY.err==="access")) ? "<div class='notice'>Synchronisation unterbrochen. Unter Mehr neu verbinden.</div>" : "";
 }
 function wipeData(){
   const el=document.getElementById("dataInfo");
   if(el.dataset.confirm!=="1"){ el.dataset.confirm="1"; el.textContent="Innerhalb von 5 s nochmal tippen, dann ist alles weg. Kein Zurück."; setTimeout(()=>{el.dataset.confirm="0"; renderMore();},5000); return; }
-  S=defaultState(); save(); renderHome(); renderMore();
+  S=defaultState(); S.wipedAt=Date.now(); S.program.ts=Date.now(); save(); renderHome(); renderMore();
   el.textContent="Alles gelöscht.";
 }
 function alertInline(msg){ const el=document.getElementById("dataInfo"); if(el) el.textContent=msg; }
 
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden && document.querySelector(".overlay.active")) wakeOn(); });
 renderHome();
-/* Speicher dauerhaft markieren; falls localStorage leer ist, aus der zweiten Ablage wiederherstellen. */
-try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
-(function(){
-  const empty = !S.checks.length && !S.baselines.length && !S.sessions.length && !S.vhi.length;
-  if(!empty){ idbSave(S); return; }
-  idbLoad().then(d=>{
-    if(d && ((d.checks&&d.checks.length)||(d.baselines&&d.baselines.length)||(d.sessions&&d.sessions.length)||(d.vhi&&d.vhi.length))){
-      S=Object.assign(defaultState(),d); save(); renderHome();
-    }
-  });
-})();
+renderSync();
+syncNow();
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) syncNow(); });
+window.addEventListener("online",()=>syncNow());
 </script>
 </body>
 </html>
